@@ -26,16 +26,9 @@ export async function getSqlabInfo(name) {
             return null;  // Not found: there's no value for this name
         }
 
-        // The value comes as a JSON string from the database
-        const valueString = result.rows[0][0];
-
-        return valueString
-
-
-        // Parse and return the proper JavaScript type.
-        return JSON.parse(valueString);
+        // The value is a Javascript type among string, number, object, array, etc.
+        return result.rows[0][0];
         
-
     } catch (error) {
         console.error(`Error fetching ${name} from sqlab_info:`, error);
         throw error;  // Rethrow the error for further handling

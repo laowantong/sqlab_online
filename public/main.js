@@ -2,7 +2,6 @@ import { initTabs } from './controllers/tabController.js';
 import { initQueryExecution } from './controllers/queryController.js';
 import { initBusinessTables } from './controllers/tableController.js';
 import { initNotes } from './controllers/notesController.js';
-import { getSqlabInfo } from './models/getSqlabInfo.js';
 import { initLocalization } from './controllers/localizationController.js';
 import { initSchema } from './controllers/schemaController.js';
 import { initContext } from './controllers/contextController.js';
@@ -110,10 +109,15 @@ async function loadAdventureTitle() {
         titleElement.textContent = window.i18n.t('app.loading');
 
         // Get adventure title directly from sqlab_info table
-        const adventureTitle = await getSqlabInfo('title');
+        const adventureTitle = await fetch('/sqlab-info-value/title', {
+            method: 'GET',
+            headers: { 'Content-Type': 'text/plain' }
+        });
+
+        alert('Adventure title:', adventureTitle);
 
         // Update page title and displayed name
-        document.title = `${adventureTitle}`;
+        document.title = `${adventureTitle.body}`;
         titleElement.textContent = adventureTitle;
     } catch (error) {
         console.error('Error loading adventure title:', error);
@@ -122,3 +126,4 @@ async function loadAdventureTitle() {
         document.getElementById('database-name').textContent = window.i18n.t('database.unknown');
     }
 }
+

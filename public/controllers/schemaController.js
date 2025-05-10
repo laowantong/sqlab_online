@@ -1,4 +1,4 @@
-import { getSqlabInfo } from '../models/getSqlabInfo.js';
+import { getSqlabInfo } from '../models/getSqlabInfo_deprecated.js';
 import { t } from './localizationController.js';
 
 /**
