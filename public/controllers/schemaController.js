@@ -1,4 +1,4 @@
-import { getRelationalSchema } from '../models/dbModel.js';
+import { getSqlabInfo } from '../models/getSqlabInfo.js';
 import { t } from './localizationController.js';
 
 /**
@@ -20,7 +20,7 @@ export function initSchema() {
         
         try {
             // Get relational schema SVG
-            const schemaSvg = await getRelationalSchema();
+            const schemaSvg = await getSqlabInfo('relational_schema_light');
             
             if (!schemaSvg) {
                 schemaContainer.innerHTML = `<div class="info">${t('schema.notAvailable')}</div>`;

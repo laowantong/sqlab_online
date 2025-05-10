@@ -2,7 +2,7 @@ import { initTabs } from './controllers/tabController.js';
 import { initQueryExecution } from './controllers/queryController.js';
 import { initBusinessTables } from './controllers/tableController.js';
 import { initNotes } from './controllers/notesController.js';
-import { getAdventureTitle } from './models/dbModel.js';
+import { getSqlabInfo } from './models/getSqlabInfo.js';
 import { initLocalization } from './controllers/localizationController.js';
 import { initSchema } from './controllers/schemaController.js';
 import { initContext } from './controllers/contextController.js';
@@ -110,7 +110,7 @@ async function loadAdventureTitle() {
         titleElement.textContent = window.i18n.t('app.loading');
 
         // Get adventure title directly from sqlab_info table
-        const adventureTitle = await getAdventureTitle();
+        const adventureTitle = await getSqlabInfo('title');
 
         // Update page title and displayed name
         document.title = `${adventureTitle}`;
