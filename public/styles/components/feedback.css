@@ -1,0 +1,101 @@
+/* feedback.css — styles for hints and corrections */
+
+.hint,
+.correction {
+  background-color: var(--color-white);
+  border-left: 5px solid var(--color-secondary);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-sm);
+  font-family: var(--font-primary);
+  font-size: var(--font-size-md);
+  padding: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  color: var(--color-dark);
+}
+
+.hint .label,
+.correction .label,
+.hint .number,
+.correction .number {
+  color: var(--color-secondary);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--spacing-xs);
+  display: inline-block;
+}
+
+.hint .preamble,
+.correction .preamble {
+  margin-bottom: var(--spacing-sm);
+}
+
+.hint .text p {
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+.correction .solutions {
+  margin-top: var(--spacing-sm);
+}
+
+.correction .solution {
+  background-color: var(--color-white);
+  border: 1px solid var(--color-light);
+  border-radius: var(--border-radius-sm);
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-sm);
+  box-shadow: var(--shadow-sm);
+}
+
+.correction .solution pre {
+  margin: 0;
+  overflow-x: auto;
+}
+
+.correction .solution code {
+  font-family: var(--font-code);
+  font-size: var(--font-size-sm);
+  background-color: transparent;
+  color: var(--color-dark);
+}
+
+.correction .solution .intro {
+  font-style: italic;
+  margin-bottom: var(--spacing-xs);
+}
+
+/* Dark mode */
+.dark-theme .hint,
+.dark-theme .correction {
+  background-color: var(--dark-element);
+  color: var(--dark-text);
+  border-left-color: var(--dark-secondary);
+}
+
+.dark-theme .hint .label,
+.dark-theme .correction .label {
+  color: var(--dark-secondary);
+}
+
+.dark-theme .correction .solution {
+  background-color: var(--dark-bg);
+  border-color: var(--dark-light);
+}
+
+.dark-theme .correction .solution code {
+  color: var(--dark-text);
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .hint,
+  .correction {
+    font-size: var(--font-size-sm);
+    padding: var(--spacing-sm);
+  }
+
+  .hint .number,
+  .correction .number {
+    font-size: var(--font-size-md);
+  }
+}

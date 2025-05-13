@@ -1,0 +1,61 @@
+{
+  "app": {
+    "title": "SQLab",
+    "loading": "Loading..."
+  },
+  "header": {
+    "toggleTheme": "Toggle theme",
+    "language": "Interface",
+    "theme": "Theme"
+  },
+  "context": {
+    "loading": "Loading episode...",
+    "loadError": "Failed to load episode content"
+  },
+  "query": {
+    "placeholder": "Enter your SQL query here...",
+    "emptyError": "Please enter a SQL query"
+  },
+  "tabs": {
+    "coreTables": "Tables",
+    "schema": "Schema",
+    "execution": "Run",
+    "feedback": "Check",
+    "notes-tab": "Notes"
+  },
+  "notes": {
+    "placeholder": "What you write here is saved locally and will persist across sessions."
+  },
+  "coreTables": {
+    "title": "Tables",
+    "loading": "Loading tables..."
+  },
+  "schema-tab": {
+    "loading": "Loading schema...",
+    "notAvailable": "Schema is not available for this database."
+  },
+  "execution-tab": {
+    "title": "Run",
+    "noResults": "No results",
+    "runPrompt": "Run a query to see the results"
+  },
+  "feedback-tab": {
+    "title": "Check",
+    "developing": "Feature under development..."
+  },
+  "table": {
+    "pagination": {
+      "rows": "Rows"
+    },
+    "nullValue": "NULL",
+    "clickToCopy": "Click to copy cell content"
+  },
+  "database": {
+    "fetchError": "Failed to fetch database information: {status}",
+    "notConnected": "Not connected",
+    "unknown": "Unknown"
+  },
+  "error": {
+    "tableData": "Failed to load table data"
+  }
+}

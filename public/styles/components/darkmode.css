@@ -1,0 +1,295 @@
+/**
+ * Dark mode component styles
+ * Override styles for dark theme
+ */
+
+/* ===== Dark Theme Overrides ===== */
+
+/* Base dark theme */
+.dark-theme {
+  background-color: var(--dark-bg);
+  color: var(--dark-text);
+}
+
+.dark-theme h1, .dark-theme h2, .dark-theme h3 {
+  color: var(--dark-light);
+}
+
+.dark-theme a {
+  color: var(--dark-light);
+}
+
+.dark-theme a:hover {
+  color: var(--color-light);
+}
+
+/* Tab-related dark theme */
+.dark-theme .tabs {
+  position: relative;
+  margin-bottom: var(--spacing-md);
+}
+
+.dark-theme .tab {
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: #8b949e;
+  font-weight: 400;
+  border: 2px solid transparent;
+  border-bottom: none;
+  border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+  margin: 0 var(--spacing-sm);
+}
+
+.dark-theme .tab:hover {
+  color: #c9d1d9;
+}
+
+.dark-theme .tab.active {
+  color: var(--dark-light);
+  background-color: transparent;
+  border-color: #444;
+  border-width: 2px;
+  border-bottom: none;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.dark-theme .tab-content {
+  border-color: #444;
+  background-color: transparent;
+}
+
+/* Add pseudo-element for the tab border in dark mode */
+.dark-theme .tabs::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #444;
+  z-index: 1;
+}
+
+/* Add pseudo-element to create the "gap" effect in the border in dark mode */
+.dark-theme .tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--dark-bg);
+  z-index: 2;
+}
+
+/* Query-related dark theme */
+.dark-theme .top-query {
+  background: linear-gradient(to bottom, #06384a 0%, #085570 100%);
+  border-color: rgba(76, 180, 231, 0.3);
+  position: relative;
+}
+
+.dark-theme .top-query textarea {
+  color: #B0E0E6;
+  position: relative;
+  z-index: 10;
+}
+
+/* Table-related dark theme */
+.dark-theme th {
+  background-color: var(--dark-primary);
+  color: var(--dark-text);
+}
+
+.dark-theme td {
+  border-color: #555;
+}
+
+.dark-theme tr:nth-child(even) {
+  background-color: #2c2c2c;
+}
+
+.dark-theme tr:hover {
+  background-color: #3a3a3a;
+}
+
+.dark-theme .row-number-header,
+.dark-theme .row-number {
+  background-color: #383838;
+  border-right: 2px solid #555;
+}
+
+.dark-theme .row-number {
+  color: #bbb;
+}
+
+/* Table accordion dark theme */
+.dark-theme .accordion {
+  border-color: #444;
+  background-color: var(--dark-element);
+}
+
+.dark-theme .table-outline {
+  background-color: var(--dark-primary);
+  color: var(--dark-text);
+  border-bottom: 1px solid #444;
+}
+
+.dark-theme .table-content.active {
+  background-color: var(--dark-element);
+}
+
+/* Pagination dark theme */
+.dark-theme .table-actions {
+  background-color: #2f2f2f;
+  border-bottom: 1px solid #444;
+}
+
+.dark-theme .strip-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  max-width: 100%;
+  padding: var(--spacing-xs) 0;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.dark-theme .strip-container::-webkit-scrollbar {
+  display: none;
+}
+
+.dark-theme .strip-buttons {
+  display: inline-flex;
+  flex-direction: row;
+  gap: var(--spacing-xs);
+  padding: 0 var(--spacing-sm);
+}
+
+.dark-theme .strip-button {
+  min-width: 50px;
+  height: 36px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-sm);
+  background-color: var(--dark-primary);
+  color: var(--dark-text);
+  border: 1px solid #555;
+  cursor: pointer;
+  font-weight: var(--font-weight-normal);
+  transition: all var(--transition-fast);
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dark-theme .strip-button:hover {
+  background-color: var(--dark-secondary);
+}
+
+.dark-theme .strip-button.active {
+  background-color: var(--dark-secondary);
+  color: #fff;
+  font-weight: var(--font-weight-bold);
+  border-color: var(--dark-light);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Table columns dark theme */
+.dark-theme .table-columns {
+  color: #aaa;
+}
+
+.dark-theme .column-names {
+  color: #bbb;
+}
+
+.dark-theme .loading-columns {
+  color: var(--dark-light);
+}
+
+.dark-theme .error-columns {
+  color: #ff7b7b;
+}
+
+/* Language selector dark theme */
+.dark-theme .language-selector {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.dark-theme .language-selector:hover {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.dark-theme #language-selector {
+  color: var(--dark-text);
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f0f0f0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+.dark-theme #language-selector option {
+  background-color: var(--dark-element);
+  color: var(--dark-text);
+}
+
+/* Notes tab dark theme */
+.dark-theme #notes-textarea {
+  background-color: var(--dark-element);
+  color: var(--dark-text);
+  border-color: #444;
+}
+
+.dark-theme #notes-textarea:focus {
+  border-color: var(--dark-light);
+  box-shadow: 0 0 5px rgba(106, 157, 160, 0.3);
+}
+
+/* Dark theme hamburger menu */
+.dark-theme .dropdown-menu {
+  background-color: var(--dark-element);
+  border: 1px solid #444;
+}
+
+.dark-theme .menu-label {
+  color: var(--dark-text);
+}
+
+.dark-theme .menu-item:hover {
+  background-color: var(--dark-primary);
+}
+
+.dark-theme .menu-item .theme-icon {
+  color: var(--dark-text);
+}
+
+/* Episode container dark theme */
+.dark-theme #task-container {
+  background-color: var(--dark-element);
+  border-color: #444;
+}
+
+/* Button dark theme */
+.dark-theme button {
+  background-color: var(--dark-primary);
+}
+
+.dark-theme button:hover {
+  background-color: var(--color-primary);
+}
+
+/* Form elements dark theme */
+.dark-theme textarea, .dark-theme input {
+  background-color: var(--dark-element);
+  border-color: #555;
+  color: var(--dark-text);
+}
+
+/* Header dark theme */
+.dark-theme header {
+  background: linear-gradient(135deg, var(--dark-primary) 0%, var(--dark-secondary) 100%);
+}
+
+/* Info message dark theme */
+.dark-theme .info {
+  background-color: #00529B33;
+  color: #9BCBFF;
+}

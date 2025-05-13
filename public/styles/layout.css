@@ -1,0 +1,100 @@
+/**
+ * Layout styles for SQLab Interface
+ * Defines page structure, headers, and containers
+ */
+
+/* Header with logo and theme toggle */
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md) 0;
+  position: relative;
+  background: var(--gradient-header);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+h1 {
+  color: var(--color-white);
+  margin: 0;
+  text-align: center;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Theme toggle button */
+.theme-toggle {
+  cursor: pointer;
+  padding: var(--spacing-sm);
+  position: absolute;
+  right: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color var(--transition-fast);
+}
+
+.theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.theme-icon {
+  font-size: 1.2rem;
+  color: var(--color-white);
+  transition: transform var(--transition-medium);
+}
+
+.theme-icon:hover {
+  transform: rotate(45deg);
+}
+
+#results-container {
+  overflow-x: auto;
+  max-height:  var(--results-max-height, 500px);
+  overflow-y: auto;
+}
+
+/* Core tables container */
+#accordions {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--spacing-md);
+}
+
+/* Dark theme overrides */
+.dark-theme header {
+  background: linear-gradient(135deg, var(--dark-primary) 0%, var(--dark-secondary) 100%);
+}
+
+.dark-theme .results-container {
+  background-color: var(--dark-element);
+  border-color: #444;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  body {
+    padding: var(--spacing-md);
+  }
+  
+  .tabs {
+    flex-wrap: wrap;
+  }
+  
+  .tab {
+    flex: 1 1 40%;
+    text-align: center;
+    margin-bottom: var(--spacing-xs);
+  }
+  
+  .top-query textarea {
+    height: 100px;
+  }
+}

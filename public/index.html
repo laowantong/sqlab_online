@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Meta information and document title -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="app.title">SQLab</title>
+
+    <!-- Main stylesheet -->
+    <link rel="stylesheet" href="styles/main.css">
+
+    <!-- Icon library (Font Awesome) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- Header with dynamic database name and left-positioned hamburger menu -->
+    <header>
+        <!-- Hamburger menu that contains language selector and theme toggle -->
+        <div class="hamburger-menu">
+            <i id="menu-toggle" class="fas fa-bars"></i>
+            <div class="dropdown-menu">
+                <!-- Language selector -->
+                <div class="menu-item language-container">
+                    <span class="menu-label" data-i18n="header.language">Language</span>
+                    <select id="language-selector">
+                        <option value="en">English</option>
+                        <option value="fr">Français</option>
+                    </select>
+                </div>
+                <!-- Theme toggle -->
+                <div class="menu-item theme-container">
+                    <span class="menu-label" data-i18n="header.theme">Theme</span>
+                    <i id="toggle-theme" class="fas fa-moon theme-icon" data-i18n-title="header.toggleTheme"
+                        title="Toggle theme"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Title -->
+        <h1><span id="activity-title" data-i18n="app.loading">Loading...</span></h1>
+    </header>
+
+    <!-- Episode container for adventure content -->
+    <div id="task-container">
+        <!-- Episode content will be injected here directly -->
+    </div>
+
+    <!-- SQL query input zone -->
+    <div class="query-container top-query">
+        <textarea id="query-input" data-i18n-placeholder="query.placeholder"
+            placeholder="Enter your SQL query here..."></textarea>
+    </div>
+
+    <!-- Navigation tabs for switching between interface sections -->
+    <div class="tabs">
+        <div class="tab" data-tab="schema-tab" data-i18n="tabs.schema">Schema</div>
+        <div class="tab active" data-tab="core-tables-tab" data-i18n="tabs.coreTables">Tables</div>
+        <div class="tab" data-tab="execution-tab" data-i18n="tabs.execution">Run</div>
+        <div class="tab" data-tab="feedback-tab" data-i18n="tabs.feedback">Check</div>
+        <div class="tab" data-tab="notes-tab" data-i18n="tabs.notes">Notes</div>
+    </div>
+
+    <!-- Schema tab content -->
+    <div id="schema-tab" class="tab-content">
+        <div id="schema-container">
+        </div>
+    </div>
+
+    <!-- Core tables tab content -->
+    <div id="core-tables-tab" class="tab-content active">
+        <div id="accordions">
+            <div class="loading" data-i18n="coreTables.loading">Loading tables...</div>
+        </div>
+    </div>
+
+    <!-- SQL execution tab with results -->
+    <div id="execution-tab" class="tab-content">
+        <div id="results-container"></div>
+    </div>
+
+    <!-- Control tab (check solution) -->
+    <div id="feedback-tab" class="tab-content">
+        <div id="feedback-container">
+            <!-- Feedback will be displayed here -->
+        </div>
+    </div>
+
+    <!-- Notes tab content -->
+    <div id="notes-tab" class="tab-content">
+        <textarea id="notes-textarea" data-i18n-placeholder="notes.placeholder"
+            placeholder="Write your notes here..."></textarea>
+    </div>
+
+    <!-- JavaScript modules -->
+    <script src="https://unpkg.com/node-sql-parser@5.3.8/umd/index.umd.js"></script>
+    <script src="utils/sqlUtils.js" type="module"></script>
+    
+    <!-- Localization service should be loaded before main -->
+    <script src="utils/localizationService.js"></script>
+    <script type="module" src="main.js"></script>
+
+</body>
+
+</html>

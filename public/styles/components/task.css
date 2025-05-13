@@ -1,0 +1,99 @@
+/* task.css — styles for exercises and episodes */
+
+.task {
+    background-color: var(--color-white);
+    border-left: 5px solid var(--color-primary);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    font-family: var(--font-primary);
+    font-size: var(--font-size-md);
+    padding: var(--spacing-md);
+    margin: var(--spacing-md) 0;
+    color: var(--color-dark);
+}
+
+.task .label,
+.task .number {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-bold);
+    text-transform: uppercase;
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xs);
+    display: inline-block;
+}
+
+.task .text,
+.task .context,
+.task .statement {
+    margin-top: var(--spacing-sm);
+}
+
+.task .text p,
+.task .context p,
+.task .statement .text p {
+    margin: 0 0 var(--spacing-sm) 0;
+    line-height: 1.4;
+}
+
+.task code {
+    font-family: var(--font-code);
+    background-color: var(--color-light-gray);
+    padding: 0 4px;
+    border-radius: var(--border-radius-sm);
+}
+
+/* Episode-specific context and statement distinction */
+.episode .context {
+    background-color: var(--color-light-gray);
+    padding: var(--spacing-sm);
+    border-left: 3px solid var(--color-secondary);
+    border-radius: var(--border-radius-sm);
+}
+
+.episode .statement {
+    margin-top: var(--spacing-md);
+}
+
+.episode .statement .label {
+    color: var(--color-secondary);
+    font-weight: var(--font-weight-bold);
+    font-size: var(--font-size-sm);
+    margin-bottom: var(--spacing-xs);
+}
+
+/* Dark mode */
+.dark-theme .task {
+    background-color: var(--dark-element);
+    color: var(--dark-text);
+    border-left-color: var(--dark-primary);
+}
+
+.dark-theme .task .label {
+    color: var(--dark-primary);
+}
+
+.dark-theme .episode .context {
+    background-color: var(--dark-bg);
+    border-left-color: var(--dark-secondary);
+}
+
+.dark-theme .episode .statement .label {
+    color: var(--dark-secondary);
+}
+
+.dark-theme .task code {
+    background-color: var(--dark-light);
+    color: var(--dark-bg);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .task {
+        font-size: var(--font-size-sm);
+        padding: var(--spacing-sm);
+    }
+
+    .task .number {
+        font-size: var(--font-size-md);
+    }
+}

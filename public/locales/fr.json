@@ -1,0 +1,61 @@
+{
+  "app": {
+    "title": "SQLab",
+    "loading": "Chargement..."
+  },
+  "header": {
+    "toggleTheme": "Changer de thème",
+    "language": "Interface",
+    "theme": "Thème"
+  },
+  "context": {
+    "loading": "Chargement de l'épisode...",
+    "loadError": "Impossible de charger le contenu de l'épisode"
+  },
+  "query": {
+    "placeholder": "Entrez votre requête SQL ici...",
+    "emptyError": "Veuillez entrer une requête SQL"
+  },
+  "tabs": {
+    "coreTables": "Tables",
+    "schema": "Schéma",
+    "execution": "Exécuter",
+    "feedback": "Vérifier",
+    "notes": "Notes"
+  },
+  "notes": {
+    "placeholder": "Ce que vous écrivez ici est enregistré localement et persistera entre les sessions."
+  },
+  "coreTables": {
+    "title": "Tables",
+    "loading": "Chargement des tables..."
+  },
+  "schema-tab": {
+    "loading": "Chargement du schéma...",
+    "notAvailable": "Schéma non disponible pour cette base de données."
+  },
+  "execution-tab": {
+    "title": "Exécuter",
+    "noResults": "Aucun résultat",
+    "runPrompt": "Exécutez une requête pour voir les résultats"
+  },
+  "feedback-tab": {
+    "title": "Vérifier",
+    "developing": "Fonctionnalité en cours de développement..."
+  },
+  "table": {
+    "pagination": {
+      "rows": "Lignes"
+    },
+    "nullValue": "NULL",
+    "clickToCopy": "Cliquez pour copier le contenu de la cellule"
+  },
+  "database": {
+    "fetchError": "Impossible de récupérer les informations de la base de données : {status}",
+    "notConnected": "Non connecté",
+    "unknown": "Inconnu"
+  },
+  "error": {
+    "tableData": "Impossible de charger les données de la table"
+  }
+}

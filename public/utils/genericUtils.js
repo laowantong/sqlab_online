@@ -1,0 +1,23 @@
+/**
+ * Escapes special HTML characters to prevent XSS attacks
+ * @param {string} unsafe - Potentially dangerous string
+ * @returns {string} - Safe escaped string
+ */
+export function escapeHtml(unsafe) {
+    return String(unsafe ?? '').replace(/[&<>"']/g, m => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;',
+    })[m]);
+}
+
+/**
+ * Shows an error message in a container
+ * @param {string} message - Error message to display
+ * @param {HTMLElement} containerElement - Container to show the error in
+ */
+export function showError(message, containerElement) {
+    containerElement.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
+}

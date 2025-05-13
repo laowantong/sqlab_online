@@ -1,0 +1,68 @@
+/**
+ * Tabs component styles
+ * Navigation tabs for switching between interface sections
+ */
+
+/* ===== Tabs Navigation ===== */
+.tabs {
+  display: flex;
+  position: relative; /* Added for pseudo-element positioning */
+  margin-bottom: var(--spacing-md);
+}
+
+.tab {
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  color: #586069;
+  font-weight: 400;
+  font-size: var(--font-size-md);
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 2px solid transparent;
+  border-bottom: none;
+  border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+  margin: 0 var(--spacing-sm);
+}
+
+.tab.active {
+  color: var(--color-primary);
+  border-color: #ccc;
+  border-width: 2px;
+  border-bottom: none;
+  font-weight: 600;
+  z-index: 2; /* Above the tabs::after border */
+  background-color: transparent;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* Add pseudo-element for the tab border */
+.tabs::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #ccc;
+  z-index: 1;
+}
+
+/* Add pseudo-element to create the "gap" effect in the border */
+.tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0px; /* Position at the bottom of the tab */
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-light-gray);
+  z-index: 2; /* Must be above the tabs::after border */
+}
