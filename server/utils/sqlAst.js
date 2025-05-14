@@ -6,13 +6,12 @@ const { Parser } = pkg;
 const parser = new Parser();
 
 /**
- * Add a given column expression to the final statement of a SQL text if and only if
- * this statement is a SELECT.
+ * Append a placeholder as the last column of the final statement of a SQL text
+ * if and only if this statement is a SELECT.
  * @param {string} sqlText - The SQL text to parse
- * @param {string} columnExpression - The expression to add as a new column
  * @returns {object} - The response status and, if successful, the modified SQL text
  */
-export function addColumnToFinalStatement(sqlText, columnExpression) {
+export function appendPlaceholderColumn(sqlText) {
   // Calculate the AST of the SQL text
   let ast;
   try {
@@ -29,7 +28,7 @@ export function addColumnToFinalStatement(sqlText, columnExpression) {
     final = ast[ast.length - 1];
   };
 
-  // Check if the last statement is a SELECT
+  // Check if the final statement is a SELECT
   if (final.type !== 'select') return { response: "nonSelectFinalStatement" };
 
   // Perform the insertion
@@ -37,13 +36,12 @@ export function addColumnToFinalStatement(sqlText, columnExpression) {
     expr: {
       type: 'column_ref',
       table: null,
-      column: 'SQLAB_PLACEHOLDER'
+      column: 'SQLAB_COLUMN_PLACEHOLDER'
     }
   });
-  const result = parser.sqlify(ast).replace('`SQLAB_PLACEHOLDER`', columnExpression);
   return {
     response: "ok",
-    result: result
+    result: parser.sqlify(ast).replace('`SQLAB_COLUMN_PLACEHOLDER`', 'SQLAB_COLUMN_PLACEHOLDER')
   };
 }
 
