@@ -7,7 +7,8 @@ const parser = new Parser();
 
 /**
  * Append a placeholder as the last column of the final statement of a SQL text
- * if and only if this statement is a SELECT.
+ * if and only if this statement is a SELECT. Note that the placeholder string
+ * will be delimited by backticks.
  * @param {string} sqlText - The SQL text to parse
  * @returns {object} - The response status and, if successful, the modified SQL text
  */
@@ -41,7 +42,7 @@ export function appendPlaceholderColumn(sqlText) {
   });
   return {
     response: "ok",
-    result: parser.sqlify(ast).replace('`SQLAB_COLUMN_PLACEHOLDER`', 'SQLAB_COLUMN_PLACEHOLDER')
+    result: parser.sqlify(ast)
   };
 }
 
