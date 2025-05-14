@@ -13,15 +13,16 @@ export async function customQuery(query, offset, limit) {
 
     const trimmedQuery = query.trim();
     const rows = await executeQuery(trimmedQuery);
+    const rowCount = rows.length;
 
-    if (Array.isArray(rows) && rows.length > 0) {
-        const totalRows = rows.length;
+    if (Array.isArray(rows) && rowCount > 0) {
+        
 
         // Extract column names, filtering out the "hash" column
         const columns = Object.keys(rows[0]).filter(col => col.toLowerCase() !== "hash");
 
-        const startIndex = Math.min(offset, totalRows);
-        const endIndex = Math.min(offset + limit, totalRows);
+        const startIndex = Math.min(offset, rowCount);
+        const endIndex = Math.min(offset + limit, rowCount);
         const pagedRows = rows.slice(startIndex, endIndex);
 
         const filteredRows = pagedRows.map(row => { return columns.map(col => row[col]) });
@@ -29,18 +30,20 @@ export async function customQuery(query, offset, limit) {
         return {
             columns,
             rows: filteredRows,
-            total: totalRows,
+            total: rowCount,
             offset: parseInt(offset),
             limit: parseInt(limit)
         };
     }
+    //In case of empty set or non-select queries
     else {
-        // Return results without pagination
+        
         return {
-            columns: rows.meta?.columns || [],
-            rows: rows || [],
-            totalRows: rows.length || 0
+            columns:  [],
+            rows: [],
+            total:  0,  
+            offset: parseInt(offset),
+            limit: parseInt(limit)
         };
-
     }
 }
