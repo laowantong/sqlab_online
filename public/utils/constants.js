@@ -8,3 +8,6 @@ export const DEFAULT_PAGE_OFFSET = 0;
 
 // Timing constants
 export const DRAG_END_DELAY = 50; // ms
+
+// Temporary constants
+export const TEMP_STARTING_ACTIVITY = 0;

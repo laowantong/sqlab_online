@@ -1,5 +1,5 @@
 import { escapeHtml } from '../../utils/genericUtils.js';
-import { createOrUpdatePageStrip } from '../strips/pages.js';
+import { createPageStrip } from '../strips/pages.js';
 import { t } from '../../controllers/localizationController.js';
 
 // Description: common functions for both core table and results table rendering
@@ -29,7 +29,7 @@ export function mayRecreateTableContainerIn(container) {
  * @param {Function} onPageChange - Callback for pagination changes
  */
 export function renderPaginatedTable(data, container, onPageChange) {
-    createOrUpdatePageStrip( container, data.offset, data.limit, data.total, onPageChange);
+    createPageStrip( container, data.offset, data.limit, data.total, onPageChange);
     const tableElement = container.querySelector('.table-content');
     const headers = generateTableHeaderRow(data.columns);
     const rows = generateTableRowsWithNumbers(data.rows, data.offset);

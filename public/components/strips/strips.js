@@ -4,7 +4,8 @@
  */
 
 /**
- * Creates a horizontal strip of buttons in a container
+ * Creates an empty container for the strip
+ * @param {HTMLElement} container - The container to insert the strip into
  * @param {HTMLElement} container - The container to insert the strip into
  * @param {Array<Object>} buttonsProperties - Array of button configuration objects
  * @param {string|number} buttonsProperties[].label - Text to display on the button
@@ -13,82 +14,65 @@
  * @param {Function} [buttonsProperties[].onClick] - Optional click handler for the button
  * @returns {Object} The created strip component with methods to manipulate it
  */
-export function createOrUpdateStrip(container, buttonsProperties) {
-    // Check if strip container already exists
-    let stripContainer = container.querySelector('.strip-container');
-    let stripButtons;
-    let buttonElements = [];
+
+export function createStrip(container, buttonsProperties) {
+    // Remove any existing strip container
+    const existingStrip = container.querySelector('.strip-container');
+    if (existingStrip) container.removeChild(existingStrip);
     
-    if (stripContainer) {
-        // Clear event listeners from existing buttons
-        stripButtons = stripContainer.querySelector('.strip-buttons');
-        buttonElements = Array.from(stripButtons.children);
-        buttonElements.forEach(button => {
-            const newButton = button.cloneNode(false);
-            newButton.className = 'strip-button';
-            newButton.setAttribute('index', button.getAttribute('index'));
-            button.parentNode.replaceChild(newButton, button);
-        });
-        buttonElements = Array.from(stripButtons.children);
-    } else {
-        // Create new DOM elements for the strip if they don't exist
-        stripContainer = document.createElement('nav');
-        stripContainer.className = 'strip-container';
-        stripButtons = document.createElement('div');
-        stripButtons.className = 'strip-buttons';
-        buttonsProperties.forEach((properties, index) => {
-            const button = document.createElement('button');
-            button.className = 'strip-button';
-            button.setAttribute('index', index);
-            stripButtons.appendChild(button);
-            buttonElements.push(button);
-        });
-        stripContainer.appendChild(stripButtons);
-        container.insertBefore(stripContainer, container.firstChild);
-    }
-    
-    // Update button properties
+    // Create new DOM structure for the strip
+    const stripContainer = document.createElement('nav');
+    stripContainer.className = 'strip-container';
+    const stripButtons = document.createElement('div');
+    stripButtons.className = 'strip-buttons';
+
+    // Create the buttons based on properties and store the active button index
+    let activeButtonIndex;
+    const buttonElements = [];
     buttonsProperties.forEach((properties, index) => {
-        const button = buttonElements[index];
-        
-        // Update properties
+        const button = document.createElement('button');
+        button.className = 'strip-button';
+        button.setAttribute('index', index);
         button.textContent = properties.label;
-        properties.classes.forEach(cls => button.classList.add(cls));
         
-        // Update tooltip
-        if (properties.tooltip) {
-            button.setAttribute('title', properties.tooltip);
-        } else {
-            button.removeAttribute('title');
+        // Add classes if provided
+        if (properties.classes) {
+            properties.classes.forEach(cls => button.classList.add(cls));
+            if (properties.classes.includes('active')) activeButtonIndex = index;
         }
         
-        // Update click handler
-        if (properties.onClick) {
+        // Set tooltip if provided
+        if (properties.title) button.setAttribute('title', properties.title);
+        
+        // Add click handler if provided
+        if (typeof properties.onClick === 'function') {
             button.addEventListener('click', e => {
                 properties.onClick(index, e);
+                changeActiveButton(index);
             });
         }
-    });
+        
+        stripButtons.appendChild(button);
+        buttonElements.push(button);
+    })
+
+    stripContainer.appendChild(stripButtons);
+    container.insertBefore(stripContainer, container.firstChild);
+
+    /**
+     * Activates a button and deactivates the currently active one
+     * @param {number} index - Index of the button to activate
+     * @returns {void}
+    */
+   function changeActiveButton(index) {
+       buttonElements[activeButtonIndex].classList.remove('active');
+       buttonElements[index].classList.add('active');
+       activeButtonIndex = index;
+    }
     
     // Public API for strip management
     return {
-        /**
-         * Gets all button elements in the strip
-         * @returns {HTMLElement[]} Array of button elements
-         */
-        getButtons: () => [...buttonElements],
-        
-        /**
-         * Gets a specific button element by index
-         * @param {number} index - Index of the button
-         * @returns {HTMLElement|null} The button element or null if not found
-         */
-        getButton: index => {
-            return (index >= 0 && index < buttonElements.length) 
-                ? buttonElements[index] 
-                : null;
-        },
-        
+
         /**
          * Adds a class to a button
          * @param {number} index - Index of the button
@@ -114,7 +98,12 @@ export function createOrUpdateStrip(container, buttonsProperties) {
                 button.classList.remove(className);
             }
         },
+
+        /**
+         * Get the active button element
+         */
+        getActiveButton: () => {
+            return buttonElements[activeButtonIndex];
+        },
     };
 }
-
-

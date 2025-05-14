@@ -77,11 +77,6 @@ export function initTabs() {
             const selectedContent = document.getElementById(tabId);
             selectedContent.classList.add('active');
 
-            // Reload data if needed
-            if (tabId === 'core-tables-tab') {
-                window.loadAndRenderCoreTableList();
-            }
-
             // STEP 4: Two-phase scroll restoration strategy
             // First restoration: after DOM update
             requestAnimationFrame(() => {
