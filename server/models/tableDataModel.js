@@ -1,7 +1,6 @@
 import { executeQuery } from '../services/databaseService.js';
 import { formatDates } from '../utils/dateFormatter.js';
 
-
 /**
  * Retrieves a page of a core table data. The hash column is filtered out.
  * @param {string} tableName - Table name
@@ -25,17 +24,22 @@ export async function queryCoreTableData(tableName, offset, limit) {
 
     const formattedRows = rows.map(formatDates);
 
-    // Extract column names, filtering out the "hash" column
-    const columns = formattedRows.length > 0 ? Object.keys(formattedRows[0]).filter(col => col.toLowerCase() !== "hash") : [];
-    const filteredRows = formattedRows.map(row => { return columns.map(col => row[col]); });
+    // Suppress the column exactly named "hash"
+    const filteredColumns = rows.length > 0
+        ? Object.keys(rows[0]).filter(col => col !== 'hash')
+        : [];
 
+    // Filter out hash columns from results
+    const filteredRows = formattedRows.map(row => {
+        return filteredColumns.map(col => row[col]);
+    });
 
     return {
         tableName,
         total,
         offset: offset,
         limit: limit,
-        columns: columns,
+        columns: filteredColumns,
         rows: filteredRows,
     };
 }
