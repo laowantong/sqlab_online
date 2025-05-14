@@ -2,7 +2,7 @@ import mariadb from 'mariadb';
 import dbConfig from '../config.js';
 
 // Create database connection pool
-const pool = mariadb.createPool(dbConfig.dbConfig);
+ export const pool = mariadb.createPool(dbConfig.dbConfig);
 
 /**
  * Gets a connection from the pool
