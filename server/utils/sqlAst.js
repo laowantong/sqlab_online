@@ -1,33 +1,46 @@
+// Import the node-sql-parser library
+import pkg from 'node-sql-parser';
+const { Parser } = pkg;
+
+// Create a parser instance
+const parser = new Parser();
+
 /**
  * Add a given column expression to the final statement of a SQL text if and only if
  * this statement is a SELECT.
  * @param {string} sqlText - The SQL text to parse
  * @param {string} columnExpression - The expression to add as a new column
- * @returns {string} The modified SQL text with the new column added
+ * @returns {object} - The response status and, if successful, the modified SQL text
  */
-export function addColumnToFinalStatement(sqlText, columnExpression = 'added_column') {
-
+export function addColumnToFinalStatement(sqlText, columnExpression) {
   // Calculate the AST of the SQL text
   let ast;
   try {
     ast = parser.astify(sqlText, { parseOptions: { includeLocations: true } });
   } catch (e) {
-    return { response: "ParseError"}
+    return { response: "ParseError" };
   }
-
-  // Ensure that all the preconditions are met
-  if (!Array.isArray(ast)) return { response: "NotAnArray"};
-  const final = ast[ast.length - 1];
-  if (final.type !== 'select') return { response: "nonSelectFinalStatement"};
-  const columns = final.columns;
-  if (!Array.isArray(columns)) return { response: "nonArrayColumns"};
-  if (columns.length === 0) return { response: "NoColumns"};
   
+  let final = ast;
+  if (Array.isArray(ast)) {
+    if (ast.length === 0) return { response: "EmptyAst" };
+    // The SQL text consists of multiple statements
+    // We only care about the last one
+    final = ast[ast.length - 1];
+  };
+
+  // Check if the last statement is a SELECT
+  if (final.type !== 'select') return { response: "nonSelectFinalStatement" };
+
   // Perform the insertion
-  const lastColumn = columns[columns.length - 1];
-  const loc = lastColumn?.loc ?? lastColumn.expr?.loc;
-  const i = loc.end.offset;
-  const result = sqlText.slice(0, i) + ',' + columnExpression + sqlText.slice(i);
+  final.columns.push({
+    expr: {
+      type: 'column_ref',
+      table: null,
+      column: 'SQLAB_PLACEHOLDER'
+    }
+  });
+  const result = parser.sqlify(ast).replace('`SQLAB_PLACEHOLDER`', columnExpression);
   return {
     response: "ok",
     result: result
@@ -46,19 +59,3 @@ function getTablesOfFromClause(ast) {
   }
   return ast.from.map(src => src.as || src.table);
 }
-
-
-// All the remaining functions are private and not exported
-
-/**
- * Splits SQL text into individual statements, trimming whitespace and filtering out empty statements.
- * @param {string} sqlText - The SQL text to split
- * @returns {Array<string>} Array of trimmed SQL statements
- */
-function splitStatements(sqlText) {
-  return sqlText
-    .split(';')
-    .map(s => s.trim())
-    .filter(s => s.length > 0);
-}
-
