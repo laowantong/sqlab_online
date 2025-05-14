@@ -1,4 +1,4 @@
-import { createOrUpdateStrip } from './strips.js';
+import { createStrip } from './strips.js';
 
 /**
  * Creates a strip to navigate through pages of table rows.
@@ -7,17 +7,17 @@ import { createOrUpdateStrip } from './strips.js';
  * @param {number} limit - Number of items per page
  * @param {number} total - Total number of items
  * @param {Function} onPageChange - Callback when page is changed
- * @returns {Object} The pagination strip component
+ * @returns {void} - No need to keep a reference to the strip
  */
-export function createOrUpdatePageStrip(container, offset, limit, total, onPageChange) {
+export function createPageStrip(container, offset, limit, total, onPageChange) {
     const activePage = Math.floor(offset / limit);
     const totalPages = Math.ceil(total / limit);
     const properties = Array.from({ length: totalPages }, (_, i) => {
         return {
             label: (i + 1) * limit,
-            classes: ['strip-button', ...((i === activePage) ? ['active'] : [])],
+            classes: (i === activePage) ? ['active'] : [],
             onClick: () => onPageChange(i * limit)
         };
     });
-    createOrUpdateStrip(container, properties);
+    createStrip(container, properties);
 }

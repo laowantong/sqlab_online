@@ -2,13 +2,15 @@ import { loadAndRenderActivityTitle } from './components/activityTitle.js';
 import { loadAndRenderRelationalSchema } from './components/relationalSchema.js';
 import { loadAndRenderCoreTableList } from './components/tables/core/accordions.js';
 import { loadAndRenderCoreTableData } from './components/tables/core/data.js';
-import { loadAndRenderSecretMessage } from './components/secretMessage.js';
 
 import { initTabs } from './controllers/tabController.js';
 import { initQueryExecution } from './components/tables/results.js';
 import { initNotes } from './components/notes.js';
+import { loadAndRenderTaskStrip } from './components/strips/tasks.js';
+
 import { initLocalization } from './controllers/localizationController.js';
-import { initContext } from './controllers/contextController.js';
+
+import { TEMP_STARTING_ACTIVITY } from './utils/constants.js';
 
 // Initialize localization service immediately
 window.i18n.init().catch(err => console.error('Failed to initialize localization:', err));
@@ -33,8 +35,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     initTabs();
     initQueryExecution();
     initNotes();
-    // initContext();
-    await loadAndRenderSecretMessage(199627676565263);
+
+    // Initialize the task strip ans simulate a click on the active button
+    const taskStrip = await loadAndRenderTaskStrip(TEMP_STARTING_ACTIVITY);
+    taskStrip.getActiveButton().click();
 
     window.loadAndRenderCoreTableList = loadAndRenderCoreTableList;
     window.loadAndRenderCoreTableData = loadAndRenderCoreTableData;

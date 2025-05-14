@@ -138,3 +138,11 @@ td.copy-error {
   font-weight: var(--font-weight-bold);
   border-color: var(--color-primary);
 }
+
+.strip-button.disabled {
+  background-color: #f0f0f0;
+  color: #ddd;
+  cursor: not-allowed;
+  border-color: #ddd;
+  pointer-events: none;
+}

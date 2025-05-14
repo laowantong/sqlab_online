@@ -1,51 +1,31 @@
+import { fetchMetadata } from '../../api/fetchMetadata.js';
+import { createStrip } from './strips.js';
+import { loadAndRenderSecretMessage } from '../secretMessage.js';
+
 /**
  * Creates a task navigation strip
- * @param {HTMLElement} container - Container to insert the strip into
- * @param {Object} options - Task options
- * @param {Array<Object>} options.tasks - Array of task data
- * @param {number} options.currentIndex - Current task index
- * @param {Function} options.onChange - Callback when task is changed
+ * @param {string} activityNumber - The activity number to fetch tasks for
  * @returns {Object} The task strip component
  */
-export function createOrUpdateTaskStrip(container, options) {
-    // Add task-specific classes to container
-    container.classList.add('task-actions-container');
-    
-    const { tasks, currentIndex, onChange } = options;
-    
-    // Prepare button configurations
-    const properties = tasks.map((task, index) => {
-        // Define classes
-        const classes = ['task-button'];
-        if (index === currentIndex) {
-            classes.push('active');
-        }
-        if (!task.accessible) {
-            classes.push('disabled');
-        }
-        if (task.completed) {
-            classes.push('done');
-        }
-        
-        // Define click handler (null for disabled properties)
-        const onClick = task.accessible ? () => {
-            onChange(index);
-        } : null;
-        
-        // Create button configuration
-        return {
-            label: index + 1, // Numbering starts from 1
-            classes: classes,
-            tooltip: task.title || `Task ${index + 1}`,
-            onClick: onClick
+export async function loadAndRenderTaskStrip(activityNumber) {
+    const activities = await fetchMetadata('activities');
+    const activity = activities[activityNumber];
+    const container = document.getElementById('tasks');
+
+    const properties = activity.tasks.map((task, i) => {
+        const obj = {
+            label: i + 1,
+            title: task.task_title,
+            classes: [],
         };
+        if (task.access) {
+            if (i === 0) obj.classes.push('active');
+            obj.onClick = () => loadAndRenderSecretMessage(task.access);
+        } else {
+            obj.classes.push('disabled');
+        }
+        return obj;
     });
     
-    // Create the strip
-    const strip = createOrUpdateStrip(container, properties);
-    
-    // Scroll the active button into view
-    strip.scrollClassIntoView('active');
-    
-    return strip;
+    return createStrip(container, properties);
 }
