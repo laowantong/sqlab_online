@@ -1,3 +1,6 @@
+// TODO: instead of using an existing database, create dynamically a dedicated test database.
+// It could be another instance of sqlab_island, whose dump is quite short.
+
 import { expect } from "chai";
 import { customQuery } from "../server/models/customQueryModel.js";
 import { pool } from "../server/services/databaseService.js";
@@ -23,7 +26,10 @@ describe('customQuery', () => {
     });
  
     it('filters hash columns from multiple tables in a JOIN', async () => {
-        const query = 'SELECT v.villageid, v.name AS village_name, v.chief, i.personid, i.name AS inhabitant_name, i.gender, i.job, i.gold, i.state FROM village v JOIN inhabitant i ON v.villageid = i.villageid';
+        // Obviously, specifying all columns except the hash columns will not result
+        // in any hash column in the result set! Replacing the columns with asterisk
+        // reveals an error. TODO: fix it.
+        const query = 'SELECT * FROM village v JOIN inhabitant i ON v.villageid = i.villageid';
         const result = await customQuery(query, 0, 20);
         expect(result.isArray).to.be.true;
         expect(result.columns).to.not.include('hash');
@@ -51,18 +57,11 @@ describe('customQuery', () => {
         expect(result.columns).to.have.lengthOf(2);
     });
 
-    it('filters hash columns in cartesian product', async () => {
-        const query = 'SELECT v.villageid, v.name AS village_name, v.chief, i.personid, i.name AS inhabitant_name, i.gender, i.job, i.gold, i.state FROM village v, inhabitant i LIMIT 5';
-        const result = await customQuery(query, 0, 5);
-        expect(result.isArray).to.be.true;
-        expect(result.columns).to.not.include('hash');
-        expect(result.total).to.be.greaterThan(0);
-    });
+    // Removed redundant test.
 
-
+    // TODO: test non query, e.g. INSERT + DELETE / UPDATE + UPDATE
 
       after(async () => {
-        
         if (pool) await pool.end();
     });
 });

@@ -1,6 +1,5 @@
 import { executeQuery } from "../services/databaseService.js";
 
-
 /**
  * Executes a custom SQL query with pagination support
  * @param {string} query - SQL query to execute - Must contain a valid SQL query
@@ -10,21 +9,17 @@ import { executeQuery } from "../services/databaseService.js";
  */
 export async function customQuery(query, offset, limit) {
 
-
     const trimmedQuery = query.trim();
     const result = await executeQuery(trimmedQuery);
 
-
     if (Array.isArray(result)) {
         const rowCount = result.length;
-
 
         let columns = [];
         if (rowCount > 0) {
             // Extract column names, filtering out the "hash" column
             columns = Object.keys(result[0]).filter(col => col.toLowerCase() !== "hash");
         }
-
 
         const startIndex = Math.min(offset, rowCount);
         const endIndex = Math.min(offset + limit, rowCount);
@@ -43,7 +38,6 @@ export async function customQuery(query, offset, limit) {
     }
     //In case of non-select queries
     else {
-
         return {
             isArray: false,
             result: result
