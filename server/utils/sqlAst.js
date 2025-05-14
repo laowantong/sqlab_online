@@ -15,7 +15,7 @@ export function appendPlaceholderColumn(sqlText) {
   // Calculate the AST of the SQL text
   let ast;
   try {
-    ast = parser.astify(sqlText, { parseOptions: { includeLocations: true } });
+    ast = parser.astify(sqlText);
   } catch (e) {
     return { response: "ParseError" };
   }
