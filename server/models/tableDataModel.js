@@ -1,6 +1,6 @@
 import { executeQuery } from '../services/databaseService.js';
 import { formatDates } from '../utils/dateFormatter.js';
-import { filterSensitiveData } from '../utils/dataFilters.js';
+
 
 /**
  * Retrieves a page of a core table data. The hash column is filtered out.
@@ -25,7 +25,9 @@ export async function queryCoreTableData(tableName, offset, limit) {
 
     const formattedRows = rows.map(formatDates);
 
-    const { columns, rows: filteredRows } = filterSensitiveData(formattedRows);
+    // Extract column names, filtering out the "hash" column
+    const columns = formattedRows.length > 0 ? Object.keys(formattedRows[0]).filter(col => col.toLowerCase() !== "hash") : [];
+    const filteredRows = formattedRows.map(row => { return columns.map(col => row[col]); });
 
 
     return {

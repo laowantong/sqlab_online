@@ -1,48 +1,31 @@
 import { executeQuery } from "../services/databaseService.js";
-import { filterSensitiveData } from "../utils/dataFilters.js";
+
 
 /**
-* Executes a custom SQL query with pagination support
-* @param {string} query - SQL query to execute
-* @param {number} offset - Starting index for pagination
-* @param {number} limit - Number of rows to return
-* @param {boolean} skipPagination - If true, pagination will not be applied
-* @returns {Promise<Object>} Query results with metadata
-*/
-export async function customQuery(query, offset, limit, skipPagination) {
+ * Executes a custom SQL query with pagination support
+ * @param {string} query - SQL query to execute
+ * @param {number} offset - Starting index for pagination
+ * @param {number} limit - Number of rows to return
+ * @returns {Promise<Object>} Query results with metadata
+ */
+export async function customQuery(query, offset, limit) {
 
-    // Clean the query and determine if pagination should be applied
+
     const trimmedQuery = query.trim();
-    const isSelectQuery = trimmedQuery.toLowerCase().startsWith('select');
-    const shouldApplyPagination = isSelectQuery && !skipPagination;
+    const rows = await executeQuery(trimmedQuery);
 
-    if (shouldApplyPagination) {
-        const cleanQuery = trimmedQuery.replace(/;+$/, '');
-        const hasLimit = cleanQuery.match(/\sLIMIT\s+(\d+)(?:\s+OFFSET\s+(\d+))?/i) !== null;
+    if (Array.isArray(rows) && rows.length > 0) {
+        const totalRows = rows.length;
 
-        let totalRows, rows, paginatedQuery;
+        // Extract column names, filtering out the "hash" column
+        const columns = Object.keys(rows[0]).filter(col => col.toLowerCase() !== "hash");
 
-        if (hasLimit) {
-            // If query already has LIMIT, execute as is
-            rows = await executeQuery(cleanQuery);
-            totalRows = rows.length;
-            paginatedQuery = cleanQuery;
-        }
-        else {
-            const queryForCounting = cleanQuery.replace(/\s+LIMIT\s+\d+(\s+OFFSET\s+\d+)?/i, '');
+        const startIndex = Math.min(offset, totalRows);
+        const endIndex = Math.min(offset + limit, totalRows);
+        const pagedRows = rows.slice(startIndex, endIndex);
 
-            const countQuery = `SELECT COUNT(*) as total from (${queryForCounting}) as countTable`;
-            const countResult = await executeQuery(countQuery);
-            totalRows = countResult[0].total;
-
-            paginatedQuery = `${cleanQuery} LIMIT ${limit} OFFSET ${offset}`;
-            rows = await executeQuery(paginatedQuery);
-        }
-
-        // Filter sensitive data (like hash columns)
-        const { columns, rows: filteredRows } = filterSensitiveData(rows);
-
-         // Return results with pagination metadata
+        const filteredRows = pagedRows.map(row => { return columns.map(col => row[col]) });
+        // Return results with pagination metadata
         return {
             columns,
             rows: filteredRows,
@@ -52,14 +35,11 @@ export async function customQuery(query, offset, limit, skipPagination) {
         };
     }
     else {
-        // For non-SELECT queries or when pagination is skipped
-        const rows = await executeQuery(trimmedQuery);
-
-         // Return results without pagination
+        // Return results without pagination
         return {
             columns: rows.meta?.columns || [],
             rows: rows || [],
-            totalRows: rows.length
+            totalRows: rows.length || 0
         };
 
     }
