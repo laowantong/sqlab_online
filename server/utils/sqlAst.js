@@ -1,30 +1,45 @@
+// Import the node-sql-parser library
+import pkg from 'node-sql-parser';
+const { Parser } = pkg;
+
+// Create a parser instance
+const parser = new Parser();
+
 /**
  * Add a given column expression to the final statement of a SQL text if and only if
  * this statement is a SELECT.
  * @param {string} sqlText - The SQL text to parse
  * @param {string} columnExpression - The expression to add as a new column
- * @returns {string} The modified SQL text with the new column added
+ * @returns {object} - The response status and, if successful, the modified SQL text
  */
-export function addColumnToFinalStatement(sqlText, columnExpression = 'added_column') {
-
+export function addColumnToFinalStatement(sqlText, columnExpression) {
   // Calculate the AST of the SQL text
   let ast;
   try {
     ast = parser.astify(sqlText, { parseOptions: { includeLocations: true } });
   } catch (e) {
-    return { response: "ParseError"}
+    return { response: "ParseError" };
   }
+  
+  if (Array.isArray(ast)) {
+    if (ast.length === 0) return { response: "EmptyAst" };
+    // The SQL text consists of multiple statements
+    // We only care about the last one
+    ast = ast[ast.length - 1];
+  };
 
-  // Ensure that all the preconditions are met
-  if (!Array.isArray(ast)) return { response: "NotAnArray"};
-  const final = ast[ast.length - 1];
-  if (final.type !== 'select') return { response: "nonSelectFinalStatement"};
-  const columns = final.columns;
-  if (!Array.isArray(columns)) return { response: "nonArrayColumns"};
-  if (columns.length === 0) return { response: "NoColumns"};
+  // Check if the last statement is a SELECT
+  if (ast.type !== 'select') return { response: "nonSelectFinalStatement" };
+
+  // Check there are columns in the SELECT statement
+  const columns = ast.columns;
+  if (!Array.isArray(columns)) return { response: "nonArrayColumns" };
+  if (columns.length === 0) return { response: "NoColumns" };
   
   // Perform the insertion
   const lastColumn = columns[columns.length - 1];
+  // console.log('lastColumn', lastColumn);
+  // console.log('lastColumn.expr.loc', lastColumn.expr.ast.loc);
   const loc = lastColumn?.loc ?? lastColumn.expr?.loc;
   const i = loc.end.offset;
   const result = sqlText.slice(0, i) + ',' + columnExpression + sqlText.slice(i);
