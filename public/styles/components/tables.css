@@ -108,7 +108,8 @@ td.copy-error {
   display: inline-flex;
   flex-direction: row;
   gap: var(--spacing-sm);
-  padding-bottom: var(--spacing-sm);
+  padding: var(--spacing-sm);
+  padding-top: 0;
 }
 
 .strip-button {

@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Initialize core components: tabs, query handling, and core tables
     initTabs();
+    document.querySelector('.tab[data-tab="schema-tab"]').click();
     initQueryExecution();
     initNotes();
 
@@ -45,7 +46,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Automatically load core tables on page load
     window.loadAndRenderCoreTableList();
-    document.querySelector('.tab[data-tab="core-tables-tab"]').click();
    
     // Theme toggle handling
     const themeToggle = document.getElementById('toggle-theme');
