@@ -2,7 +2,7 @@ import mariadb from 'mariadb';
 import dbConfig from '../config.js';
 
 // Create database connection pool
- export const pool = mariadb.createPool(dbConfig.dbConfig);
+export const pool = mariadb.createPool(dbConfig.dbConfig);
 
 /**
  * Gets a connection from the pool
@@ -22,7 +22,7 @@ export async function executeQuery(query, params = []) {
   let conn;
   try {
     conn = await getConnection();
-    return await conn.query(query, params);
+    return await conn.query({sql: query, checkDuplicate: false}, params);
   } finally {
     if (conn) conn.release();
   }
