@@ -5,7 +5,7 @@ import { expect } from "chai";
 import { customQuery } from "../server/models/customQueryModel.js";
 import { pool } from "../server/services/databaseService.js";
 
-describe('customQuery', () => {
+describe('customQuery for SELECT operations', () => {
     it('handles simple SELECT query correctly', async () => {
         const query = 'SELECT * FROM village';
         const result = await customQuery(query, 0, 10);
@@ -24,7 +24,7 @@ describe('customQuery', () => {
         expect(result.columns).to.be.an('array').that.is.empty;
         expect(result.rows).to.be.an('array').that.is.empty;
     });
- 
+
     it('filters hash columns from multiple tables in a JOIN', async () => {
         // Obviously, specifying all columns except the hash columns will not result
         // in any hash column in the result set! Replacing the columns with asterisk
@@ -57,11 +57,53 @@ describe('customQuery', () => {
         expect(result.columns).to.have.lengthOf(2);
     });
 
-    // Removed redundant test.
+});
 
-    // TODO: test non query, e.g. INSERT + DELETE / UPDATE + UPDATE
+describe('customQuery for non-SELECT operations', () => {
+    const cleanup = async (itemName) => {
+        const cleanupQuery = `DELETE FROM item WHERE item = '${itemName}'`;
+        await customQuery(cleanupQuery, 0, 10);
+    };
 
-      after(async () => {
+    beforeEach(async () => {
+        await cleanup('testitem');
+        await cleanup('update_test');
+    });
+
+    afterEach(async () => {
+        await cleanup('testitem');
+        await cleanup('update_test');
+    });
+
+    it('handles INSERT query correctly', async () => {
+        const insertQuery = "INSERT INTO item (item,owner,hash) VALUES ('testitem', NULL,123456789)";
+        const insertResult = await customQuery(insertQuery, 0, 10);
+        expect(insertResult.isArray).to.be.false; 
+        const selectQuery = "SELECT item, owner, hash FROM item WHERE item = 'testitem'";
+        const selectResult = await customQuery(selectQuery, 0, 10);
+        expect(selectResult.rows.length).to.equal(1);
+        expect(selectResult.columns).to.not.include('hash');  
+        const deleteQuery = "DELETE FROM item WHERE item = 'testitem'";
+        await customQuery(deleteQuery, 0, 10);
+        const verifyQuery = "SELECT item FROM item WHERE item = 'testitem'";
+        const verifyResult = await customQuery(verifyQuery, 0, 10);
+        expect(verifyResult.rows.length).to.equal(0);
+    });
+
+    it('handles UPDATE query correctly', async () => {
+        const insertQuery = "INSERT INTO item (item, owner, hash) VALUES ('update_test', NULL, 135792468)";
+        await customQuery(insertQuery, 0, 10);
+        const updateQuery = "UPDATE item SET owner = 1 WHERE item = 'update_test'";
+        const updateResult = await customQuery(updateQuery, 0, 10);
+        expect(updateResult.isArray).to.be.false;   
+        const verifyQuery = "SELECT owner FROM item WHERE item = 'update_test'";
+        const verifyResult = await customQuery(verifyQuery, 0, 10);
+        expect(verifyResult.rows.length).to.equal(1);
+        expect(verifyResult.rows[0][0]).to.equal(1);
+    });
+
+
+     after(async () => {
         if (pool) await pool.end();
     });
 });
