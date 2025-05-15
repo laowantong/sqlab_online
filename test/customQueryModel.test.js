@@ -1,14 +1,10 @@
 import { expect } from "chai";
 import { customQuery } from "../server/models/customQueryModel.js";
-import { pool } from "../server/services/databaseService.js";
-import { setupTestDatabase } from "./testSetup.js";
+import { setupTestDatabase } from "./setupTestDatabase.js";
+
+await setupTestDatabase();
 
 describe('customQuery for SELECT operations', () => {
-    before(async () => {
-        await setupTestDatabase();
-    });
-
-
     it('handles simple SELECT query correctly', async () => {
         const query = 'SELECT * FROM village';
         const result = await customQuery(query, 0, 10);
@@ -101,7 +97,6 @@ describe('customQuery for non-SELECT operations', () => {
         expect(verifyResult.rows.length).to.equal(1);
         expect(verifyResult.rows[0][0]).to.equal(1);
     });
-
 
     after(async () => {
         if (pool) await pool.end();
