@@ -1,11 +1,14 @@
-// TODO: instead of using an existing database, create dynamically a dedicated test database.
-// It could be another instance of sqlab_island, whose dump is quite short.
-
 import { expect } from "chai";
 import { customQuery } from "../server/models/customQueryModel.js";
 import { pool } from "../server/services/databaseService.js";
+import { setupTestDatabase } from "./testSetup.js";
 
 describe('customQuery for SELECT operations', () => {
+    before(async () => {
+        await setupTestDatabase();
+    });
+
+
     it('handles simple SELECT query correctly', async () => {
         const query = 'SELECT * FROM village';
         const result = await customQuery(query, 0, 10);
@@ -26,9 +29,6 @@ describe('customQuery for SELECT operations', () => {
     });
 
     it('filters hash columns from multiple tables in a JOIN', async () => {
-        // Obviously, specifying all columns except the hash columns will not result
-        // in any hash column in the result set! Replacing the columns with asterisk
-        // reveals an error. TODO: fix it.
         const query = 'SELECT * FROM village v JOIN inhabitant i ON v.villageid = i.villageid';
         const result = await customQuery(query, 0, 20);
         expect(result.isArray).to.be.true;
@@ -78,11 +78,11 @@ describe('customQuery for non-SELECT operations', () => {
     it('handles INSERT query correctly', async () => {
         const insertQuery = "INSERT INTO item (item,owner,hash) VALUES ('testitem', NULL,123456789)";
         const insertResult = await customQuery(insertQuery, 0, 10);
-        expect(insertResult.isArray).to.be.false; 
+        expect(insertResult.isArray).to.be.false;
         const selectQuery = "SELECT item, owner, hash FROM item WHERE item = 'testitem'";
         const selectResult = await customQuery(selectQuery, 0, 10);
         expect(selectResult.rows.length).to.equal(1);
-        expect(selectResult.columns).to.not.include('hash');  
+        expect(selectResult.columns).to.not.include('hash');
         const deleteQuery = "DELETE FROM item WHERE item = 'testitem'";
         await customQuery(deleteQuery, 0, 10);
         const verifyQuery = "SELECT item FROM item WHERE item = 'testitem'";
@@ -95,7 +95,7 @@ describe('customQuery for non-SELECT operations', () => {
         await customQuery(insertQuery, 0, 10);
         const updateQuery = "UPDATE item SET owner = 1 WHERE item = 'update_test'";
         const updateResult = await customQuery(updateQuery, 0, 10);
-        expect(updateResult.isArray).to.be.false;   
+        expect(updateResult.isArray).to.be.false;
         const verifyQuery = "SELECT owner FROM item WHERE item = 'update_test'";
         const verifyResult = await customQuery(verifyQuery, 0, 10);
         expect(verifyResult.rows.length).to.equal(1);
@@ -103,7 +103,7 @@ describe('customQuery for non-SELECT operations', () => {
     });
 
 
-     after(async () => {
+    after(async () => {
         if (pool) await pool.end();
     });
 });
