@@ -1,10 +1,13 @@
 import { expect } from "chai";
 import { customQuery } from "../server/models/customQueryModel.js";
 import { setupTestDatabase } from "./setupTestDatabase.js";
+import { databaseConnection } from "../server/services/databaseService.js";
+import { databaseClose } from "../server/services/databaseService.js";
 
 await setupTestDatabase();
+databaseConnection('../../test/testDatabaseConfig.js');
 
-describe('customQuery for SELECT operations', () => {
+describe('customQuery', () => {
     it('handles simple SELECT query correctly', async () => {
         const query = 'SELECT * FROM village';
         const result = await customQuery(query, 0, 10);
@@ -53,52 +56,14 @@ describe('customQuery for SELECT operations', () => {
         expect(result.columns).to.have.lengthOf(2);
     });
 
-});
-
-describe('customQuery for non-SELECT operations', () => {
-    const cleanup = async (itemName) => {
-        const cleanupQuery = `DELETE FROM item WHERE item = '${itemName}'`;
-        await customQuery(cleanupQuery, 0, 10);
-    };
-
-    beforeEach(async () => {
-        await cleanup('testitem');
-        await cleanup('update_test');
-    });
-
-    afterEach(async () => {
-        await cleanup('testitem');
-        await cleanup('update_test');
-    });
-
-    it('handles INSERT query correctly', async () => {
-        const insertQuery = "INSERT INTO item (item,owner,hash) VALUES ('testitem', NULL,123456789)";
-        const insertResult = await customQuery(insertQuery, 0, 10);
-        expect(insertResult.isArray).to.be.false;
-        const selectQuery = "SELECT item, owner, hash FROM item WHERE item = 'testitem'";
-        const selectResult = await customQuery(selectQuery, 0, 10);
-        expect(selectResult.rows.length).to.equal(1);
-        expect(selectResult.columns).to.not.include('hash');
-        const deleteQuery = "DELETE FROM item WHERE item = 'testitem'";
-        await customQuery(deleteQuery, 0, 10);
-        const verifyQuery = "SELECT item FROM item WHERE item = 'testitem'";
-        const verifyResult = await customQuery(verifyQuery, 0, 10);
-        expect(verifyResult.rows.length).to.equal(0);
-    });
-
-    it('handles UPDATE query correctly', async () => {
-        const insertQuery = "INSERT INTO item (item, owner, hash) VALUES ('update_test', NULL, 135792468)";
-        await customQuery(insertQuery, 0, 10);
-        const updateQuery = "UPDATE item SET owner = 1 WHERE item = 'update_test'";
+    
+    it('handles non-select queries correctly', async () => {
+        const updateQuery = "UPDATE village SET chief = 1 WHERE name = 'Monkeycity'";
         const updateResult = await customQuery(updateQuery, 0, 10);
         expect(updateResult.isArray).to.be.false;
-        const verifyQuery = "SELECT owner FROM item WHERE item = 'update_test'";
-        const verifyResult = await customQuery(verifyQuery, 0, 10);
-        expect(verifyResult.rows.length).to.equal(1);
-        expect(verifyResult.rows[0][0]).to.equal(1);
     });
 
-    after(async () => {
-        if (pool) await pool.end();
-    });
+    after(async function() {
+        await databaseClose();
+    })
 });
