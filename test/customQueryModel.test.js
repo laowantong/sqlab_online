@@ -3,6 +3,7 @@ import { customQuery } from "../server/models/customQueryModel.js";
 import { setupTestDatabase } from "./setupTestDatabase.js";
 import { databaseConnection } from "../server/services/databaseService.js";
 import { databaseClose } from "../server/services/databaseService.js";
+import { expectThrowsAsync } from "./testUtils.js";
 
 await setupTestDatabase();
 databaseConnection('../../test/testDatabaseConfig.js');
@@ -72,46 +73,24 @@ describe('customQuery', () => {
 
     it('throws an error for empty queries', async () => {
         const query = '';
-        try {
-            await customQuery(query);
-            expect.fail('Expected error not thrown');
-        } catch (error) {
-            expect(error.message).to.equal('Query cannot be empty');
-        }
+        await expectThrowsAsync(() => customQuery(query)), 'Query cannot be empty';
     });
     
     it('throws an error for falsy values', async () => {
-        [undefined, null, false, 0].forEach(async (falsyValue) => {
-            const query = falsyValue;
-            try {
-                await customQuery(query);
-                expect.fail('Expected error not thrown');
-            } catch (error) {
-                expect(error.message).to.equal('Query cannot be empty');
-            }
-        });
+        for (const falsyValue of [undefined, null, false, 0]) {
+            await expectThrowsAsync(() => customQuery(falsyValue)), 'Query cannot be empty';
+        }
     });
     
     // Wrong behavior:
     it('does NOT handle multi-select queries correctly', async () => {
         // TODO: execute all statements, returning the last one if it is a SELECT
         const query = 'SELECT * FROM village; SELECT * FROM inhabitant';
-        try {
-            await customQuery(query);
-            expect.fail('Expected error not thrown');
-        }
-        catch (error) {
-            expect(error.message).to.include('SQL error');
-        }
+        await expectThrowsAsync(() => customQuery(query)), /SQL error/;
     });
-
+    
     it('throws an error for invalid queries', async () => {
-        try {
-            await customQuery('INVALID SQL QUERY');
-            expect.fail('Expected error not thrown');
-        } catch (error) {
-            expect(error.message).to.include('SQL error');
-        }
+        await expectThrowsAsync(() => customQuery('INVALID')), /SQL error/;
     });
 
     after(async function() {
