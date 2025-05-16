@@ -1,29 +1,25 @@
 import mariadb from 'mariadb';
-import dbConfig from '../config.js';
 
-// Create database connection pool
-export const pool = mariadb.createPool(dbConfig.dbConfig);
+export let executeQuery;
 
 /**
- * Gets a connection from the pool
- * @returns {Promise<Object>} Database connection
+ * Creates a function to execute SQL queries using the provided database configuration.
+ * @param {string} path - Path to the database configuration file.
+ * @returns {Promise<void>} A promise that resolves when the function is created.
+ * @throws {Error} If the database configuration is invalid or if the connection fails.
+ * @description This function initializes a connection pool and returns a function to execute SQL queries.
  */
-async function getConnection() {
-  return await pool.getConnection();
-}
-
-/**
- * Executes a query and returns the results
- * @param {string} query - SQL query to execute
- * @param {Array} params - Parameters for prepared statement (optional)
- * @returns {Promise<Array>} Query results
- */
-export async function executeQuery(query, params = []) {
-  let conn;
-  try {
-    conn = await getConnection();
-    return await conn.query({sql: query, checkDuplicate: false}, params);
-  } finally {
-    if (conn) conn.release();
+export async function createExecuteQueryFunction(cnxPath) {
+  // Retrieve the database configuration from the provided path
+  const cnx = await import(cnxPath);
+  const pool = mariadb.createPool(cnx.dbConfig);
+  executeQuery = async (query, params = []) => {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+      return await conn.query({ sql: query, checkDuplicate: false }, params);
+    } finally {
+      if (conn) conn.release();
+    }
   }
 }
