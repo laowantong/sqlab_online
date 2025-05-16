@@ -3,7 +3,6 @@ import { showError } from '../../utils/genericUtils.js';
 import { renderPaginatedTable, mayRecreateTableContainerIn } from './tables.js';
 import { t } from '../../controllers/localizationController.js';
 import { DEFAULT_PAGE_LIMIT, DEFAULT_PAGE_OFFSET } from '../../utils/constants.js';
-import { getQueryEditor } from '../sqlEditor.js';
 
 /**
  * Initializes the query execution functionality.
@@ -13,12 +12,14 @@ import { getQueryEditor } from '../sqlEditor.js';
  * @returns {void}
  */
 export function initQueryExecution() {
+    const queryInput = document.getElementById('query-input');
     const resultsContainer = document.getElementById('results-container');
     const executionTab = document.querySelector('.tab[data-tab="execution-tab"]');
+
     executionTab.addEventListener('click', triggerExecutionOfNewQuery);
 
     async function triggerExecutionOfNewQuery() {
-        const query = getQueryEditor().trim();
+        const query = queryInput.value.trim();
         if (!query) {
             showError(t('query.emptyError'), resultsContainer);
             return;

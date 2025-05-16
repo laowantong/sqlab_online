@@ -12,8 +12,6 @@ import { initLocalization } from './controllers/localizationController.js';
 
 import { TEMP_STARTING_ACTIVITY } from './utils/constants.js';
 
-import { initSqlEditor } from './components/sqlEditor.js';
-
 // Initialize localization service immediately
 window.i18n.init().catch(err => console.error('Failed to initialize localization:', err));
 
@@ -32,8 +30,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     await loadAndRenderActivityTitle();
-    initSqlEditor();
-    
+
     // Initialize core components: tabs, query handling, and core tables
     initTabs();
     document.querySelector('.tab[data-tab="schema-tab"]').click();
@@ -49,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Automatically load core tables on page load
     window.loadAndRenderCoreTableList();
-
+   
     // Theme toggle handling
     const themeToggle = document.getElementById('toggle-theme');
     const isDarkTheme = localStorage.getItem('darkTheme') === 'true';
