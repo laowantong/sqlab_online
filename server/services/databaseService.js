@@ -24,5 +24,4 @@ export async function databaseConnection(cnxPath) {
     }
   };
   databaseClose = async() => pool.end();
-
 }

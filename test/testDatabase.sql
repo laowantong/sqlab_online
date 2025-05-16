@@ -3,10 +3,10 @@
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
-DROP DATABASE IF EXISTS sqlab_island_test;
-CREATE DATABASE sqlab_island_test DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+DROP DATABASE IF EXISTS sqlab_test;
+CREATE DATABASE sqlab_test DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
 
-USE sqlab_island_test;
+USE sqlab_test;
 
 CREATE TABLE inhabitant (
   personid int(11) NOT NULL AUTO_INCREMENT,

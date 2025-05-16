@@ -1,6 +1,6 @@
 # Configuration files with sensitive data
 server/config.js
-test/testDatabaseConfig.cnf
+test/testDatabaseConfig.js
 
 # Node.js dependencies
 node_modules/
