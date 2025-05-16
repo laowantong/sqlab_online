@@ -4,6 +4,7 @@ import {
   injectPlaceholderColumn,
   getTablesOfFromClause,
   calculateFirstPassFormula,
+  calculateSecondPassFormula,
 } from '../server/utils/sqlAst.js';
 
 // Helper function to remove all backticks, mostly added by sqlify
@@ -250,6 +251,17 @@ describe('parseSqlToAst + calculateFirstPassFormula', () => {
     const sql = 'SELECT id, name FROM users';
     const formula = 'salt_042(sum(nn(A.hash) + nn(B.hash)) OVER ()) AS token';
     expect(() => calculateFirstPassFormula(sql, formula)).to.throw('tooFewTablesError');
+  });
+
+});
+
+
+describe('calculateSecondPassFormula', () => {
+  it('replaces placeholder with value', () => {
+    const formula = 'salt_042((0) + sum(nn(hash)) OVER ()) AS token';
+    const tweakValue = 42;
+    const result = calculateSecondPassFormula(formula, tweakValue);
+    expect(result).to.equal('salt_042(42 + sum(nn(hash)) OVER ()) AS token');
   });
 
 });

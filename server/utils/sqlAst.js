@@ -90,29 +90,13 @@ export function calculateFirstPassFormula(sql, formula) {
       result.replace(match, tablesOfFromClauses[i] + '.hash'), formula);
 }
 
-// TODO: implement the following process
-// - The user requests a check: he sends:
-//   {
-//     sql: 'SELECT * FROM users',
-//     activity_number: 1,
-//     task_number: 42,
-//   }
-// - const formula = the token formula from the activity and task number. If it fails, respond with "unknownTaskError".
-// - const formulaTableCount = the number of \b\W\.hash\b in the formula.
-// - const ast = parser.astify(sql). If it fails, respond with "ParseError". This should never occur since the check button is inactive if the input area is dirty or the last execution failed. It may be a failure from the library node-sql-parser or an attempt to inject SQL code.
-// - const tablesOfFromClauses = getTablesOfFromClause(ast);
-// - If queryTableCount > tablesOfFromClauses.length(), respond with "tooManyTablesError".
-// - If queryTableCount < tablesOfFromClauses.length(), respond with "tooFewTablesError".
-// - const firstPassFormula = copy of formula with \b\W\.hash\b replaced by the actual table names.
-// - const queryWithPlaceholder = injectPlaceholderColumn(ast).result;
-// - const firstPassQuery = queryWithPlaceholder.replace('`SQLAB_COLUMN_PLACEHOLDER`', firstPassFormula).
-// - let resultSet = executeQuery(firstPassQuery).result; If it fails, respond with "firstPassExecutionError". If it returns an empty result set, respond with "emptyResultError".
-// - If the formula comes with a tweak {
-//   - const tweakValue = retrieved from firstPassResult
-//   - const secondPassFormula = firstPassFormula.replace('(0)', `(${tweakValue})`)
-//   - const secondPassQuery = queryWithPlaceholder.replace('`SQLAB_COLUMN_PLACEHOLDER`', secondPassFormula).
-//   - resultSet = executeQuery(secondPassQuery).result; If it fails, respond with "secondPassExecutionError".
-//  }
-// - const token = resultSet[0].token. If it fails, respond with "noTokenError".
-// - const secretMessage = executeQuery(`SELECT decrypt('${token}')`).result.
-// - Respond with the secret message.
+/**
+ * Replaces the placeholder '(0)' in the formula with a given value.
+ * @param {string} firstPassFormula - The formula after the first pass
+ * @param {string} tweakValue - The value to replace the placeholder with
+ * @return {string} - The formula with the placeholder replaced
+ */
+export function calculateSecondPassFormula(firstPassFormula, tweakValue) {
+  return firstPassFormula.replace('(0)', `${tweakValue}`);
+}
+
