@@ -1,6 +1,7 @@
 import mariadb from 'mariadb';
 
 export let executeQuery;
+export let databaseClose;
 
 /**
  * Creates a function to execute SQL queries using the provided database configuration.
@@ -9,7 +10,7 @@ export let executeQuery;
  * @throws {Error} If the database configuration is invalid or if the connection fails.
  * @description This function initializes a connection pool and returns a function to execute SQL queries.
  */
-export async function createExecuteQueryFunction(cnxPath) {
+export async function databaseConnection(cnxPath) {
   // Retrieve the database configuration from the provided path
   const cnx = await import(cnxPath);
   const pool = mariadb.createPool(cnx.dbConfig);
@@ -21,5 +22,7 @@ export async function createExecuteQueryFunction(cnxPath) {
     } finally {
       if (conn) conn.release();
     }
-  }
+  };
+  databaseClose = async() => pool.end();
+
 }

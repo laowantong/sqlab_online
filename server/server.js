@@ -2,7 +2,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import path from 'path';
-import { createExecuteQueryFunction } from './services/databaseService.js';
+import { databaseConnection } from './services/databaseService.js';
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -16,7 +16,7 @@ const __dirname = path.dirname(__filename);
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, '../public')));
 // Initialize database connection
-createExecuteQueryFunction('../config.js');
+databaseConnection('../config.js');
 
 // Configure middlewares
 import { bigIntHandler } from './middlewares/bigIntHandler.js';
