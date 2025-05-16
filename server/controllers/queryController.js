@@ -8,9 +8,6 @@ import { customQuery } from "../models/customQueryModel.js";
  */
 export async function handleExecuteQuery(req, res) {
   const { query, offset, limit } = req.body;
-
-  if (!query || query.trim() === '') return res.status(400).json;
-
   try {
     const data = await customQuery(query, offset, limit);
     res.json(data);
@@ -19,5 +16,4 @@ export async function handleExecuteQuery(req, res) {
       error: `Database error: ${err.message}`
     });
   }
-
 }

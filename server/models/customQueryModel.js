@@ -1,16 +1,26 @@
 import { executeQuery } from "../services/databaseService.js";
 
 /**
- * Executes a custom SQL query with pagination support
+ * Executes a custom SQL query with optional pagination support
  * @param {string} query - SQL query to execute - Must contain a valid SQL query
  * @param {number} offset - Starting index for pagination - Must be a non-negative integer
  * @param {number} limit - Number of rows to return - Must be a positive integer
  * @returns {Promise<Object>} Query results with metadata
  */
-export async function customQuery(query, offset, limit) {
+export async function customQuery(query, offset=0, limit=0) {
 
-    const trimmedQuery = query.trim();
-    const result = await executeQuery(trimmedQuery);
+    if (!query || query.trim() === "") {
+        throw new Error("Query cannot be empty");
+    }
+
+    let result;
+    try {
+        result = await executeQuery(query);
+    }
+    catch (error) {
+        console.log(`SQL error: ${error.message}`);
+        throw new Error(`SQL error: ${error.message}`);
+    }
 
     if (Array.isArray(result)) {
         const rowCount = result.length;
@@ -22,7 +32,7 @@ export async function customQuery(query, offset, limit) {
         }
 
         const startIndex = Math.min(offset, rowCount);
-        const endIndex = Math.min(offset + limit, rowCount);
+        const endIndex = limit ? Math.min(startIndex + limit, rowCount) : rowCount;
         const pagedRows = result.slice(startIndex, endIndex);
 
         const filteredRows = pagedRows.map(row => { return columns.map(col => row[col]) });

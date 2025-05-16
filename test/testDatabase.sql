@@ -91,7 +91,7 @@ TRUNCATE TABLE item;
 INSERT INTO item (item, owner) VALUES
   ('bucket', NULL),
   ('carton', NULL),
-  ('coffee cup', NULL),
+  ('咖啡杯', 3),
   ('lightbulb', NULL),
   ('ring', NULL),
   ('teapot', NULL),
