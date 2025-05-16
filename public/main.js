@@ -32,7 +32,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     await loadAndRenderActivityTitle();
-    initSqlEditor();
+
+    window.sqlEditor = initSqlEditor('sql-editor');
     
     // Initialize core components: tabs, query handling, and core tables
     initTabs();

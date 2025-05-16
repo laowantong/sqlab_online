@@ -1,25 +1,16 @@
-let editorInstance = null;
-
 /**
- * Initializes the SQL editor with syntax highlighting
+ * Creates a CodeMirror editor instance for SQL editing.
+ * @param {string} containerId - ID of the textarea element
+ * @returns {Object} Enhanced editor instance
  */
-export function initSqlEditor() {
-    const queryInput = document.getElementById('query-input');
-    editorInstance = CodeMirror.fromTextArea(queryInput, {
-        placeholder: queryInput.getAttribute('placeholder')
+export function initSqlEditor(containerId) {
+    const container = document.getElementById(containerId);
+    
+    if (!container) {
+        throw new Error(`Element with id "${containerId}" not found`);
+    }
+    
+    return CodeMirror.fromTextArea(container, {
+        placeholder: container.getAttribute('placeholder')
     });
 }
-
-/**
- * Gets the current SQL query from the editor
- * @returns {string} The SQL query
- */
-export function getQueryEditor() {
-    if (editorInstance) {
-        return editorInstance.getValue();
-    }
-    else {
-        return '';
-    }
-}
-
