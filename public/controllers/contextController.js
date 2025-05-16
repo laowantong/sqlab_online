@@ -42,7 +42,7 @@ export function initContext() {
     async function checkSolution() {
         try {
             // Get the current query
-            const queryInput = document.getElementById('query-input');
+            const queryInput = document.getElementById('sql-editor');
             const query = queryInput.value.trim();
             
             // Make sure we have a query
