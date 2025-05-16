@@ -1,5 +1,10 @@
 import { expect } from 'chai';
-import { parseSqlToAst, injectPlaceholderColumn, getTablesOfFromClause } from '../server/utils/sqlAst.js';
+import {
+  parseSqlToAst,
+  injectPlaceholderColumn,
+  getTablesOfFromClause,
+  calculateFirstPassFormula,
+} from '../server/utils/sqlAst.js';
 
 // Helper function to remove all backticks, mostly added by sqlify
 function r(string) {
@@ -216,6 +221,35 @@ describe('parseSqlToAst + getTablesOfFromClause', () => {
   it('should handle SELECT with UNION', () => {
     // TODO. The expected behavior is much more complex
     testGetTables('SELECT id FROM users UNION SELECT id FROM admins', ['users']);
+  });
+
+});
+
+describe('parseSqlToAst + calculateFirstPassFormula', () => {
+  it('handles unqualified hash and unaliased table', () => {
+    const sql = 'SELECT id, name FROM users';
+    const formula = 'salt_042(sum(nn(hash)) OVER ()) AS token';
+    const result = calculateFirstPassFormula(sql, formula);
+    expect(result).to.equal('salt_042(sum(nn(users.hash)) OVER ()) AS token');
+  });
+
+  it ('handles qualified hash and aliased table', () => {
+    const sql = 'SELECT t.id, t.name FROM users AS t';
+    const formula = 'salt_042(sum(nn(A.hash)) OVER ()) AS token';
+    const result = calculateFirstPassFormula(sql, formula);
+    expect(result).to.equal('salt_042(sum(nn(t.hash)) OVER ()) AS token');
+  });
+
+  it('throws error for too many tables', () => {
+    const sql = 'SELECT id, name FROM users, orders';
+    const formula = 'salt_042(sum(nn(A.hash)) OVER ()) AS token';
+    expect(() => calculateFirstPassFormula(sql, formula)).to.throw('tooManyTablesError');
+  });
+
+  it('throws error for too few tables', () => {
+    const sql = 'SELECT id, name FROM users';
+    const formula = 'salt_042(sum(nn(A.hash) + nn(B.hash)) OVER ()) AS token';
+    expect(() => calculateFirstPassFormula(sql, formula)).to.throw('tooFewTablesError');
   });
 
 });

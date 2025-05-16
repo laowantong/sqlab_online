@@ -68,6 +68,28 @@ export function getTablesOfFromClause(ast) {
   return ast.from.map(src => src.as || src.table);
 }
 
+/**
+* Replaces all occurrences of the word "hash" in the formula with the actual table names
+* from the FROM clause of the SQL query.
+* @param {string} sql - The SQL query
+* @param {string} formula - The formula containing the word "hash"
+* @returns {string} - The formula with "hash" replaced by the actual table names
+* @throws {Error} - Throws an error if the number of "hash" occurrences does not match the number of tables
+*/
+export function calculateFirstPassFormula(sql, formula) {
+  const parseResult = parseSqlToAst(sql);
+  const tablesOfFromClauses = getTablesOfFromClause(parseResult.ast);
+  const hashMatches = formula.match(/(\w\.)?hash/g);
+  if (hashMatches.length < tablesOfFromClauses.length) {
+      throw new Error("tooManyTablesError");
+  } 
+  else if (hashMatches.length > tablesOfFromClauses.length) {
+      throw new Error("tooFewTablesError");
+  }
+  return hashMatches.reduce((result, match, i) => 
+      result.replace(match, tablesOfFromClauses[i] + '.hash'), formula);
+}
+
 // TODO: implement the following process
 // - The user requests a check: he sends:
 //   {
