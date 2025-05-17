@@ -5,6 +5,7 @@ import {
   getTablesOfFromClause,
   calculateFirstPassFormula,
   calculateSecondPassFormula,
+  isSafeForEvaluation,
 } from '../server/utils/sqlAst.js';
 
 // Helper function to remove all backticks, mostly added by sqlify
@@ -262,6 +263,40 @@ describe('calculateSecondPassFormula', () => {
     const tweakValue = 42;
     const result = calculateSecondPassFormula(formula, tweakValue);
     expect(result).to.equal('salt_042(42 + sum(nn(hash)) OVER ()) AS token');
+  });
+
+});
+
+describe('isSafeForEvaluation', () => {
+  it('should return true for safe expressions', () => {
+    const expressions = [
+      `result[0][0]`,
+      `result[2][2]`,
+      `result.length`,
+      `result[0].['fid']`,
+      `Math.floor(result[0][0])`,
+      `result[2][2].toLowerCase()`,
+      `result[0][result[0].length - 1]`,
+      `Math.max(...result.map(row => row[result[0].length - 1]))`,
+      `Math.min(...result.map(row => row[result[0].length - 1]))`,
+      `query.match(/date_format\\([^,]*,\\s*['\"]([^'\"]+)['\"]\\)/i)[1]`,
+      `Math.floor(result.find(row => row[result[0].length - 1] === 2018)[1])`,
+    ]
+    expressions.forEach(expr => {
+      expect(isSafeForEvaluation(expr)).to.be.true;
+    })
+  });
+
+  it('should return false for unsafe expressions', () => {
+    const expressions = [
+      "x".repeat(1000),
+      `Robert'); DROP TABLE Students;--`,
+      "SELECT * FROM `users`",
+      `eval('alert(1)')`,
+    ]
+    expressions.forEach(expr => {
+      expect(isSafeForEvaluation(expr)).to.be.false;
+    })
   });
 
 });

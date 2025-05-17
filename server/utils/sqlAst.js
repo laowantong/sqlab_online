@@ -1,3 +1,5 @@
+import { BLOCKED_PATTERNS, TWEAK_MAX_LENGTH } from './constants.js';
+
 // Import the node-sql-parser library
 import pkg from 'node-sql-parser';
 const { Parser } = pkg;
@@ -100,3 +102,15 @@ export function calculateSecondPassFormula(firstPassFormula, tweakValue) {
   return firstPassFormula.replace('(0)', `${tweakValue}`);
 }
 
+/**
+ * Checks if the given tweak expression is safe for evaluation.
+ * @param {string} expression - The expression to check
+ * @returns {boolean} - True if the expression is safe, false otherwise
+ */
+export function isSafeForEvaluation(expression) {
+  return (
+    expression.length <= TWEAK_MAX_LENGTH
+    &&
+    BLOCKED_PATTERNS.every(bp => !bp.test(expression))
+  );
+}
