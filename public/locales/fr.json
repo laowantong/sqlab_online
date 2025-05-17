@@ -57,5 +57,8 @@
   },
   "error": {
     "tableData": "Impossible de charger les données de la table"
+  },
+  "task": {
+    "sandbox": "Bac à sable"
   }
 }

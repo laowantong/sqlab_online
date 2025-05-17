@@ -1,5 +1,13 @@
 import { expect } from 'chai';
-import { parseSqlToAst, injectPlaceholderColumn, getTablesOfFromClause } from '../server/utils/sqlAst.js';
+import {
+  parseSqlToAst,
+  injectPlaceholderColumn,
+  getTablesOfFromClause,
+  calculateFirstPassFormula,
+  calculateSecondPassFormula,
+  isSafeForEvaluation,
+  asciiMapper,
+} from '../server/utils/sqlAst.js';
 
 // Helper function to remove all backticks, mostly added by sqlify
 function r(string) {
@@ -21,6 +29,16 @@ describe('parseSqlToAst', () => {
     const result = parseSqlToAst(sql);
     expect(result.response).to.equal('ok');
     expect(result.ast).to.be.an('object');
+  });
+
+  it('should handle accentuated characters in column', () => {
+    let sql = "SELECT * FROM test WHERE théâtre = 'Molière'";
+    sql = asciiMapper.encode(sql);
+    const result = parseSqlToAst(sql);
+    expect(result.response).to.equal('ok');
+    expect(result.ast).to.be.an('object');
+    sql = asciiMapper.decode(sql);
+    expect(sql).to.equal("SELECT * FROM test WHERE théâtre = 'Molière'");
   });
 
   it('should handle multiple SQL statements', () => {
@@ -216,6 +234,80 @@ describe('parseSqlToAst + getTablesOfFromClause', () => {
   it('should handle SELECT with UNION', () => {
     // TODO. The expected behavior is much more complex
     testGetTables('SELECT id FROM users UNION SELECT id FROM admins', ['users']);
+  });
+
+});
+
+describe('parseSqlToAst + calculateFirstPassFormula', () => {
+  it('handles unqualified hash and unaliased table', () => {
+    const ast = parseSqlToAst('SELECT id, name FROM users').ast;
+    const formula = 'salt_042(sum(nn(hash)) OVER ()) AS token';
+    const result = calculateFirstPassFormula(ast, formula);
+    expect(result).to.equal('salt_042(sum(nn(users.hash)) OVER ()) AS token');
+  });
+
+  it ('handles qualified hash and aliased table', () => {
+    const ast = parseSqlToAst('SELECT t.id, t.name FROM users AS t').ast;
+    const formula = 'salt_042(sum(nn(A.hash)) OVER ()) AS token';
+    const result = calculateFirstPassFormula(ast, formula);
+    expect(result).to.equal('salt_042(sum(nn(t.hash)) OVER ()) AS token');
+  });
+
+  it('throws error for too many tables', () => {
+    const ast = parseSqlToAst('SELECT id, name FROM users, orders').ast;
+    const formula = 'salt_042(sum(nn(A.hash)) OVER ()) AS token';
+    expect(() => calculateFirstPassFormula(ast, formula)).to.throw('tooManyTablesError');
+  });
+
+  it('throws error for too few tables', () => {
+    const ast = parseSqlToAst('SELECT id, name FROM users').ast;
+    const formula = 'salt_042(sum(nn(A.hash) + nn(B.hash)) OVER ()) AS token';
+    expect(() => calculateFirstPassFormula(ast, formula)).to.throw('tooFewTablesError');
+  });
+
+});
+
+
+describe('calculateSecondPassFormula', () => {
+  it('replaces placeholder with value', () => {
+    const formula = 'salt_042((0) + sum(nn(hash)) OVER ()) AS token';
+    const tweakValue = 42;
+    const result = calculateSecondPassFormula(formula, tweakValue);
+    expect(result).to.equal('salt_042(42 + sum(nn(hash)) OVER ()) AS token');
+  });
+
+});
+
+describe('isSafeForEvaluation', () => {
+  it('should return true for safe expressions', () => {
+    const expressions = [
+      `result[0][0]`,
+      `result[2][2]`,
+      `result.length`,
+      `result[0].['fid']`,
+      `Math.floor(result[0][0])`,
+      `result[2][2].toLowerCase()`,
+      `result[0][result[0].length - 1]`,
+      `Math.max(...result.map(row => row[result[0].length - 1]))`,
+      `Math.min(...result.map(row => row[result[0].length - 1]))`,
+      `query.match(/date_format\\([^,]*,\\s*['\"]([^'\"]+)['\"]\\)/i)[1]`,
+      `Math.floor(result.find(row => row[result[0].length - 1] === 2018)[1])`,
+    ]
+    expressions.forEach(expr => {
+      expect(isSafeForEvaluation(expr)).to.be.true;
+    })
+  });
+
+  it('should return false for unsafe expressions', () => {
+    const expressions = [
+      "x".repeat(1000),
+      `Robert'); DROP TABLE Students;--`,
+      "SELECT * FROM `users`",
+      `eval('alert(1)')`,
+    ]
+    expressions.forEach(expr => {
+      expect(isSafeForEvaluation(expr)).to.be.false;
+    })
   });
 
 });

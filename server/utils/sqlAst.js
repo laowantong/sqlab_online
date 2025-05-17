@@ -1,3 +1,5 @@
+import { BLOCKED_PATTERNS, TWEAK_MAX_LENGTH } from './constants.js';
+
 // Import the node-sql-parser library
 import pkg from 'node-sql-parser';
 const { Parser } = pkg;
@@ -68,29 +70,95 @@ export function getTablesOfFromClause(ast) {
   return ast.from.map(src => src.as || src.table);
 }
 
-// TODO: implement the following process
-// - The user requests a check: he sends:
-//   {
-//     sql: 'SELECT * FROM users',
-//     activity_number: 1,
-//     task_number: 42,
-//   }
-// - const formula = the token formula from the activity and task number. If it fails, respond with "unknownTaskError".
-// - const formulaTableCount = the number of \b\W\.hash\b in the formula.
-// - const ast = parser.astify(sql). If it fails, respond with "ParseError". This should never occur since the check button is inactive if the input area is dirty or the last execution failed. It may be a failure from the library node-sql-parser or an attempt to inject SQL code.
-// - const tablesOfFromClauses = getTablesOfFromClause(ast);
-// - If queryTableCount > tablesOfFromClauses.length(), respond with "tooManyTablesError".
-// - If queryTableCount < tablesOfFromClauses.length(), respond with "tooFewTablesError".
-// - const firstPassFormula = copy of formula with \b\W\.hash\b replaced by the actual table names.
-// - const queryWithPlaceholder = injectPlaceholderColumn(ast).result;
-// - const firstPassQuery = queryWithPlaceholder.replace('`SQLAB_COLUMN_PLACEHOLDER`', firstPassFormula).
-// - let resultSet = executeQuery(firstPassQuery).result; If it fails, respond with "firstPassExecutionError". If it returns an empty result set, respond with "emptyResultError".
-// - If the formula comes with a tweak {
-//   - const tweakValue = retrieved from firstPassResult
-//   - const secondPassFormula = firstPassFormula.replace('(0)', `(${tweakValue})`)
-//   - const secondPassQuery = queryWithPlaceholder.replace('`SQLAB_COLUMN_PLACEHOLDER`', secondPassFormula).
-//   - resultSet = executeQuery(secondPassQuery).result; If it fails, respond with "secondPassExecutionError".
-//  }
-// - const token = resultSet[0].token. If it fails, respond with "noTokenError".
-// - const secretMessage = executeQuery(`SELECT decrypt('${token}')`).result.
-// - Respond with the secret message.
+/**
+* Replaces all occurrences of the word "hash" in the formula with the actual table names
+* from the FROM clause of the SQL query.
+* @param {object} ast - The AST of the SQL query
+* @param {string} formula - The formula containing the word "hash"
+* @returns {string} - The formula with "hash" replaced by the actual table names
+* @throws {Error} - Throws an error if the number of "hash" occurrences does not match the number of tables
+*/
+export function calculateFirstPassFormula(ast, formula) {
+  const tablesOfFromClauses = getTablesOfFromClause(ast);
+  const hashMatches = formula.match(/(\w\.)?hash/g);
+  if (hashMatches.length < tablesOfFromClauses.length) {
+      throw new Error("tooManyTablesError");
+  } 
+  else if (hashMatches.length > tablesOfFromClauses.length) {
+      throw new Error("tooFewTablesError");
+  }
+  return hashMatches.reduce((result, match, i) => 
+      result.replace(match, tablesOfFromClauses[i] + '.hash'), formula);
+}
+
+/**
+ * Replaces the placeholder '(0)' in the formula with a given value.
+ * @param {string} firstPassFormula - The formula after the first pass
+ * @param {string} tweakValue - The value to replace the placeholder with
+ * @return {string} - The formula with the placeholder replaced
+ */
+export function calculateSecondPassFormula(firstPassFormula, tweakValue) {
+  return firstPassFormula.replace('(0)', `${tweakValue}`);
+}
+
+/**
+ * Checks if the given tweak expression is safe for evaluation.
+ * @param {string} expression - The expression to check
+ * @returns {boolean} - True if the expression is safe, false otherwise
+ */
+export function isSafeForEvaluation(expression) {
+  return (
+    expression.length <= TWEAK_MAX_LENGTH
+    &&
+    BLOCKED_PATTERNS.every(bp => !bp.test(expression))
+  );
+}
+
+
+/**
+ * An IIFE (Immediately Invoked Function Expression) for encoding and decoding
+ * non-ASCII characters in SQL queries. It maintains a shared state between the
+ * encode and decode functions using two maps.
+ * This is a workaround for the following issue in node-sql-parser:
+ * https://github.com/taozhi8833998/node-sql-parser/issues/1606
+ * As of v. 5.3.9, it has been fixed for PostgreSQL only:
+ * https://github.com/taozhi8833998/node-sql-parser/pull/1732
+ */
+export const asciiMapper = (function() {
+  const prefix = '__UNICODE__';
+
+  // Memoization maps for encoding and decoding
+  const charMap = new Map();
+  const reverseMap = new Map();
+  
+  return {
+    /**
+     * Encodes non-ASCII characters to safe placeholders
+     * @param {string} sql - Original SQL query
+     * @return {string} Encoded SQL
+     */
+    encode: (sql) => {
+      return sql.replace(/[^\x00-\x7F]/g, (char) => {
+        if (!charMap.has(char)) {
+          const placeholder = `${prefix}${char.codePointAt(0).toString(16)}_`;
+          charMap.set(char, placeholder);
+          reverseMap.set(placeholder, char);
+        }
+        return charMap.get(char);
+      });
+    },
+    
+    /**
+     * Decodes placeholders back to original characters
+     * @param {string|object} value - SQL string or AST object
+     * @return {string|object} Decoded value
+     */
+    decode: (sql) => {
+      if (!sql.includes(prefix)) return sql;
+      reverseMap.forEach((char, placeholder) => {
+        sql = sql.replace(new RegExp(placeholder, 'g'), char);
+      });
+      return sql;
+    },
+  };
+}());

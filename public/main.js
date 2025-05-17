@@ -7,6 +7,7 @@ import { initTabs } from './controllers/tabController.js';
 import { initQueryExecution } from './components/tables/results.js';
 import { initNotes } from './components/notes.js';
 import { loadAndRenderTaskStrip } from './components/strips/tasks.js';
+import { initQueryCheck } from './components/feedback.js';
 
 import { initLocalization } from './controllers/localizationController.js';
 
@@ -41,9 +42,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     initQueryExecution();
     initNotes();
 
-    // Initialize the task strip ans simulate a click on the active button
-    const taskStrip = await loadAndRenderTaskStrip(TEMP_STARTING_ACTIVITY);
-    taskStrip.getActiveButton().click();
+    // Initialize the task strip and simulate a click on the active button
+    window.taskStrip = await loadAndRenderTaskStrip(TEMP_STARTING_ACTIVITY);
+    window.taskStrip.getActiveButton().click();
+
+
+    initQueryCheck();
 
     window.loadAndRenderCoreTableList = loadAndRenderCoreTableList;
     window.loadAndRenderCoreTableData = loadAndRenderCoreTableData;
