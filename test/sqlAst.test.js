@@ -6,6 +6,7 @@ import {
   calculateFirstPassFormula,
   calculateSecondPassFormula,
   isSafeForEvaluation,
+  asciiMapper,
 } from '../server/utils/sqlAst.js';
 
 // Helper function to remove all backticks, mostly added by sqlify
@@ -28,6 +29,16 @@ describe('parseSqlToAst', () => {
     const result = parseSqlToAst(sql);
     expect(result.response).to.equal('ok');
     expect(result.ast).to.be.an('object');
+  });
+
+  it('should handle accentuated characters in column', () => {
+    let sql = "SELECT * FROM test WHERE théâtre = 'Molière'";
+    sql = asciiMapper.encode(sql);
+    const result = parseSqlToAst(sql);
+    expect(result.response).to.equal('ok');
+    expect(result.ast).to.be.an('object');
+    sql = asciiMapper.decode(sql);
+    expect(sql).to.equal("SELECT * FROM test WHERE théâtre = 'Molière'");
   });
 
   it('should handle multiple SQL statements', () => {
@@ -229,29 +240,29 @@ describe('parseSqlToAst + getTablesOfFromClause', () => {
 
 describe('parseSqlToAst + calculateFirstPassFormula', () => {
   it('handles unqualified hash and unaliased table', () => {
-    const sql = 'SELECT id, name FROM users';
+    const ast = parseSqlToAst('SELECT id, name FROM users').ast;
     const formula = 'salt_042(sum(nn(hash)) OVER ()) AS token';
-    const result = calculateFirstPassFormula(sql, formula);
+    const result = calculateFirstPassFormula(ast, formula);
     expect(result).to.equal('salt_042(sum(nn(users.hash)) OVER ()) AS token');
   });
 
   it ('handles qualified hash and aliased table', () => {
-    const sql = 'SELECT t.id, t.name FROM users AS t';
+    const ast = parseSqlToAst('SELECT t.id, t.name FROM users AS t').ast;
     const formula = 'salt_042(sum(nn(A.hash)) OVER ()) AS token';
-    const result = calculateFirstPassFormula(sql, formula);
+    const result = calculateFirstPassFormula(ast, formula);
     expect(result).to.equal('salt_042(sum(nn(t.hash)) OVER ()) AS token');
   });
 
   it('throws error for too many tables', () => {
-    const sql = 'SELECT id, name FROM users, orders';
+    const ast = parseSqlToAst('SELECT id, name FROM users, orders').ast;
     const formula = 'salt_042(sum(nn(A.hash)) OVER ()) AS token';
-    expect(() => calculateFirstPassFormula(sql, formula)).to.throw('tooManyTablesError');
+    expect(() => calculateFirstPassFormula(ast, formula)).to.throw('tooManyTablesError');
   });
 
   it('throws error for too few tables', () => {
-    const sql = 'SELECT id, name FROM users';
+    const ast = parseSqlToAst('SELECT id, name FROM users').ast;
     const formula = 'salt_042(sum(nn(A.hash) + nn(B.hash)) OVER ()) AS token';
-    expect(() => calculateFirstPassFormula(sql, formula)).to.throw('tooFewTablesError');
+    expect(() => calculateFirstPassFormula(ast, formula)).to.throw('tooFewTablesError');
   });
 
 });

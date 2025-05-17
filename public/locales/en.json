@@ -57,5 +57,8 @@
   },
   "error": {
     "tableData": "Failed to load table data"
+  },
+  "task": {
+    "sandbox": "Sandbox"
   }
 }

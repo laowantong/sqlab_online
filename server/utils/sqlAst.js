@@ -73,14 +73,13 @@ export function getTablesOfFromClause(ast) {
 /**
 * Replaces all occurrences of the word "hash" in the formula with the actual table names
 * from the FROM clause of the SQL query.
-* @param {string} sql - The SQL query
+* @param {object} ast - The AST of the SQL query
 * @param {string} formula - The formula containing the word "hash"
 * @returns {string} - The formula with "hash" replaced by the actual table names
 * @throws {Error} - Throws an error if the number of "hash" occurrences does not match the number of tables
 */
-export function calculateFirstPassFormula(sql, formula) {
-  const parseResult = parseSqlToAst(sql);
-  const tablesOfFromClauses = getTablesOfFromClause(parseResult.ast);
+export function calculateFirstPassFormula(ast, formula) {
+  const tablesOfFromClauses = getTablesOfFromClause(ast);
   const hashMatches = formula.match(/(\w\.)?hash/g);
   if (hashMatches.length < tablesOfFromClauses.length) {
       throw new Error("tooManyTablesError");
@@ -114,3 +113,52 @@ export function isSafeForEvaluation(expression) {
     BLOCKED_PATTERNS.every(bp => !bp.test(expression))
   );
 }
+
+
+/**
+ * An IIFE (Immediately Invoked Function Expression) for encoding and decoding
+ * non-ASCII characters in SQL queries. It maintains a shared state between the
+ * encode and decode functions using two maps.
+ * This is a workaround for the following issue in node-sql-parser:
+ * https://github.com/taozhi8833998/node-sql-parser/issues/1606
+ * As of v. 5.3.9, it has been fixed for PostgreSQL only:
+ * https://github.com/taozhi8833998/node-sql-parser/pull/1732
+ */
+export const asciiMapper = (function() {
+  const prefix = '__UNICODE__';
+
+  // Memoization maps for encoding and decoding
+  const charMap = new Map();
+  const reverseMap = new Map();
+  
+  return {
+    /**
+     * Encodes non-ASCII characters to safe placeholders
+     * @param {string} sql - Original SQL query
+     * @return {string} Encoded SQL
+     */
+    encode: (sql) => {
+      return sql.replace(/[^\x00-\x7F]/g, (char) => {
+        if (!charMap.has(char)) {
+          const placeholder = `${prefix}${char.codePointAt(0).toString(16)}_`;
+          charMap.set(char, placeholder);
+          reverseMap.set(placeholder, char);
+        }
+        return charMap.get(char);
+      });
+    },
+    
+    /**
+     * Decodes placeholders back to original characters
+     * @param {string|object} value - SQL string or AST object
+     * @return {string|object} Decoded value
+     */
+    decode: (sql) => {
+      if (!sql.includes(prefix)) return sql;
+      reverseMap.forEach((char, placeholder) => {
+        sql = sql.replace(new RegExp(placeholder, 'g'), char);
+      });
+      return sql;
+    },
+  };
+}());

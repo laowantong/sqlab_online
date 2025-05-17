@@ -61,7 +61,6 @@ describe('customQuery', () => {
     it('handles queries with unicode characters correctly', async () => {
         const query = "SELECT owner FROM item WHERE item LIKE '咖啡%'";
         const result = await customQuery(query);
-        console.log(result);
         expect(result.rows[0][0]).to.equal(3);
     });
 

@@ -4,6 +4,9 @@ const router = express.Router();
 import { handleExecuteQuery } from '../controllers/queryController.js';
 router.post('/execute-query', handleExecuteQuery);
 
+import { handleCheckQuery } from '../controllers/checkQueryController.js';
+router.post('/check-query', handleCheckQuery);
+
 import { validatePagination } from '../middlewares/paginationValidator.js';
 import { handleQueryTableData } from '../controllers/tableDataController.js';
 router.get('/table-data/:tableName', validatePagination, handleQueryTableData);
