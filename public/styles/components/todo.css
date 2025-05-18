@@ -2,10 +2,6 @@
     color: green;
   }
 
-.CodeMirror.sandbox {
-    background-image: url('../../assets/sand.jpg');
-}
-
 /* Base styling for all strip buttons */
 .strip-button {
   display: inline-flex;
@@ -38,21 +34,6 @@
   border-color: #999;
 }
 
-/* Sandbox button styling */
-.strip-button.sandbox {
-  background-image: url('../../assets/sand.jpg');
-  background-size: cover;
-  background-position: center;
-  color: #000;
-  font-weight: 600;
-  border-color: #d2b48c;
-}
-
-.strip-button.sandbox:hover {
-  border-color: #a17f5a;
-  filter: brightness(1.05);
-}
-
 /* Active button styling */
 .strip-button.active {
   background-color: #555;
@@ -64,12 +45,6 @@
   background-color: #444;
 }
 
-/* Sandbox button when active */
-.strip-button.sandbox.active {
-  border-color: #555;
-  filter: contrast(1.1);
-}
-
 /* Disabled button styling */
 .strip-button:disabled {
   background-color: #e0e0e0;
@@ -78,7 +53,7 @@
   border-color: #ccc;
 }
 
-/* Done button styling - ice cube effect (not applicable to sandbox) */
+/* Done button styling - ice cube effect */
 .strip-button.done {
   background-color: #cce8ff; /* Light ice blue base */
   border-color: #a8d0e6;

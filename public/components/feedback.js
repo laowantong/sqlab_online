@@ -14,7 +14,7 @@ export function initQueryCheck() {
             return;
         }
         
-        const message = await checkQuery(query, window.activityNumber, window.taskNumber);
+        const message = await checkQuery(query, window.currentActivityNumberNumber, window.currentTaskNumber);
         const data = JSON.parse(message);
 
         // If there is a feedback message, show it in the feedback pane
@@ -24,10 +24,10 @@ export function initQueryCheck() {
             // If the feedback has class "correction", it is a correction
             if (feedbackContainer.firstChild.classList.contains('correction')) {
                 let strip = window.taskStrip;
-                strip.addClass(window.taskNumber, 'done');
-                if (window.activityNumber > 0) { // This is an episode of an adventure
-                    window.taskNumber += 1;
-                    strip.removeClass(window.taskNumber, 'disabled');
+                strip.addClass(window.currentTaskNumber -1, 'done');
+                if (window.currentActivityNumberNumber > 0) { // This is an episode of an adventure
+                    window.currentTaskNumber += 1;
+                    strip.removeClass(window.currentTaskNumber - 1, 'disabled');
                     strip.getActiveButton().click();
                 }
             }
