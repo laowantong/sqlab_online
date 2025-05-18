@@ -15,7 +15,7 @@
 }
 
 .table-outline {
-  background-color: #d0e8eb;
+  background-color: var(--color-light-blue);
   color: var(--color-primary);
   display: flex;
   justify-content: space-between;
@@ -30,25 +30,7 @@
 }
 
 .table-outline:hover {
-  background-color: var(--color-light-blue);
-}
-
-.table-info {
-  flex: 0 0 auto;
-  font-weight: var(--font-weight-bold);
-  color: var(--color-primary);
-}
-
-.table-columns {
-  flex: 1;
-  font-size: var(--font-size-sm);
-  color: #666;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-align: left;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  margin-left: var(--spacing-sm);
+  background-color: var(--color-light);
 }
 
 .table-name {
@@ -62,15 +44,26 @@
   transition: all var(--transition-fast);
 }
 
-.column-names {
-  font-style: italic;
-  color: #555;
+.table-columns {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  color: var(--color-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  margin-left: var(--spacing-sm);
 }
 
-.loading-columns {
+.column-name {
   font-style: italic;
-  color: var(--color-secondary);
-  font-size: 0.85em;
+  color: var(--color-dark);
+}
+
+.no-columns {
+  font-style: italic;
+  color: #888;
 }
 
 .error-columns {
@@ -89,4 +82,54 @@
   flex-direction: column;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
   margin-top: var(--spacing-sm);
+}
+
+.accordion.dragging {
+  opacity: 0.6;
+  border: 1px dashed var(--color-primary);
+}
+
+/* == Dark theme == */
+.dark-theme .accordion {
+  border-color: #444;
+}
+
+.dark-theme .table-outline {
+  background-color: var(--dark-primary);
+  color: var(--dark-text);
+  border-bottom: 1px solid #444;
+}
+
+.dark-theme .table-outline:hover {
+  background-color: var(--dark-secondary);
+}
+
+.dark-theme .table-name {
+  color: var(--dark-text);
+  background-color: rgba(0, 0, 0, 0.2);
+  border-color: var(--dark-light);
+}
+
+.dark-theme .table-columns {
+  color: var(--dark-text);
+}
+
+.dark-theme .column-name {
+  color: var(--dark-text);
+}
+
+.dark-theme .no-columns {
+  color: #777;
+}
+
+.dark-theme .error-columns {
+  color: #ff7b7b;
+}
+
+.dark-theme .paginated-table.active {
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.dark-theme .accordion.dragging {
+  border-color: var(--dark-light);
 }

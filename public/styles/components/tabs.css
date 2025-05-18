@@ -22,6 +22,7 @@
   display: none;
 }
 
+/* == Individual tab styles == */
 .tab {
   padding: var(--spacing-sm) var(--spacing-md);
   cursor: pointer;
@@ -35,7 +36,7 @@
   border-bottom: none;
   border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
   margin: 0 var(--spacing-sm);
-  flex-shrink: 0; /* Prevent tabs from shrinking */
+  flex-shrink: 0; 
 }
 
 .tab.active {
@@ -56,7 +57,7 @@
   display: block;
 }
 
-/* Add pseudo-element for the tab border */
+/* == Bottom border line for tabs == */
 .tabs::after {
   content: "";
   position: absolute;
@@ -68,14 +69,80 @@
   z-index: 1;
 }
 
-/* Add pseudo-element to create the "gap" effect in the border */
+/* Create a "gap" effect in the border for active tab */
 .tab.active::after {
   content: "";
   position: absolute;
-  bottom: 0px; /* Position at the bottom of the tab */
+  bottom: 0px; 
   left: 0;
   width: 100%;
   height: 2px;
   background-color: var(--color-light-gray);
-  z-index: 2; /* Must be above the tabs::after border */
+  z-index: 2; 
+}
+
+/* == Responsive == */
+@media (max-width: 768px) {
+  .tabs {
+    flex-wrap: wrap;
+  }
+  
+  .tab {
+    flex: 1 1 40%;
+    text-align: center;
+    margin-bottom: var(--spacing-xs);
+  }
+}
+
+/* == Dark theme == */
+.dark-theme .tabs {
+  position: relative;
+  margin-bottom: var(--spacing-md);
+}
+
+.dark-theme .tab {
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: #8b949e;
+  font-weight: 400;
+  border: 2px solid transparent;
+  border-bottom: none;
+  border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+  margin: 0 var(--spacing-sm);
+}
+
+.dark-theme .tab.active {
+  color: var(--dark-light);
+  background-color: transparent;
+  border-color: #444;
+  border-width: 2px;
+  border-bottom: none;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.dark-theme .tab-content {
+  border-color: #444;
+  background-color: transparent;
+}
+
+.dark-theme .tabs::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #444;
+  z-index: 1;
+}
+
+.dark-theme .tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--dark-bg);
+  z-index: 2;
 }

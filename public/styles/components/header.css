@@ -1,9 +1,30 @@
 /**
- * Dropdown component styles
- * For hamburger menu, language selector, and other dropdown components
+ * Header component styles
+ * Includes the main header, logo, theme toggle and hamburger menu
  */
 
-/* === Hamburger menu styles === */
+/* == Header container == */
+header {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    margin-bottom: var(--spacing-lg);
+    padding: var(--spacing-md) 0;
+    position: relative;
+    background: var(--gradient-header);
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-md);
+}
+
+/* == Title == */
+h1 {
+    color: var(--color-white);
+    margin: 0;
+    text-align: center;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* === Hamburger menu === */
 .hamburger-menu {
     position: absolute;
     left: var(--spacing-md);
@@ -11,15 +32,15 @@
     transform: translateY(-50%);
     cursor: pointer;
     z-index: 1000;
-  }
-  
-  #menu-toggle {
+}
+
+#menu-toggle {
     font-size: 1.5rem;
     color: var(--color-white);
     transition: transform var(--transition-medium);
-  }
-  
-  .dropdown-menu {
+}
+
+.dropdown-menu {
     position: absolute;
     left: 0;
     top: 100%;
@@ -30,59 +51,39 @@
     display: none;
     padding: var(--spacing-sm) 0;
     margin-top: var(--spacing-sm);
-  }
-  
-  .dropdown-menu.active {
+}
+
+.dropdown-menu.active {
     display: block;
-  }
-  
-  .menu-item {
+}
+
+.menu-item {
     padding: var(--spacing-sm) var(--spacing-md);
     display: flex;
     justify-content: space-between;
     align-items: center;
     transition: background-color var(--transition-fast);
-  }
-  
-  .menu-item:hover {
+}
+
+.menu-item:hover {
     background-color: var(--color-light-blue);
-  }
-  
-  .menu-label {
+}
+
+.menu-label {
     font-size: var(--font-size-sm);
     color: var(--color-dark);
     margin-right: var(--spacing-md);
-  }
-  
-  /* Make theme toggle work within the dropdown */
-  .menu-item .theme-icon {
+}
+
+.menu-item .theme-icon {
     color: var(--color-primary);
-  }
-  
-  /* ===== Language Selector ===== */
-  .language-selector {
-    cursor: pointer;
-    padding: var(--spacing-xs);
-    position: absolute;
-    left: var(--spacing-md);
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: var(--border-radius-sm);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: background-color var(--transition-fast);
-  }
-  
-  .language-selector:hover {
-    background-color: rgba(255, 255, 255, 0.3);
-  }
-  
-  #language-selector {
+}
+
+/* ===== Language Selector ===== */
+#language-selector {
     background-color: transparent;
     border: none;
-    color: var(--color-dark); 
+    color: var(--color-dark);
     font-size: var(--font-size-sm);
     cursor: pointer;
     padding: var(--spacing-xs) var(--spacing-sm);
@@ -96,16 +97,49 @@
     background-size: 1em;
     padding-right: 1.5rem;
     font-weight: var(--font-weight-bold);
-  }
-  
-  #language-selector option {
-    background-color: var(--color-white);
-    color: var(--color-dark);
-  }
-  
-  /* Responsive adaptations */
-  @media (max-width: 768px) {
+}
+
+/* == Sun and Moon== */
+.theme-icon {
+    font-size: 1.2rem;
+    color: var(--color-white);
+    transition: transform var(--transition-medium);
+}
+
+.theme-icon:hover {
+    transform: rotate(45deg);
+}
+
+/* == Responsive == */
+@media (max-width: 768px) {
     .hamburger-menu {
-      left: var(--spacing-sm);
+        left: var(--spacing-sm);
     }
-  }
+}
+
+/* == Dark mode == */
+.dark-theme header {
+    background: linear-gradient(135deg, var(--dark-primary) 0%, var(--dark-secondary) 100%);
+}
+
+.dark-theme h1 {
+    color: var(--dark-text);
+}
+
+/* == Dark theme hamburger menu ==  */
+.dark-theme .dropdown-menu {
+    background-color: var(--dark-element);
+    border: 1px solid #444;
+}
+
+.dark-theme .menu-label {
+    color: var(--dark-text);
+}
+
+.dark-theme .menu-item:hover {
+    background-color: var(--dark-primary);
+}
+
+.dark-theme .menu-item .theme-icon {
+    color: var(--dark-text);
+}

@@ -66,7 +66,8 @@ tr:hover {
   border-right: 2px solid #ccc;
 }
 
-/* Click-to-copy styles for table cells */
+/* TODO : change this after making Click to insert*/
+/* == Click-to-copy styles for table cells == */
 td.copyable {
   cursor: pointer;
 }
@@ -95,59 +96,30 @@ td.copy-error {
   100% { background-color: transparent; }
 }
 
-.strip-container {
-  overflow-x: auto;
-  max-width: 100%;
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-  background-color: var(--color-light-gray);
+/* == Dark theme == */
+.dark-theme th {
+  background-color: var(--dark-primary);
+  color: var(--dark-text);
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
-.strip-container::-webkit-scrollbar {
-  display: none;
+.dark-theme td {
+  border-color: #555;
 }
 
-
-.strip-buttons {
-  display: inline-flex;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm);
-  padding-top: 0;
+.dark-theme tr:nth-child(even) {
+  background-color: #2c2c2c;
 }
 
-.strip-button {
-  min-width: 50px;
-  height: 36px;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--border-radius-sm);
-  background-color: var(--color-light-blue);
-  color: var(--color-primary);
-  border: 1px solid var(--color-secondary);
-  cursor: pointer;
-  font-weight: var(--font-weight-normal);
-  transition: all var(--transition-fast);
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.dark-theme tr:hover {
+  background-color: #3a3a3a;
 }
 
-.strip-button:hover {
-  background-color: #dceff1;
+.dark-theme .row-number-header,
+.dark-theme .row-number {
+  background-color: #383838;
+  border-right: 2px solid #555;
 }
 
-.strip-button.active {
-  background-color: var(--color-secondary);
-  color: var(--color-white);
-  font-weight: var(--font-weight-bold);
-  border-color: var(--color-primary);
-}
-
-.strip-button.disabled {
-  background-color: #f0f0f0;
-  color: #ddd;
-  cursor: not-allowed;
-  border-color: #ddd;
-  pointer-events: none;
+.dark-theme .row-number {
+  color: #bbb;
 }
