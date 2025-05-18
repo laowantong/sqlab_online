@@ -8,6 +8,7 @@ export const dbConfig = {
   database: 'your_database_name',
   user: 'your_username',
   password: 'your_password',
+  dateStrings: true,
   connectionLimit: 5
 };
 

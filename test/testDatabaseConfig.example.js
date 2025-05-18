@@ -4,5 +4,6 @@ export const dbConfig = {
   database: 'sqlab_test',
   user: 'your_username',
   password: 'your_password',
+  dateStrings: true,
   connectionLimit: 5
 };
