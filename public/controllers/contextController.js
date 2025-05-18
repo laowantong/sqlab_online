@@ -16,7 +16,7 @@ export function initContext() {
     // Get references to UI elements
     // const episodeContainer = document.getElementById('task-container');
     // const checkBtn = document.getElementById('check-btn');
-    const controlContainer = document.getElementById('feedback-container');
+    const controlContainer = document.getElementById('feedback-text-container');
     // const checkSolutionBtn = document.getElementById('check-solution-btn');
     
     // Initialize the context by attempting to load the first episode

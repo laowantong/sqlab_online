@@ -246,11 +246,18 @@ describe('parseSqlToAst + calculateFirstPassFormula', () => {
     expect(result).to.equal('salt_042(sum(nn(users.hash)) OVER ()) AS token');
   });
 
-  it ('handles qualified hash and aliased table', () => {
+  it('handles qualified hash and aliased table', () => {
     const ast = parseSqlToAst('SELECT t.id, t.name FROM users AS t').ast;
     const formula = 'salt_042(sum(nn(A.hash)) OVER ()) AS token';
     const result = calculateFirstPassFormula(ast, formula);
     expect(result).to.equal('salt_042(sum(nn(t.hash)) OVER ()) AS token');
+  });
+
+  it('does not fall for false hash columns', () => {
+    const ast = parseSqlToAst('SELECT * FROM formation A').ast;
+    const formula = "string_hash('(0)') + sum(nn(A.hash)) OVER () AS token";
+    const result = calculateFirstPassFormula(ast, formula);
+    expect(result).to.equal("string_hash('(0)') + sum(nn(A.hash)) OVER () AS token");
   });
 
   it('throws error for too many tables', () => {
@@ -284,14 +291,14 @@ describe('isSafeForEvaluation', () => {
       `result[0][0]`,
       `result[2][2]`,
       `result.length`,
-      `result[0].['fid']`,
+      `result[0]['fid']`,
       `Math.floor(result[0][0])`,
       `result[2][2].toLowerCase()`,
-      `result[0][result[0].length - 1]`,
-      `Math.max(...result.map(row => row[result[0].length - 1]))`,
-      `Math.min(...result.map(row => row[result[0].length - 1]))`,
+      `result[0][result[0].length - 2]`,
+      `Math.max(...result.map(row => row[result[0].length - 2]))`,
+      `Math.min(...result.map(row => row[result[0].length - 2]))`,
       `query.match(/date_format\\([^,]*,\\s*['\"]([^'\"]+)['\"]\\)/i)[1]`,
-      `Math.floor(result.find(row => row[result[0].length - 1] === 2018)[1])`,
+      `Math.floor(result.find(row => row[result[0].length - 2] === 2018)[1])`,
     ]
     expressions.forEach(expr => {
       expect(isSafeForEvaluation(expr)).to.be.true;

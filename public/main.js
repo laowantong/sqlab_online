@@ -6,8 +6,8 @@ import { loadAndRenderCoreTableData } from './components/tables/core/data.js';
 import { initTabs } from './controllers/tabController.js';
 import { initQueryExecution } from './components/tables/results.js';
 import { initNotes } from './components/notes.js';
-import { loadAndRenderTaskStrip } from './components/strips/tasks.js';
-import { initQueryCheck } from './components/feedback.js';
+import { initTaskStrip } from './components/strips/tasks.js';
+import { initFeedback } from './components/feedback.js';
 
 import { initLocalization } from './controllers/localizationController.js';
 
@@ -32,6 +32,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Error initializing localization:', error);
     }
 
+    // Reset the local storage for testing purposes. TODO: remove this line in production
+    localStorage.clear();
+
     await loadAndRenderActivityTitle();
 
     window.sqlEditor = initSqlEditor('sql-editor');
@@ -43,11 +46,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     initNotes();
 
     // Initialize the task strip and simulate a click on the active button
-    window.taskStrip = await loadAndRenderTaskStrip(TEMP_STARTING_ACTIVITY);
+    window.currentActivityNumber = TEMP_STARTING_ACTIVITY;
+    window.taskStrip = await initTaskStrip();
     window.taskStrip.getActiveButton().click();
 
 
-    initQueryCheck();
+    initFeedback();
 
     window.loadAndRenderCoreTableList = loadAndRenderCoreTableList;
     window.loadAndRenderCoreTableData = loadAndRenderCoreTableData;

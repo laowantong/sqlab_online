@@ -1,44 +1,83 @@
 import { checkQuery} from '../api/checkQuery.js';
+import { showError } from '../../utils/genericUtils.js';
+import { t } from '../controllers/localizationController.js';
 
-export function initQueryCheck() {
-    const feedbackContainer = document.getElementById('feedback-container');
-    const taskContainer = document.getElementById('task-container');
-
-    const feedbackTab = document.querySelector('.tab[data-tab="feedback-tab"]');
-    feedbackTab.addEventListener('click', triggerQueryCheck);
-    
-    async function triggerQueryCheck() {
-        const query = window.sqlEditor.getValue().trim();
-        if (!query) {
-            showError(t('query.emptyError'), feedbackContainer);
-            return;
-        }
-        
-        const message = await checkQuery(query, window.currentActivityNumberNumber, window.currentTaskNumber);
-        const data = JSON.parse(message);
-
-        // If there is a feedback message, show it in the feedback pane
-        if (data.feedback) {
-            feedbackContainer.innerHTML = data.feedback;
-            
-            // If the feedback has class "correction", it is a correction
-            if (feedbackContainer.firstChild.classList.contains('correction')) {
-                let strip = window.taskStrip;
-                strip.addClass(window.currentTaskNumber -1, 'done');
-                if (window.currentActivityNumberNumber > 0) { // This is an episode of an adventure
-                    window.currentTaskNumber += 1;
-                    strip.removeClass(window.currentTaskNumber - 1, 'disabled');
-                    strip.getActiveButton().click();
-                }
-            }
-        }
-
-        // If there is a task message, show it in the task pane
-        // TODO: this is temporary. A new task should be created and populated.
-        if (data.task) {
-            // replace the task container with the new task
-            taskContainer.innerHTML = data.task;
-        }
-    }
+export function initFeedback() {
+    const feedbackButton = document.getElementById('check-button');
+    feedbackButton.addEventListener('click', getAndRenderFeedback);
 }
 
+export async function getAndRenderFeedback(refresh = true) {
+    const feedbackTextContainer = document.getElementById('feedback-text-container');
+    const feedbackControlContainer = document.getElementById('check-container');
+    const activityNumber = window.currentActivityNumber;
+    const taskNumber = window.currentTaskNumber;
+    const taskId = `${activityNumber}/${taskNumber}`;
+    
+    // If the feedback is already stored, restore it and return.
+    let feedback = localStorage.getItem(`feedback/${taskId}`);
+    if (feedback) {
+        feedbackTextContainer.innerHTML = feedback;
+        feedbackTextContainer.classList.remove('hidden');
+        feedbackControlContainer.classList.add('hidden');
+        return
+    }
+
+    // If the refresh flag is not set, return.
+    if (!refresh) {
+        feedbackTextContainer.classList.add('hidden');
+        feedbackControlContainer.classList.remove('hidden');
+        document.querySelector('.tab[data-tab="core-tables-tab"]').click();
+        return
+    }
+
+    
+    // Retrieve the SQL query from the editor
+    const query = window.sqlEditor.getValue().trim();
+    if (!query) {
+        document.querySelector('.tab[data-tab="feedback-tab"]').click();
+        showError(t('query.emptyError'), feedbackTextContainer);
+        return;
+    }
+    
+    // Fetch the object resulting of the query check
+    const message = await checkQuery(query, activityNumber, taskNumber);
+    const data = JSON.parse(message);
+
+    // The result has necessarily a feedback part. Display it.
+    feedbackTextContainer.innerHTML = data.feedback;
+    feedbackTextContainer.classList.remove('hidden');
+    document.querySelector('.tab[data-tab="feedback-tab"]').click();
+    
+    // The feeback can be a hint.
+    if (feedbackTextContainer.firstChild.classList.contains('hint')) {
+        feedbackControlContainer.classList.remove('hidden');
+        // TODO: update the score
+        return;
+    }
+
+    // Otherwise, the answer was correct, and the feedback gives the official solution.
+
+    // Store the correction locally
+    localStorage.setItem(`feedback/${taskId}`, data.feedback);
+    feedbackControlContainer.classList.add('hidden');
+
+    // Freeze the current task strip button.
+    // Note that, contrarily to the task number, the strip button index is 0-based.
+    const strip = window.taskStrip;
+    const index = currentTaskNumber - 1;
+    strip.addClass(index, 'frozen');
+
+    // We may have solved a non-sequitur exercise.
+    if (activityNumber === 0) {
+        return
+    }
+
+    // Otherwise, we have solved an episode of an adventure.
+
+    // Store locally the next episode (which can be an epilogue).
+    localStorage.setItem(`task/${activityNumber}/${taskNumber + 1}`, data.task);
+
+    // Make it accessible in the task strip.
+    strip.removeClass(index + 1, 'disabled');
+}

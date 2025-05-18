@@ -20,7 +20,7 @@
     "coreTables": "Tables",
     "schema": "Schema",
     "execution": "Run",
-    "feedback": "Check",
+    "feedback": "Feedback",
     "notes-tab": "Notes"
   },
   "notes": {
@@ -37,11 +37,8 @@
   "execution-tab": {
     "title": "Run",
     "noResults": "No results",
-    "runPrompt": "Run a query to see the results"
-  },
-  "feedback-tab": {
-    "title": "Check",
-    "developing": "Feature under development..."
+    "runPrompt": "Run a query to see the results",
+    "checkQuery": "Check the answer"
   },
   "table": {
     "pagination": {

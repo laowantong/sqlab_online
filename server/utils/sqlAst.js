@@ -67,7 +67,8 @@ export function getTablesOfFromClause(ast) {
     // Most dialects of SQL allow SELECT queries without a FROM clause, e.g., SELECT 1
     return [];
   }
-  return ast.from.map(src => src.as || src.table);
+  const result = ast.from.map(src => src.as || src.table);
+  return result;
 }
 
 /**
@@ -80,7 +81,7 @@ export function getTablesOfFromClause(ast) {
 */
 export function calculateFirstPassFormula(ast, formula) {
   const tablesOfFromClauses = getTablesOfFromClause(ast);
-  const hashMatches = formula.match(/(\w\.)?hash/g);
+  const hashMatches = formula.match(/(\w\.)?\bhash\b/g);
   if (hashMatches.length < tablesOfFromClauses.length) {
       throw new Error("tooManyTablesError");
   } 

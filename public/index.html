@@ -47,7 +47,7 @@
     </header>
 
     <!-- Task strip -->
-    <div id="tasks">
+    <div id="task-strip">
     </div>
 
     <!-- Episode container for adventure content -->
@@ -86,19 +86,19 @@
     <!-- SQL execution tab with results -->
     <div id="execution-tab" class="tab-content">
         <div id="results-container"></div>
+        <div id="check-container">
+            <button id="check-button" data-i18n="execution-tab.checkQuery">Check query</button>
+        </div>
     </div>
 
-    <!-- Control tab (check solution) -->
+    <!-- Feedback tab -->
     <div id="feedback-tab" class="tab-content">
-        <div id="feedback-container">
-            <!-- Feedback will be displayed here -->
-        </div>
+        <div id="feedback-text-container" class="hidden"></div>
     </div>
 
     <!-- Notes tab content -->
     <div id="notes-tab" class="tab-content">
-        <textarea id="notes-textarea" data-i18n-placeholder="notes.placeholder"
-            placeholder="Write your notes here..."></textarea>
+        <textarea id="notes-textarea" data-i18n-placeholder="notes.placeholder"></textarea>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>

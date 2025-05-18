@@ -20,7 +20,7 @@
     "coreTables": "Tables",
     "schema": "Schéma",
     "execution": "Exécuter",
-    "feedback": "Vérifier",
+    "feedback": "Feedback",
     "notes": "Notes"
   },
   "notes": {
@@ -37,11 +37,8 @@
   "execution-tab": {
     "title": "Exécuter",
     "noResults": "Aucun résultat",
-    "runPrompt": "Exécutez une requête pour voir les résultats"
-  },
-  "feedback-tab": {
-    "title": "Vérifier",
-    "developing": "Fonctionnalité en cours de développement..."
+    "runPrompt": "Exécutez une requête pour voir les résultats",
+    "checkQuery": "Vérifier la réponse"
   },
   "table": {
     "pagination": {
