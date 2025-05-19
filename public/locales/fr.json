@@ -45,7 +45,7 @@
       "rows": "Lignes"
     },
     "nullValue": "NULL",
-    "clickToCopy": "Cliquez pour copier le contenu de la cellule"
+    "clickToInsert" :"Cliquez pour insérer le contenu de la cellule"
   },
   "database": {
     "fetchError": "Impossible de récupérer les informations de la base de données : {status}",

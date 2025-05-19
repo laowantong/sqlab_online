@@ -66,34 +66,9 @@ tr:hover {
   border-right: 2px solid #ccc;
 }
 
-/* TODO : change this after making Click to insert*/
-/* == Click-to-copy styles for table cells == */
-td.copyable {
-  cursor: pointer;
-}
-
-td.copyable:hover {
-  background-color: rgba(0, 0, 0, 0.05);
-}
-
-td.copy-success {
-  animation: copy-success-flash 0.3s ease;
-}
-
-td.copy-error {
-  animation: copy-error-flash 0.3s ease;
-}
-
-@keyframes copy-success-flash {
-  0% { background-color: transparent; }
-  50% { background-color: #e6ffe6; }
-  100% { background-color: transparent; }
-}
-
-@keyframes copy-error-flash {
-  0% { background-color: transparent; }
-  50% { background-color: #ffe6e6; }
-  100% { background-color: transparent; }
+td.insert-success {
+    background-color: #d4edda;
+    transition: background-color 0.3s ease;
 }
 
 /* == Dark theme == */
@@ -123,4 +98,6 @@ td.copy-error {
 .dark-theme .row-number {
   color: #bbb;
 }
+
+
 

@@ -45,7 +45,7 @@
       "rows": "Rows"
     },
     "nullValue": "NULL",
-    "clickToCopy": "Click to copy cell content"
+    "clickToInsert" : "Click to insert cell content"
   },
   "database": {
     "fetchError": "Failed to fetch database information: {status}",
