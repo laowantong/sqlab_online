@@ -44,7 +44,7 @@
 }
 
 .strip-button:hover {
-    background-color: #dceff1;
+    transform: translateY(2px);
 }
 
 .strip-button.active {
@@ -115,6 +115,43 @@
     opacity: 0.8;
 }
 
+/* Generic class for hiding elements */
+.hidden {
+    display: none !important;
+}
+
+/* == Check Query Button == */
+
+#check-container {
+    display: flex;
+     justify-content: flex-end; 
+    margin-top: var(--spacing-md); 
+}
+
+#check-button {
+    background-color: var(--color-accent);
+    color: var(--color-white);
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border: none;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#check-button:hover {
+    transform: translateY(2px);
+}
+
+
+
 /* == Responsive == */
 @media (max-width: 768px) {
     .strip-button {
@@ -135,9 +172,6 @@
     border: 1px solid #555;
 }
 
-.dark-theme .strip-button:hover {
-    background-color: var(--dark-secondary);
-}
 
 .dark-theme .strip-button.active {
     background-color: var(--dark-secondary);
@@ -151,4 +185,12 @@
     background-color: #333;
     color: #555;
     border-color: #444;
+}
+
+
+/* == Dark theme Check button == */
+.dark-theme #check-button {
+    background-color: var(--dark-secondary);
+    color: var(--dark-text);
+    box-shadow: var(--shadow-sm);
 }

@@ -143,3 +143,9 @@ h1 {
 .dark-theme .menu-item .theme-icon {
     color: var(--dark-text);
 }
+
+/* ===== Dark theme Language Selector ===== */
+.dark-theme #language-selector {
+    color: var(--dark-text);
+    background-color: var(--dark-element);
+}
