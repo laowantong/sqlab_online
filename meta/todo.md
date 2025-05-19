@@ -6,9 +6,9 @@
 
 - [ ] Rendre hidden le bouton feedBack lorsque la zone de codeMirrorEditor est dirty
 
-- [ ] Implémenter système de score (q1 vaut 10 points, q2 = 20 points ...) les points seront sûrement stockées dans la table directement par commodité. 
-    - Bouton mise score -> Un slider pour miser un pourcentage de son score 10 à 50% de son score(?) 
-    - Dans local storage : { activityNumber }/{taskNumber}.
+- [ ] Implémenter système de score en utilisant `task.reward` généré à partir de SQLab 0.7.9.
+    - Bouton mise score -> Un slider pour miser un pourcentage de son score 10 à 50% de son score. 
+    - Dans local storage : `score/${activityNumber}`.
     - Plus tard logo de la monnaie du jeu au centre d'un slider circulaire, le pourcentage s'afficherait sur la pièce de monnaie.
 ## Prochainement
 - [ ] Aventure d'accueil/Tutoriel
