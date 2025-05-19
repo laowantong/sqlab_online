@@ -44,7 +44,8 @@
     "pagination": {
       "rows": "Lignes"
     },
-    "nullValue": "NULL"
+    "nullValue": "NULL",
+    "clickToInsert" :"Cliquez pour insérer le contenu de la cellule"
   },
   "database": {
     "fetchError": "Impossible de récupérer les informations de la base de données : {status}",

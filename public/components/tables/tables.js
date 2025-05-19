@@ -65,7 +65,7 @@ function generateTableRowsWithNumbers(rows, offset) {
     rows.forEach((row, i) => {
         const cells = row.map(cell => {
             const content = cell !== null ? escapeHtml(cell) : 'NULL';
-            return `<td class="insertable" title="${t('table.clickToAppend')}">${content}</td>`;
+            return `<td class="insertable" title="${t('table.clickToInsert')}">${content}</td>`;
         });
         rowsHtml.push(`<tr><td class="row-number">${offset + i + 1}</td>${cells.join('')}</tr>`);
     });
@@ -89,6 +89,11 @@ function addClickToInsert(tableElement) {
                 const editor = window.sqlEditor;
                 const cursor = editor.getCursor(); 
                 editor.replaceRange(textToInsert, cursor); 
+
+                this.classList.add('insert-success');
+                setTimeout(() => {
+                    this.classList.remove('insert-success');
+                }, 300);
             }
         });
 
