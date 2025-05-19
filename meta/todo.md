@@ -11,7 +11,7 @@
     - Dans local storage : { activityNumber }/{taskNumber}.
     - Plus tard logo de la monnaie du jeu au centre d'un slider circulaire, le pourcentage s'afficherait sur la pièce de monnaie.
 ## Prochainement
-- [] Aventure d'accueil/Tutoriel
-- [] Page d'accueil pour selectionner sa base puis l'aventure ou la série d'exercices
-- [] Gestion des utilisateurs
-- [] Tester les trucs importants (fonctions du modèle serveur, certaines fonctions du client ?  )
+- [ ] Aventure d'accueil/Tutoriel
+- [ ] Page d'accueil pour selectionner sa base puis l'aventure ou la série d'exercices
+- [ ] Gestion des utilisateurs
+- [ ] Tester les trucs importants (fonctions du modèle serveur, certaines fonctions du client ?  )
