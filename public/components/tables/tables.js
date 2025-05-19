@@ -34,7 +34,7 @@ export function renderPaginatedTable(data, container, onPageChange) {
     const headers = generateTableHeaderRow(data.columns);
     const rows = generateTableRowsWithNumbers(data.rows, data.offset);
     tableElement.innerHTML = `<thead>${headers}</thead><tbody>${rows}</tbody>`;
-    addClickToInsert(tableElement);
+    addClickToAppend(tableElement);
 }
 
 // All the remaining functions are private and not exported
@@ -77,17 +77,17 @@ function generateTableRowsWithNumbers(rows, offset) {
  * - A visual effect indicates whether the copy to clipboard succeeded or failed.
  * - Double-click is disabled to prevent text selection.
  */
-function addClickToInsert(tableElement) {
-    tableElement.querySelectorAll('td.copyable').forEach(cell => {
-        cell.addEventListener('click', async function() {
+function addClickToAppend(tableElement) {
+    tableElement.querySelectorAll('td.appendable').forEach(cell => {
+        cell.addEventListener('click', async function () {
             const textToInsert = this.textContent.trim();
 
            
             if (window.sqlEditor) {
-                const currentText = window.sqlEditor.getValue(); 
-                window.sqlEditor.setValue(currentText + ' ' + textToInsert); //on lui ajoute le texte cliqué avec un espace
                 //window.sqlEditor.focus(); // // Optional: puts the focus back into the editor
 
+                const currentText = window.sqlEditor.getValue();
+                window.sqlEditor.setValue(currentText + textToInsert); 
             }
         });
 
