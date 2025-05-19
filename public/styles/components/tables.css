@@ -99,5 +99,19 @@ td.insert-success {
   color: #bbb;
 }
 
+th.sortable-header {
+    cursor: pointer;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+}
+
+th.sortable-header.sort-asc {
+    border-top: 3px solid #333;
+}
+
+th.sortable-header.sort-desc {
+    border-bottom: 3px solid #333;
+}
+
 
 

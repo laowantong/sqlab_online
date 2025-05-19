@@ -35,6 +35,59 @@ export function renderPaginatedTable(data, container, onPageChange) {
     const rows = generateTableRowsWithNumbers(data.rows, data.offset);
     tableElement.innerHTML = `<thead>${headers}</thead><tbody>${rows}</tbody>`;
     addClickToInsert(tableElement);
+    let currentSort = {
+        columnIndex: null,
+        direction: null // 'asc', 'desc', or null   
+        
+    };
+
+    tableElement.querySelectorAll('th.sortable-header').forEach(th => {
+    th.addEventListener('click', () => {
+        const index = parseInt(th.dataset.index, 10);
+
+        // Détermine le nouveau sens de tri
+        if (currentSort.columnIndex === index) {
+            if (currentSort.direction === 'asc') {
+                currentSort.direction = 'desc';
+            } else if (currentSort.direction === 'desc') {
+                currentSort.columnIndex = null;
+                currentSort.direction = null;
+            } else {
+                currentSort.direction = 'asc';
+            }
+        } else {
+            currentSort.columnIndex = index;
+            currentSort.direction = 'asc';
+        }
+
+        // Trie les données localement
+        const sortedRows = [...data.rows];
+        if (currentSort.direction) {
+            sortedRows.sort((a, b) => {
+                const valA = a[index];
+                const valB = b[index];
+                if (valA === null) return 1;
+                if (valB === null) return -1;
+                if (valA === valB) return 0;
+                return currentSort.direction === 'asc' ? valA > valB ? 1 : -1 : valA < valB ? 1 : -1;
+            });
+        }
+
+        // Met à jour l'affichage
+        const rows = generateTableRowsWithNumbers(sortedRows, data.offset);
+        tableElement.querySelector('tbody').innerHTML = rows;
+
+        // Met à jour les styles
+        tableElement.querySelectorAll('th').forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+        if (currentSort.columnIndex !== null) {
+            const th = tableElement.querySelector(`th[data-index="${currentSort.columnIndex}"]`);
+            th.classList.add(currentSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+        }
+    });
+});
+
+
+
 }
 
 // All the remaining functions are private and not exported
@@ -46,11 +99,12 @@ export function renderPaginatedTable(data, container, onPageChange) {
  * @returns {string} HTML string representing the table header row
  */
 function generateTableHeaderRow(columnNames) {
-    return [
+   return [
         '<tr><th class="row-number-header"></th>',
-        ...columnNames.map(column => `<th>${escapeHtml(column)}</th>`),
+        ...columnNames.map((column, index) =>
+            `<th class="sortable-header" data-index="${index}">${escapeHtml(column)}</th>`),
         '</tr>'
-    ].join('')
+    ].join('');
 
 }
 
