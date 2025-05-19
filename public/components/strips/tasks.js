@@ -18,7 +18,7 @@ export async function initTaskStrip() {
         // Initialize the properties of the current task
         const result = {
             label: task.task_number,
-            title: task.task_title,
+            title: `${task.task_title}\n${task.reward} squalions`,
             classes: task.classes || [],
             onClick: () => {
                 window.currentTaskNumber = task.task_number;
