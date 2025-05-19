@@ -15,13 +15,19 @@ export async function initTaskStrip() {
 
     const properties = activity.tasks.map(task => {
 
+        const prequery = `SELECT ${task.columns.map((col, i) => `${i > 0 ? '     , ' : ''}${col}`).join('\n')}\nFROM `;
+
         // Initialize the properties of the current task
         const result = {
             label: task.task_number,
             title: `${task.task_title}\n${task.reward} squalions`,
             classes: task.classes || [],
             onClick: () => {
-                window.currentTaskNumber = task.task_number;
+                if (task.task_number === window.currentTaskNumber) {
+                    window.sqlEditor.setValue(prequery);
+                } else {
+                    window.currentTaskNumber = task.task_number;
+                }
                 getAndRenderTask(task.access);
                 getAndRenderFeedback(false); // Don't refresh feedback
             },
