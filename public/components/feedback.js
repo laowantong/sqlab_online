@@ -30,7 +30,6 @@ export async function getAndRenderFeedback(refresh = true) {
         document.querySelector('.tab[data-tab="core-tables-tab"]').click();
         return
     }
-
     
     // Retrieve the SQL query from the editor
     const query = window.sqlEditor.getValue().trim();

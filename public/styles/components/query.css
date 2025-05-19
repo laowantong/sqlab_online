@@ -1,12 +1,9 @@
 /**
  * Query component styles
  */
-.query-container {
-  margin-bottom: var(--spacing-lg);
-  position: relative;
-}
 
-.top-query {
+.query-container {
+  position: relative;
   background: linear-gradient(to bottom, #eff1f2 0%, #e3f1f5 100%);
   border-radius: var(--border-radius-md);
   margin-bottom: var(--spacing-lg);
@@ -18,7 +15,7 @@
 }
 
 /* CodeMirror wrapper */
-.top-query .CodeMirror {
+.query-container .CodeMirror {
   color: #a71490;
   font-size: var(--font-size-md);
   background: transparent;
@@ -33,44 +30,84 @@
   z-index: 10;
 }
 
-.top-query .CodeMirror-scroll {
+.query-container .CodeMirror-scroll {
   min-height: 80px;
 }
 
-.top-query .CodeMirror-selected {
+.query-container .CodeMirror-selected {
   background-color: rgba(76, 180, 231, 0.3) !important;
 }
 
-.top-query .CodeMirror-selectedtext {
+.query-container .CodeMirror-selectedtext {
   color: #efeded;
 }
 
-.top-query .CodeMirror-cursor {
+.query-container .CodeMirror-cursor {
   border-left: 1px solid #7ab90d;
 }
 
 /* SQL syntax highlighting */
-.top-query .cm-s-default .cm-keyword {
+.query-container .cm-s-default .cm-keyword {
   color: #280eaa;
 }
 
-.top-query .cm-s-default .cm-operator {
+.query-container .cm-s-default .cm-operator {
   color: #084bc7;
 }
 
-.top-query .cm-s-default .cm-number {
+.query-container .cm-s-default .cm-number {
   color: #FF628C;
 }
 
-.top-query .cm-s-default .cm-string {
-  color: #A5FF90;
+.query-container .cm-s-default .cm-string {
+  color: #0c2706;
 }
 
-.top-query .cm-s-default .cm-comment {
+.query-container .cm-s-default .cm-comment {
   color: #808080;
 }
 
-.top-query .CodeMirror-empty .CodeMirror-placeholder {
+.query-container .CodeMirror-empty .CodeMirror-placeholder {
   color: rgba(47, 46, 46, 0.6);
   font-style: italic;
+}
+
+/* == Dark theme == */
+.dark-theme .query-container {
+  background: linear-gradient(to bottom, #06384a 0%, #085570 100%);
+  border-color: rgba(76, 180, 231, 0.3);
+  position: relative;
+}
+
+.dark-theme .query-container textarea,
+.dark-theme .query-container .CodeMirror {
+  color: #B0E0E6;
+  position: relative;
+  z-index: 10;
+  background-color: transparent;
+}
+
+/* == Dark mode syntax highlighting == */
+.dark-theme .query-container .cm-s-default .cm-keyword {
+  color: #88b4ff;
+}
+
+.dark-theme .query-container .cm-s-default .cm-operator {
+  color: #56d0ff;
+}
+
+.dark-theme .query-container .cm-s-default .cm-number {
+  color: #ff89a8;
+}
+
+.dark-theme .query-container .cm-s-default .cm-string {
+  color: #a8ff9c;
+}
+
+.dark-theme .query-container .cm-s-default .cm-comment {
+  color: #a0a0a0;
+}
+
+.dark-theme .query-container .CodeMirror-empty .CodeMirror-placeholder {
+  color: rgba(176, 224, 230, 0.6);
 }
