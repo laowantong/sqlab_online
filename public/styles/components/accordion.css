@@ -30,7 +30,7 @@
 }
 
 .table-outline:hover {
-  background-color: var(--color-light);
+  background-color: var(--color-light-blue);
 }
 
 .table-name {

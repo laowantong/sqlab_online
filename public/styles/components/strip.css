@@ -7,8 +7,10 @@
 .strip-container {
     overflow-x: auto;
     max-width: 100%;
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
     background-color: var(--color-light-gray);
 }
 
@@ -60,6 +62,59 @@
     pointer-events: none;
 }
 
+/* == Done button styling - ice cube effect == */
+.strip-button.frozen {
+    background-color: #cce8ff;
+    /* Light ice blue base */
+    border-color: #a8d0e6;
+    color: rgba(0, 60, 120, 0.7);
+    /* Semi-transparent dark blue for text */
+    position: relative;
+    backdrop-filter: blur(1px);
+    box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
+.strip-button.frozen::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg,
+            rgba(255, 255, 255, 0.4) 0%,
+            rgba(255, 255, 255, 0.1) 50%,
+            rgba(255, 255, 255, 0.4) 100%);
+    pointer-events: none;
+}
+
+.strip-button.frozen::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 95% 20%, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 25%);
+    pointer-events: none;
+}
+
+/* Done and active combination */
+.strip-button.frozen.active {
+    background-color: #a8d0e6;
+    color: rgba(255, 255, 255, 0.85);
+    box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.5);
+}
+
+/* Ensure disable and frozen states don't interfere with each other */
+.strip-button.frozen:disabled {
+    background-color: #d8ecff;
+    /* Lighter ice blue */
+    color: rgba(0, 60, 120, 0.4);
+    /* More transparent text */
+    opacity: 0.8;
+}
+
 /* == Responsive == */
 @media (max-width: 768px) {
     .strip-button {
@@ -97,4 +152,3 @@
     color: #555;
     border-color: #444;
 }
-

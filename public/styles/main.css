@@ -9,11 +9,6 @@
 /* Import base styles (resets, typography, common elements) */
 @import url('base.css');
 
-/* Import layout (structure, containers, responsive design) */
-/*@import url('layout.css');
-@import url('components/forms.css');
-@import url('components/dropdown.css');
-*/
 
 /* Import component styles */
 @import url('components/header.css');
@@ -27,7 +22,3 @@
 @import url('components/notes.css');
 
 @import url('components/todo.css');
-
-
-/* Import dark mode overrides last */
-/* @import url('components/darkmode.css'); */
