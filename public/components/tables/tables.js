@@ -29,12 +29,12 @@ export function mayRecreateTableContainerIn(container) {
  * @param {Function} onPageChange - Callback for pagination changes
  */
 export function renderPaginatedTable(data, container, onPageChange) {
-    createPageStrip( container, data.offset, data.limit, data.total, onPageChange);
+    createPageStrip(container, data.offset, data.limit, data.total, onPageChange);
     const tableElement = container.querySelector('.table-content');
     const headers = generateTableHeaderRow(data.columns);
     const rows = generateTableRowsWithNumbers(data.rows, data.offset);
     tableElement.innerHTML = `<thead>${headers}</thead><tbody>${rows}</tbody>`;
-    addClickToAppend(tableElement);
+    addClickToInsert(tableElement);
 }
 
 // All the remaining functions are private and not exported
@@ -51,6 +51,7 @@ function generateTableHeaderRow(columnNames) {
         ...columnNames.map(column => `<th>${escapeHtml(column)}</th>`),
         '</tr>'
     ].join('')
+
 }
 
 /**
@@ -64,7 +65,7 @@ function generateTableRowsWithNumbers(rows, offset) {
     rows.forEach((row, i) => {
         const cells = row.map(cell => {
             const content = cell !== null ? escapeHtml(cell) : 'NULL';
-            return `<td class="copyable" title="${t('table.clickToCopy')}">${content}</td>`;
+            return `<td class="insertable" title="${t('table.clickToAppend')}">${content}</td>`;
         });
         rowsHtml.push(`<tr><td class="row-number">${offset + i + 1}</td>${cells.join('')}</tr>`);
     });
@@ -72,27 +73,27 @@ function generateTableRowsWithNumbers(rows, offset) {
 }
 
 /**
- * Adds event listeners to table cells:
- * - When a cell is clicked, its content is appended to the SQL editor text.
- * - A visual effect indicates whether the copy to clipboard succeeded or failed.
- * - Double-click is disabled to prevent text selection.
+ * Adds click and double-click event listeners to all table cells with the 'insertable' class within the given table element.
+ *
+ * On single click, the cell's trimmed text content is inserted to the value of a global SQL editor (window.sqlEditor), if it exists.
+ * On double-click, prevents the default text selection behavior.
+ *
+ * @param {HTMLElement} tableElement - The table element containing cells to which event listeners will be attached.
  */
-function addClickToAppend(tableElement) {
-    tableElement.querySelectorAll('td.appendable').forEach(cell => {
-        cell.addEventListener('click', async function () {
+function addClickToInsert(tableElement) {
+    tableElement.querySelectorAll('td.insertable').forEach(cell => {
+        cell.addEventListener('click', function () {
             const textToInsert = this.textContent.trim();
 
-           
             if (window.sqlEditor) {
-                //window.sqlEditor.focus(); // // Optional: puts the focus back into the editor
-
-                const currentText = window.sqlEditor.getValue();
-                window.sqlEditor.setValue(currentText + textToInsert); 
+                const editor = window.sqlEditor;
+                const cursor = editor.getCursor(); 
+                editor.replaceRange(textToInsert, cursor); 
             }
         });
 
         // Prevents text selection on double-click
-        cell.addEventListener('dblclick', function(e) {
+        cell.addEventListener('dblclick', function (e) {
             e.preventDefault();
         });
     });

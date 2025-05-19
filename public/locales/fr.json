@@ -44,8 +44,7 @@
     "pagination": {
       "rows": "Lignes"
     },
-    "nullValue": "NULL",
-    "clickToCopy": "Cliquez pour copier le contenu de la cellule"
+    "nullValue": "NULL"
   },
   "database": {
     "fetchError": "Impossible de récupérer les informations de la base de données : {status}",
