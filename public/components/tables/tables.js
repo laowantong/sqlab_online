@@ -30,12 +30,10 @@ export function mayRecreateTableContainerIn(container) {
  */
 export function renderPaginatedTable(data, container, onPageChange) {
     createPageStrip(container, data.offset, data.limit, data.total, onPageChange);
-    createPageStrip(container, data.offset, data.limit, data.total, onPageChange);
     const tableElement = container.querySelector('.table-content');
     const headers = generateTableHeaderRow(data.columns);
     const rows = generateTableRowsWithNumbers(data.rows, data.offset);
     tableElement.innerHTML = `<thead>${headers}</thead><tbody>${rows}</tbody>`;
-    addClickToInsert(tableElement);
     addClickToInsert(tableElement);
 }
 
@@ -75,12 +73,6 @@ function generateTableRowsWithNumbers(rows, offset) {
 }
 
 /**
- * Adds click and double-click event listeners to all table cells with the 'insertable' class within the given table element.
- *
- * On single click, the cell's trimmed text content is inserted to the value of a global SQL editor (window.sqlEditor), if it exists.
- * On double-click, prevents the default text selection behavior.
- *
- * @param {HTMLElement} tableElement - The table element containing cells to which event listeners will be attached.
  * Adds click and double-click event listeners to all table cells with the 'insertable' class within the given table element.
  *
  * On single click, the cell's trimmed text content is inserted to the value of a global SQL editor (window.sqlEditor), if it exists.
