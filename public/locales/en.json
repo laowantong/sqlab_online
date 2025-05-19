@@ -44,8 +44,7 @@
     "pagination": {
       "rows": "Rows"
     },
-    "nullValue": "NULL",
-    "clickToCopy": "Click to copy cell content"
+    "nullValue": "NULL"
   },
   "database": {
     "fetchError": "Failed to fetch database information: {status}",

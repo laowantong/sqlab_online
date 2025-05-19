@@ -29,12 +29,12 @@ export function mayRecreateTableContainerIn(container) {
  * @param {Function} onPageChange - Callback for pagination changes
  */
 export function renderPaginatedTable(data, container, onPageChange) {
-    createPageStrip( container, data.offset, data.limit, data.total, onPageChange);
+    createPageStrip(container, data.offset, data.limit, data.total, onPageChange);
     const tableElement = container.querySelector('.table-content');
     const headers = generateTableHeaderRow(data.columns);
     const rows = generateTableRowsWithNumbers(data.rows, data.offset);
     tableElement.innerHTML = `<thead>${headers}</thead><tbody>${rows}</tbody>`;
-    addCopyEventListeners(tableElement);
+    addClickToInsert(tableElement);
 }
 
 // All the remaining functions are private and not exported
@@ -51,6 +51,7 @@ function generateTableHeaderRow(columnNames) {
         ...columnNames.map(column => `<th>${escapeHtml(column)}</th>`),
         '</tr>'
     ].join('')
+
 }
 
 /**
@@ -64,7 +65,7 @@ function generateTableRowsWithNumbers(rows, offset) {
     rows.forEach((row, i) => {
         const cells = row.map(cell => {
             const content = cell !== null ? escapeHtml(cell) : 'NULL';
-            return `<td class="copyable" title="${t('table.clickToCopy')}">${content}</td>`;
+            return `<td class="insertable" title="${t('table.clickToAppend')}">${content}</td>`;
         });
         rowsHtml.push(`<tr><td class="row-number">${offset + i + 1}</td>${cells.join('')}</tr>`);
     });
@@ -72,80 +73,28 @@ function generateTableRowsWithNumbers(rows, offset) {
 }
 
 /**
- * Adds click-to-copy event listeners to copyable cells in a table
- * @param {HTMLElement} tableElement - The table element containing copyable cells
+ * Adds click and double-click event listeners to all table cells with the 'insertable' class within the given table element.
+ *
+ * On single click, the cell's trimmed text content is inserted to the value of a global SQL editor (window.sqlEditor), if it exists.
+ * On double-click, prevents the default text selection behavior.
+ *
+ * @param {HTMLElement} tableElement - The table element containing cells to which event listeners will be attached.
  */
-function addCopyEventListeners(tableElement) {
-    tableElement.querySelectorAll('td.copyable').forEach(cell => {
-        cell.addEventListener('click', async function(e) {
-            // Get the text content of the cell
-            const textToCopy = this.textContent.trim();
-            
-            try {
-                // Try to use the clipboard API
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    await navigator.clipboard.writeText(textToCopy);
-                } else {
-                    // Fallback for older browsers
-                    const success = fallbackCopyTextToClipboard(textToCopy);
-                    if (!success) throw new Error('Fallback copying failed');
-                }
-                
-                // Visual feedback that copying was successful - using classes instead of inline styles
-                this.classList.add('copy-success');
-                
-                setTimeout(() => {
-                    this.classList.remove('copy-success');
-                }, 300);
-                
-            } catch (err) {
-                console.error('Failed to copy text: ', err);
-                
-                // Visual feedback that copying failed - using classes instead of inline styles
-                this.classList.add('copy-error');
-                
-                setTimeout(() => {
-                    this.classList.remove('copy-error');
-                }, 300);
+function addClickToInsert(tableElement) {
+    tableElement.querySelectorAll('td.insertable').forEach(cell => {
+        cell.addEventListener('click', function () {
+            const textToInsert = this.textContent.trim();
+
+            if (window.sqlEditor) {
+                const editor = window.sqlEditor;
+                const cursor = editor.getCursor(); 
+                editor.replaceRange(textToInsert, cursor); 
             }
-            
-            // Prevent default action and propagation
-            e.preventDefault();
-            e.stopPropagation();
         });
-        
-        // Prevent text selection on double click
-        cell.addEventListener('dblclick', function(e) {
+
+        // Prevents text selection on double-click
+        cell.addEventListener('dblclick', function (e) {
             e.preventDefault();
         });
     });
-}
-
-/**
- * Fallback method for browsers that don't support the Clipboard API
- * @param {string} text - Text to copy to clipboard
- * @returns {boolean} - Whether the operation was successful
- */
-function fallbackCopyTextToClipboard(text) {
-    const textArea = document.createElement('textarea');
-    textArea.value = text;
-    
-    // Make the textarea out of viewport
-    textArea.style.position = 'fixed';
-    textArea.style.top = '-9999px';
-    textArea.style.left = '-9999px';
-    
-    document.body.appendChild(textArea);
-    textArea.focus();
-    textArea.select();
-    
-    let successful = false;
-    try {
-        successful = document.execCommand('copy');
-    } catch (err) {
-        console.error('Fallback: Copying text failed', err);
-    }
-    
-    document.body.removeChild(textArea);
-    return successful;
 }
