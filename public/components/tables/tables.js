@@ -34,7 +34,7 @@ export function renderPaginatedTable(data, container, onPageChange) {
     const headers = generateTableHeaderRow(data.columns);
     const rows = generateTableRowsWithNumbers(data.rows, data.offset);
     tableElement.innerHTML = `<thead>${headers}</thead><tbody>${rows}</tbody>`;
-    addCellClickInteractions(tableElement);
+    addClickToInsert(tableElement);
 }
 
 // All the remaining functions are private and not exported
@@ -77,7 +77,7 @@ function generateTableRowsWithNumbers(rows, offset) {
  * - A visual effect indicates whether the copy to clipboard succeeded or failed.
  * - Double-click is disabled to prevent text selection.
  */
-function addCellClickInteractions(tableElement) {
+function addClickToInsert(tableElement) {
     tableElement.querySelectorAll('td.copyable').forEach(cell => {
         cell.addEventListener('click', async function() {
             const textToInsert = this.textContent.trim();
