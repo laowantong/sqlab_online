@@ -14,17 +14,89 @@ import { DEFAULT_PAGE_LIMIT, DEFAULT_PAGE_OFFSET } from '../../utils/constants.j
 export function initQueryExecution() {
     const resultsContainer = document.getElementById('results-container');
     const executionTab = document.querySelector('.tab[data-tab="execution-tab"]');
-    executionTab.addEventListener('click', triggerExecutionOfNewQuery);
+    const checkContainer = document.getElementById('check-container');
+    let executionListener = null;
+    const initialQuery = window.sqlEditor.getValue().trim();
+    updateExecutionListener(initialQuery !== '');
+    window.sqlEditor.on('change', handleEditorChange);
+    
+    /**
+     * Handles changes in the SQL editor.
+     * - If the editor content is dirty (modified), updates the execution listener and hides the check button.
+     * - If the query is empty, disables the execution listener and hides the check button.
+     */
+    function handleEditorChange() {
+        const query = window.sqlEditor.getValue().trim();
+        if (window.sqlEditor.isDirty) {
+            updateExecutionListener(true);
+            checkContainer.classList.add(('hidden'));
+        }
 
+        if (!query) {
+            updateExecutionListener(false);
+            checkContainer.classList.add(('hidden'));
+        }
+    }
+
+    /**
+     * Enables or disables the execution listener for the execution tab.
+     *
+     * When enabled, attaches the `triggerExecutionOfNewQuery` function as a click event listener
+     * to the `executionTab` element. When disabled, removes the event listener if it exists.
+     *
+     * @param {boolean} shouldEnable - Determines whether to enable (true) or disable (false) the execution listener.
+     */
+    function updateExecutionListener(shouldEnable) {
+        if (shouldEnable && !executionListener) {
+            executionListener = triggerExecutionOfNewQuery;
+            executionTab.addEventListener('click', executionListener);
+
+        } else if (!shouldEnable && executionListener) {
+            executionTab.removeEventListener('click', executionListener);
+            executionListener = null;
+        }
+    }
+
+    window.updateExecutionListener = updateExecutionListener;
+
+
+
+    /**
+     * Executes the current SQL query from the editor, renders the results,
+     * updates the editor's dirty state, and toggles the visibility of the
+     * check container based on whether any rows are returned.
+     *
+     * @async
+     * @function triggerExecutionOfNewQuery
+     * @returns {Promise<void>} Resolves when the query execution and UI updates are complete.
+     */
     async function triggerExecutionOfNewQuery() {
         const query = window.sqlEditor.getValue().trim();
         if (!query) {
             showError(t('query.emptyError'), resultsContainer);
             return;
         }
-        await runQueryAndRenderResults(query);
+        const result = await runQueryAndRenderResults(query);
+        window.sqlEditor.isDirty = false;
+        updateExecutionListener(false);
+
+        if (result.rows.length > 0) {
+            checkContainer.classList.remove('hidden');
+        }
+        else {
+            checkContainer.classList.add(('hidden'));
+        }
     }
 
+    /**
+     * Executes a SQL query, handles pagination, and renders the results in a table.
+     *
+     * @async
+     * @function
+     * @param {string} query - The SQL query string to execute.
+     * @param {number} [offset=DEFAULT_PAGE_OFFSET] - The offset for pagination (defaults to DEFAULT_PAGE_OFFSET).
+     * @returns {Promise<Object|null>} The result data from the query, or null if an error occurs.
+     */
     async function runQueryAndRenderResults(query, offset = DEFAULT_PAGE_OFFSET) {
         try {
             // Recreate the table structure if needed
@@ -32,14 +104,16 @@ export function initQueryExecution() {
 
             // Execute the query and get the results
             const data = await executeQuery(query, offset, DEFAULT_PAGE_LIMIT);
-            
+
             // Create a closure that handles page changes by re-running the same query with new offset
-            const onPageChange = (newOffset) => {runQueryAndRenderResults(query, newOffset)};
+            const onPageChange = (newOffset) => { runQueryAndRenderResults(query, newOffset) };
 
             // Render the paginated table with results and page change handler
             renderPaginatedTable(data, resultsContainer, onPageChange);
+            return data;
         } catch (error) {
             showError(error.message, resultsContainer);
+            return null;
         }
     }
 }
