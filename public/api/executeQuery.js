@@ -1,4 +1,3 @@
-import { t } from '../controllers/localizationController.js';
 import { DEFAULT_PAGE_OFFSET, DEFAULT_PAGE_LIMIT } from '../utils/constants.js';
 
 /**
@@ -18,7 +17,7 @@ export async function executeQuery(query, offset = DEFAULT_PAGE_OFFSET, limit = 
     // If the request failed, throw an error with the message from the backend
     if (!response.ok) {
         const { error } = await response.json();
-        throw new Error(error || t('database.fetchError', { status: response.status }));
+        throw new Error(error || window.i18n.t('database.fetchError', { status: response.status }));
     }
 
     return response.json();

@@ -5,19 +5,16 @@
  */
 export function initSqlEditor(containerId) {
     const container = document.getElementById(containerId);
-
+    
     if (!container) {
         throw new Error(`Element with id "${containerId}" not found`);
     }
-    const editor = CodeMirror.fromTextArea(container, {
-        placeholder: container.getAttribute('placeholder')
-    })
-
+    
+    const editor = CodeMirror.fromTextArea(container);
     editor.isDirty = false;
     editor.on('change', function () {
         editor.isDirty = true;
     });
     
-    return editor
-
+    return editor;
 }

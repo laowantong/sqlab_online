@@ -36,14 +36,13 @@
                 <!-- Theme toggle -->
                 <div class="menu-item theme-container">
                     <span class="menu-label" data-i18n="header.theme">Theme</span>
-                    <i id="toggle-theme" class="fas fa-moon theme-icon" data-i18n-title="header.toggleTheme"
-                        title="Toggle theme"></i>
+                    <i id="toggle-theme" class="fas fa-moon theme-icon"></i>
                 </div>
             </div>
         </div>
 
         <!-- Title -->
-        <h1><span id="activity-title" data-i18n="app.loading">Loading...</span></h1>
+        <h1><span id="activity-title"></span></h1>
     </header>
 
     <!-- Task strip -->
@@ -57,8 +56,7 @@
 
     <!-- SQL query input zone -->
     <div class="query-container">
-        <textarea id="sql-editor" data-i18n-placeholder="query.placeholder"
-            placeholder="Enter your SQL query here..."></textarea>
+        <textarea id="sql-editor"></textarea>
     </div>
 
     <!-- Navigation tabs for switching between interface sections -->
@@ -98,14 +96,14 @@
 
     <!-- Notes tab content -->
     <div id="notes-tab" class="tab-content">
-        <textarea id="notes-textarea" data-i18n-placeholder="notes.placeholder"></textarea>
+        <textarea id="notes-textarea" data-i18n="notes.placeholder" data-i18n-target="placeholder"></textarea>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/mode/sql/sql.min.js"></script>
      <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/addon/display/placeholder.min.js"></script>
     <!-- Localization service should be loaded before main -->
-    <script src="utils/localizationService.js"></script>
+    <script src="localization/localizationService.js"></script>
     <script type="module" src="main.js"></script>
 
 </body>

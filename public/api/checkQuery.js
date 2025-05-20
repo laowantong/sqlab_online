@@ -1,4 +1,3 @@
-import { t } from '../controllers/localizationController.js';
 
 /**
  */
@@ -13,7 +12,7 @@ export async function checkQuery(query, activityNumber, taskNumber) {
     // If the request failed, throw an error with the message from the backend
     if (!response.ok) {
         const { error } = await response.json();
-        throw new Error(error || t('database.checkError', { status: response.status }));
+        throw new Error(error || window.i18n.t('database.checkError', { status: response.status }));
     }
 
     return response.json();
