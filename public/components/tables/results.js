@@ -19,7 +19,7 @@ export function initQueryExecution() {
     const initialQuery = window.sqlEditor.getValue().trim();
     updateExecutionListener(initialQuery !== '');
     window.sqlEditor.on('change', handleEditorChange);
-    
+
     /**
      * Handles changes in the SQL editor.
      * - If the editor content is dirty (modified), updates the execution listener and hides the check button.
@@ -56,11 +56,7 @@ export function initQueryExecution() {
             executionListener = null;
         }
     }
-
-    window.updateExecutionListener = updateExecutionListener;
-
-
-
+    
     /**
      * Executes the current SQL query from the editor, renders the results,
      * updates the editor's dirty state, and toggles the visibility of the

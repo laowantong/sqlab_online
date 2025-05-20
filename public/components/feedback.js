@@ -14,14 +14,8 @@ export async function getAndRenderFeedback(refresh = true) {
     const taskNumber = window.currentTaskNumber;
     const taskId = `${activityNumber}/${taskNumber}`;
 
-    if (refresh) {
-        window.sqlEditor.isDirty = false;
-        if (window.updateExecutionListener) {
-            window.updateExecutionListener(false);
-        }
-    }
     feedbackControlContainer.classList.add('hidden');
-
+    
 
     // If the feedback is already stored, restore it and return.
     let feedback = localStorage.getItem(`feedback/${taskId}`);
