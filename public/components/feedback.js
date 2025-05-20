@@ -1,4 +1,4 @@
-import { checkQuery} from '../api/checkQuery.js';
+import { checkQuery } from '../api/checkQuery.js';
 import { showError } from '../../utils/genericUtils.js';
 
 export function initFeedback() {
@@ -12,24 +12,25 @@ export async function getAndRenderFeedback(refresh = true) {
     const activityNumber = window.currentActivityNumber;
     const taskNumber = window.currentTaskNumber;
     const taskId = `${activityNumber}/${taskNumber}`;
+
+    feedbackControlContainer.classList.add('hidden');
     
+
     // If the feedback is already stored, restore it and return.
     let feedback = localStorage.getItem(`feedback/${taskId}`);
     if (feedback) {
         feedbackTextContainer.innerHTML = feedback;
         feedbackTextContainer.classList.remove('hidden');
-        feedbackControlContainer.classList.add('hidden');
         return
     }
 
     // If the refresh flag is not set, return.
     if (!refresh) {
         feedbackTextContainer.classList.add('hidden');
-        feedbackControlContainer.classList.remove('hidden');
         document.querySelector('.tab[data-tab="core-tables-tab"]').click();
         return
     }
-    
+
     // Retrieve the SQL query from the editor
     const query = window.sqlEditor.getValue().trim();
     if (!query) {
@@ -37,7 +38,7 @@ export async function getAndRenderFeedback(refresh = true) {
         showError(window.i18n.t('query.emptyError'), feedbackTextContainer);
         return;
     }
-    
+
     // Fetch the object resulting of the query check
     const message = await checkQuery(query, activityNumber, taskNumber);
     const data = JSON.parse(message);
@@ -46,10 +47,10 @@ export async function getAndRenderFeedback(refresh = true) {
     feedbackTextContainer.innerHTML = data.feedback;
     feedbackTextContainer.classList.remove('hidden');
     document.querySelector('.tab[data-tab="feedback-tab"]').click();
-    
+
     // The feeback can be a hint.
     if (feedbackTextContainer.firstChild.classList.contains('hint')) {
-        feedbackControlContainer.classList.remove('hidden');
+        //feedbackControlContainer.classList.remove('hidden');
         // TODO: update the score
         return;
     }
@@ -58,7 +59,6 @@ export async function getAndRenderFeedback(refresh = true) {
 
     // Store the correction locally
     localStorage.setItem(`feedback/${taskId}`, data.feedback);
-    feedbackControlContainer.classList.add('hidden');
 
     // Freeze the current task strip button.
     // Note that, contrarily to the task number, the strip button index is 0-based.

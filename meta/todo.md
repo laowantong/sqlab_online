@@ -1,9 +1,7 @@
 # TODO list
 
 - [ ] Refonte Drag to reorder (+ Icone de zone préhension (à droite) et pour dérouler le bandeau (à gauche) l'icone de zone de préhension doit être fixe et ne pas pouvoir être repoussé par le nom des colonnes)
-
 - [ ] Implémenter clique to insert pour les données dans le bandeau (après avoir fait la refonte Drag to reorder)
-
 - [ ] Rendre hidden le bouton feedBack lorsque la zone de codeMirrorEditor est dirty
 
 - [ ] Implémenter système de score en utilisant `task.reward` généré à partir de SQLab 0.7.9.
