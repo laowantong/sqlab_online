@@ -22,71 +22,86 @@ export function mayRecreateTableContainerIn(container) {
 }
 
 /**
+ * Enables sortable column headers on the given table element.
+ * Handles 3-state sorting (asc, desc, none) and updates row order and visual cues.
+ *
+ * @param {HTMLElement} tableElement - The table DOM element containing the header and rows.
+ * @param {Object} data - The table data (with original rows).
+ * @param {number} offset - The row offset for numbering.
+ */
+function makeColumnsSortable(tableElement, data, offset) {
+    let currentSort = {
+        columnIndex: null,
+        direction: null // 'asc', 'desc', or null
+    };
+
+    tableElement.querySelectorAll('th.sortable-header').forEach(th => {
+        th.addEventListener('click', () => {
+            const index = parseInt(th.dataset.index, 10);
+
+            // Determine the new sorting direction
+            if (currentSort.columnIndex === index) {
+                if (currentSort.direction === 'asc') {
+                    currentSort.direction = 'desc';
+                } else if (currentSort.direction === 'desc') {
+                    currentSort.columnIndex = null;
+                    currentSort.direction = null;
+                } else {
+                    currentSort.direction = 'asc';
+                }
+            } else {
+                currentSort.columnIndex = index;
+                currentSort.direction = 'asc';
+            }
+
+            // Sort the data locally
+            const sortedRows = [...data.rows];
+            if (currentSort.direction) {
+                sortedRows.sort((a, b) => {
+                    const valA = a[index];
+                    const valB = b[index];
+                    if (valA === null) return 1;
+                    if (valB === null) return -1;
+                    if (valA === valB) return 0;
+                    return currentSort.direction === 'asc'
+                        ? valA > valB ? 1 : -1
+                        : valA < valB ? 1 : -1;
+                });
+            }
+
+            // Update the display
+            const rows = generateTableRowsWithNumbers(sortedRows, offset);
+            tableElement.querySelector('tbody').innerHTML = rows;
+            addClickToInsert(tableElement); // Re-ajoute les événements sur les nouvelles cellules
+
+            // Update the styles
+            tableElement.querySelectorAll('th').forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+            if (currentSort.columnIndex !== null) {
+                const th = tableElement.querySelector(`th[data-index="${currentSort.columnIndex}"]`);
+                th.classList.add(currentSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
+            }
+        });
+    });
+}
+
+
+/**
  * Renders a complete table with pagination, header and rows
  * @param {Object} data - Table data with columns, rows and pagination metadata
  * @param {HTMLElement} container - Container element for the table
  * @param {Function} onPageChange - Callback for pagination changes
+ * @param {Function} onPageChange - Function called when the page changes.
  */
 export function renderPaginatedTable(data, container, onPageChange) {
     createPageStrip(container, data.offset, data.limit, data.total, onPageChange);
+
     const tableElement = container.querySelector('.table-content');
     const headers = generateTableHeaderRow(data.columns);
     const rows = generateTableRowsWithNumbers(data.rows, data.offset);
     tableElement.innerHTML = `<thead>${headers}</thead><tbody>${rows}</tbody>`;
+
     addClickToInsert(tableElement);
-    let currentSort = {
-        columnIndex: null,
-        direction: null // 'asc', 'desc', or null   
-        
-    };
-
-    tableElement.querySelectorAll('th.sortable-header').forEach(th => {
-    th.addEventListener('click', () => {
-        const index = parseInt(th.dataset.index, 10);
-
-        // Détermine le nouveau sens de tri
-        if (currentSort.columnIndex === index) {
-            if (currentSort.direction === 'asc') {
-                currentSort.direction = 'desc';
-            } else if (currentSort.direction === 'desc') {
-                currentSort.columnIndex = null;
-                currentSort.direction = null;
-            } else {
-                currentSort.direction = 'asc';
-            }
-        } else {
-            currentSort.columnIndex = index;
-            currentSort.direction = 'asc';
-        }
-
-        // Trie les données localement
-        const sortedRows = [...data.rows];
-        if (currentSort.direction) {
-            sortedRows.sort((a, b) => {
-                const valA = a[index];
-                const valB = b[index];
-                if (valA === null) return 1;
-                if (valB === null) return -1;
-                if (valA === valB) return 0;
-                return currentSort.direction === 'asc' ? valA > valB ? 1 : -1 : valA < valB ? 1 : -1;
-            });
-        }
-
-        // Met à jour l'affichage
-        const rows = generateTableRowsWithNumbers(sortedRows, data.offset);
-        tableElement.querySelector('tbody').innerHTML = rows;
-
-        // Met à jour les styles
-        tableElement.querySelectorAll('th').forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
-        if (currentSort.columnIndex !== null) {
-            const th = tableElement.querySelector(`th[data-index="${currentSort.columnIndex}"]`);
-            th.classList.add(currentSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
-        }
-    });
-});
-
-
-
+    makeColumnsSortable(tableElement, data, data.offset);
 }
 
 // All the remaining functions are private and not exported
@@ -98,13 +113,12 @@ export function renderPaginatedTable(data, container, onPageChange) {
  * @returns {string} HTML string representing the table header row
  */
 function generateTableHeaderRow(columnNames) {
-   return [
+    return [
         '<tr><th class="row-number-header"></th>',
         ...columnNames.map((column, index) =>
             `<th class="sortable-header" data-index="${index}">${escapeHtml(column)}</th>`),
         '</tr>'
     ].join('');
-
 }
 
 /**
@@ -140,8 +154,8 @@ function addClickToInsert(tableElement) {
 
             if (window.sqlEditor) {
                 const editor = window.sqlEditor;
-                const cursor = editor.getCursor(); 
-                editor.replaceRange(textToInsert, cursor); 
+                const cursor = editor.getCursor();
+                editor.replaceRange(textToInsert, cursor);
 
                 this.classList.add('insert-success');
                 setTimeout(() => {
