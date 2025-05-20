@@ -3,7 +3,7 @@ import { loadAndRenderRelationalSchema } from './components/relationalSchema.js'
 import { loadAndRenderCoreTableList } from './components/tables/core/accordions.js';
 import { loadAndRenderCoreTableData } from './components/tables/core/data.js';
 
-import { initTabs } from './controllers/tabController.js';
+import { initTabs } from './components/tabs.js';
 import { initQueryExecution } from './components/tables/results.js';
 import { initNotes } from './components/notes.js';
 import { initTaskStrip } from './components/strips/tasks.js';

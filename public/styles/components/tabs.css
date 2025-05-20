@@ -81,6 +81,14 @@
   z-index: 2; 
 }
 
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
 /* == Responsive == */
 @media (max-width: 768px) {
   .tabs {
