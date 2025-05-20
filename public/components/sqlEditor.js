@@ -5,12 +5,6 @@
  */
 export function initSqlEditor(containerId) {
     const container = document.getElementById(containerId);
-    
-    if (!container) {
-        throw new Error(`Element with id "${containerId}" not found`);
-    }
-    
-    return CodeMirror.fromTextArea(container, {
-        placeholder: container.getAttribute('placeholder')
-    });
+    if (!container) throw new Error(`Element with id "${containerId}" not found`);
+    return CodeMirror.fromTextArea(container);
 }

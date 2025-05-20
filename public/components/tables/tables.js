@@ -1,6 +1,5 @@
 import { escapeHtml } from '../../utils/genericUtils.js';
 import { createPageStrip } from '../strips/pages.js';
-import { t } from '../../controllers/localizationController.js';
 
 // Description: common functions for both core table and results table rendering
 
@@ -119,7 +118,7 @@ function generateTableRowsWithNumbers(rows, offset) {
     rows.forEach((row, i) => {
         const cells = row.map(cell => {
             const content = cell !== null ? escapeHtml(cell) : 'NULL';
-            return `<td class="insertable" title="${t('table.clickToInsert')}">${content}</td>`;
+            return `<td class="insertable" data-i18n="table.clickToInsert" data-i18n-target="title" title="${window.i18n.t('table.clickToInsert')}">${content}</td>`;
         });
         rowsHtml.push(`<tr><td class="row-number">${offset + i + 1}</td>${cells.join('')}</tr>`);
     });

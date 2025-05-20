@@ -9,35 +9,21 @@ import { initNotes } from './components/notes.js';
 import { initTaskStrip } from './components/strips/tasks.js';
 import { initFeedback } from './components/feedback.js';
 
-import { initLocalization } from './controllers/localizationController.js';
-
 import { TEMP_STARTING_ACTIVITY } from './utils/constants.js';
-
 import { initSqlEditor } from './components/sqlEditor.js';
 
-// Initialize localization service immediately
+import { initLocalization } from './localization/initLocalization.js';
 window.i18n.init().catch(err => console.error('Failed to initialize localization:', err));
 
 document.addEventListener('DOMContentLoaded', async () => {
-    // Make sure localization is initialized first
-    try {
-        // If initialization hasn't completed yet, await it
-        if (!window.i18n.initialized) {
-            await window.i18n.initPromise;
-        }
-
-        // Initialize the UI components that handle localization
-        initLocalization();
-    } catch (error) {
-        console.error('Error initializing localization:', error);
-    }
-
     // Reset the local storage for testing purposes. TODO: remove this line in production
     localStorage.clear();
 
-    await loadAndRenderActivityTitle();
+    window.sqlEditor = initSqlEditor('sql-editor'); // before initLocalization
 
-    window.sqlEditor = initSqlEditor('sql-editor');
+    initLocalization();
+
+    await loadAndRenderActivityTitle();
     
     // Initialize core components: tabs, query handling, and core tables
     initTabs();
