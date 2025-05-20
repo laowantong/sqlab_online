@@ -1,7 +1,6 @@
 import { executeQuery } from '../../api/executeQuery.js';
 import { showError } from '../../utils/genericUtils.js';
 import { renderPaginatedTable, mayRecreateTableContainerIn } from './tables.js';
-import { t } from '../../controllers/localizationController.js';
 import { DEFAULT_PAGE_LIMIT, DEFAULT_PAGE_OFFSET } from '../../utils/constants.js';
 
 /**
@@ -19,7 +18,7 @@ export function initQueryExecution() {
     async function triggerExecutionOfNewQuery() {
         const query = window.sqlEditor.getValue().trim();
         if (!query) {
-            showError(t('query.emptyError'), resultsContainer);
+            showError(window.i18n.t('query.emptyError'), resultsContainer);
             return;
         }
         await runQueryAndRenderResults(query);

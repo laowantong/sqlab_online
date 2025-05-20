@@ -1,6 +1,5 @@
 import { checkQuery} from '../api/checkQuery.js';
 import { showError } from '../../utils/genericUtils.js';
-import { t } from '../controllers/localizationController.js';
 
 export function initFeedback() {
     const feedbackButton = document.getElementById('check-button');
@@ -35,7 +34,7 @@ export async function getAndRenderFeedback(refresh = true) {
     const query = window.sqlEditor.getValue().trim();
     if (!query) {
         document.querySelector('.tab[data-tab="feedback-tab"]').click();
-        showError(t('query.emptyError'), feedbackTextContainer);
+        showError(window.i18n.t('query.emptyError'), feedbackTextContainer);
         return;
     }
     
