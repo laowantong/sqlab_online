@@ -1,10 +1,11 @@
+import { DEFAULT_STARTING_SCORE } from "../utils/constants";
 /**
  * Initializes the score system for a specific activity.
  * @param {number|string} activityNumber - The identifier for the activity whose score is being managed.
  * @returns {Object} API for score management
  */
 export function initScoreSystem(activityNumber) {
-    const score = localStorage.getItem(`score/${activityNumber}`) || 1000;
+    const score = localStorage.getItem(`score/${activityNumber}`) || DEFAULT_STARTING_SCORE;
     localStorage.setItem(`score/${activityNumber}`, score);
     updateScoreDisplay(score);
     initStakeSlider(score);
