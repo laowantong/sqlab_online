@@ -14,7 +14,7 @@ export async function getAndRenderFeedback(refresh = true) {
     const taskId = `${activityNumber}/${taskNumber}`;
 
     feedbackControlContainer.classList.add('hidden');
-    
+
 
     // If the feedback is already stored, restore it and return.
     let feedback = localStorage.getItem(`feedback/${taskId}`);
@@ -48,14 +48,23 @@ export async function getAndRenderFeedback(refresh = true) {
     feedbackTextContainer.classList.remove('hidden');
     document.querySelector('.tab[data-tab="feedback-tab"]').click();
 
+    const scoreSystem = window.scoreSystem;
+    let hasWon = true;
+
     // The feeback can be a hint.
     if (feedbackTextContainer.firstChild.classList.contains('hint')) {
         //feedbackControlContainer.classList.remove('hidden');
-        // TODO: update the score
+        hasWon = false;
+        scoreSystem.applyStakeResult(hasWon);
         return;
     }
 
     // Otherwise, the answer was correct, and the feedback gives the official solution.
+    scoreSystem.applyStakeResult(hasWon);
+    const taskButton = window.taskStrip.getActiveButton();
+    const reward = parseInt(taskButton.getAttribute('data-reward'));
+    scoreSystem.addToScore(reward);
+    scoreSystem.resetStake();
 
     // Store the correction locally
     localStorage.setItem(`feedback/${taskId}`, data.feedback);

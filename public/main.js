@@ -13,6 +13,7 @@ import { TEMP_STARTING_ACTIVITY } from './utils/constants.js';
 import { initSqlEditor } from './components/sqlEditor.js';
 
 import { initLocalization } from './localization/initLocalization.js';
+import { initScoreSystem } from './components/scoreSystem.js';
 window.i18n.init().catch(err => console.error('Failed to initialize localization:', err));
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -24,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initLocalization();
 
     await loadAndRenderActivityTitle();
-    
+
     // Initialize core components: tabs, query handling, and core tables
     initTabs();
     document.querySelector('.tab[data-tab="schema-tab"]').click();
@@ -35,6 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.currentActivityNumber = TEMP_STARTING_ACTIVITY;
     window.taskStrip = await initTaskStrip();
     window.taskStrip.getActiveButton().click();
+    window.scoreSystem = initScoreSystem(window.currentActivityNumber);
 
 
     initFeedback();
