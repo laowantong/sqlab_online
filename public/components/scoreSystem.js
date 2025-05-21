@@ -35,8 +35,8 @@ export function initScoreSystem(activityNumber) {
     */
     function getStakeAmount() {
         const slider = document.getElementById('stake-slider');
-        const percentage = parseInt(slider.value) / 100;
-        return Math.floor(getScore() * percentage);
+        const percentage = parseInt(slider.value);
+        return Math.ceil(getScore() * percentage / 100);
     }
 
     /**
@@ -62,7 +62,7 @@ export function initScoreSystem(activityNumber) {
         slider.value = 10;
         const percentage = parseInt(slider.value);
         const currentScore = getScore();
-        const amount = Math.floor(currentScore * percentage / 100);
+        const amount = Math.ceil(getScore() * percentage / 100);
         const stakeButton = document.getElementById('stake-button');
         stakeButton.textContent = `Stake ${amount} squalions`;
     }
@@ -109,6 +109,6 @@ function updateStakeButton(score) {
     const slider = document.getElementById('stake-slider');
     const stakeButton = document.getElementById('stake-button');
     const percentage = parseInt(slider.value);
-    const amount = Math.floor(score * percentage / 100);
+    const amount = Math.ceil(score * percentage / 100);
     stakeButton.textContent = `Stake ${amount} squalions`;
 }
