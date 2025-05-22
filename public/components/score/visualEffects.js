@@ -5,7 +5,9 @@
 const EFFECT_DISPLAY_DURATION = 2000;
 const EFFECT_FADE_OUT_DURATION = 500;
 const FALLING_COIN_DURATION = 3000;
-const CELEBRATION_COIN_COUNT = 12;
+const MIN_FALLING_COIN_COUNT = 10;
+const MAX_FALLING_COIN_COUNT = 50;
+const FALLING_COIN_RATIO = 0.01;
 const COIN_DROP_INTERVAL = 100;
 const MAX_COIN_DELAY = 0.5;
 const MAX_COIN_ROTATION = 720;
@@ -86,7 +88,14 @@ export function initScoreVisualEffects() {
             body.appendChild(effect);
             if (amount > FALLING_COIN_THRESHOLD * score) {
                 // Show falling coins for big wins
-                for (let i = 0; i < CELEBRATION_COIN_COUNT; i++) {
+                const falling_coin_count = Math.max(
+                    MIN_FALLING_COIN_COUNT,
+                    Math.min(
+                        MAX_FALLING_COIN_COUNT,
+                        Math.floor(Math.abs(amount) * FALLING_COIN_RATIO)
+                    )
+                );
+                for (let i = 0; i < falling_coin_count; i++) {
                     setTimeout(() => {
                         createFallingCoin();
                     }, i * COIN_DROP_INTERVAL);
