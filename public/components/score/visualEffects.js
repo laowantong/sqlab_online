@@ -82,9 +82,7 @@ export function initScoreVisualEffects() {
          * @param {number} amount - The amount won (positive) or lost (negative)
          */
         updateScore: (score, amount) => {
-            const effect = createEffectOverlay(amount);
-            body.appendChild(effect);
-
+           
             if (amount > FALLING_COIN_THRESHOLD * score) {
                 // Show falling coins for big wins
                 for (let i = 0; i < CELEBRATION_COIN_COUNT; i++) {
@@ -93,7 +91,9 @@ export function initScoreVisualEffects() {
                     }, i * COIN_DROP_INTERVAL);
                 }
             }
-        
+            const effect = createEffectOverlay(amount);
+            body.appendChild(effect);
+
             // Trigger main animation
             requestAnimationFrame(() => effect.classList.add('active'));
 
