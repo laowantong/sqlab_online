@@ -36,5 +36,6 @@
 
 - [ ] Aventure d'accueil/Tutoriel
 - [ ] Page d'accueil pour selectionner sa base puis l'aventure ou la série d'exercices
+- [ ] Quand la page d'accueil sera faite, le menu hamburger sera remplacé par un bouton home, et ses fonctionnalités seront intégrées dans la page d'accueil ou dans une page de paramètres.
 - [ ] Gestion des utilisateurs
 - [ ] Tester les trucs importants (fonctions du modèle serveur, certaines fonctions du client ?  )
