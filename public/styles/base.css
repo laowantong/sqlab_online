@@ -21,6 +21,13 @@ body {
   transition: background-color var(--transition-medium);
 }
 
+/* Generic class for hiding elements */
+.hidden {
+  display: none !important;
+}
+
+/* Dark mode styles */
+
 .dark-theme  {
   background-color: var(--dark-bg);
   color: var(--dark-text);
