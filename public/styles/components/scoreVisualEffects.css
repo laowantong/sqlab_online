@@ -75,6 +75,7 @@
 /* == Falling coins animation == */
 .falling-coin {
     position: fixed;
+    top: -50px;
     width: 40px;
     height: 40px;
     z-index: 9998;
