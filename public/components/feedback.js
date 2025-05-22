@@ -48,24 +48,22 @@ export async function getAndRenderFeedback(refresh = true) {
     feedbackTextContainer.classList.remove('hidden');
     document.querySelector('.tab[data-tab="feedback-tab"]').click();
 
-    const scoreSystem = window.scoreSystem;
-    const visualEffects = window.visualEffects;
-    let stakeAmount = scoreSystem.getStakeAmount();
-    scoreSystem.resetCheckElements();
+    const stakeSystem = window.stakeSystem;
+    
+    let stakeAmount = stakeSystem.getStakeAmount();
+    stakeSystem.resetCheckElements();
 
     // The feeback can be a hint.
     if (feedbackTextContainer.firstChild.classList.contains('hint')) {
         //feedbackControlContainer.classList.remove('hidden');
-        scoreSystem.addToScore(-stakeAmount);
-        visualEffects.showScoreEffect(stakeAmount, 'loss');
+        stakeSystem.addToScore(-stakeAmount);
         return;
     }
 
     // Otherwise, the answer was correct, and the feedback gives the official solution.
     const taskButton = window.taskStrip.getActiveButton();
     const reward = parseInt(taskButton.getAttribute('data-reward'));
-    scoreSystem.addToScore(reward + stakeAmount);
-    visualEffects.showCelebrationEffect(reward + stakeAmount);
+    stakeSystem.addToScore(reward + stakeAmount);
 
     // Store the correction locally
     localStorage.setItem(`feedback/${taskId}`, data.feedback);

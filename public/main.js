@@ -13,8 +13,8 @@ import { TEMP_STARTING_ACTIVITY } from './utils/constants.js';
 import { initSqlEditor } from './components/sqlEditor.js';
 
 import { initLocalization } from './localization/initLocalization.js';
-import { initScoreSystem } from './components/scoreSystem.js';
-import { initVisualEffects } from './components/visualEffects.js';
+import { initStakeSystem } from './components/score/stakeSystem.js';
+import { initScoreVisualEffects } from './components/score/visualEffects.js';
 window.i18n.init().catch(err => console.error('Failed to initialize localization:', err));
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.currentActivityNumber = TEMP_STARTING_ACTIVITY;
     window.taskStrip = await initTaskStrip();
     window.taskStrip.getActiveButton().click();
-    window.scoreSystem = initScoreSystem(window.currentActivityNumber);
-    window.visualEffects = initVisualEffects();
+    window.stakeSystem = initStakeSystem(window.currentActivityNumber);
+    window.scoreVisualEffects = initScoreVisualEffects();
 
     initFeedback();
 

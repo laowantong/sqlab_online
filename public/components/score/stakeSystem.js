@@ -1,14 +1,14 @@
-import { DEFAULT_STARTING_SCORE, MIN_STAKE, MAX_STAKE } from "../utils/constants.js";
+import { DEFAULT_STARTING_SCORE, MIN_STAKE, MAX_STAKE } from "../../utils/constants.js";
 
 /**
- * Initializes the score system for a specific activity.
+ * Initializes the stake system for a specific activity.
  * The logic mainly relies on two variables:
  * - score: The current score of the activity.
  * - stakeSlider.value: The stake slider value, an integer between 0 and 100.
  * @param {number|string} activityNumber - The activity whose score is being managed.
  * @returns {Object} API for score management
  */
-export function initScoreSystem(activityNumber) {
+export function initStakeSystem(activityNumber) {
     const stakeSlider = document.getElementById('stake-slider');
     const checkButton = document.getElementById('check-button');
     const stakeContainer = document.getElementById('stake-container');
@@ -58,6 +58,7 @@ export function initScoreSystem(activityNumber) {
         * @param {number} amount - Amount to add
         */
         addToScore: (amount) => {
+            window.scoreVisualEffects.updateScore(score, amount);
             score += amount;
             localStorage.setItem(scoreKey, score);
             scoreDisplay.textContent = `${score}`;
