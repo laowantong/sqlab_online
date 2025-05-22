@@ -49,6 +49,7 @@ export async function getAndRenderFeedback(refresh = true) {
     document.querySelector('.tab[data-tab="feedback-tab"]').click();
 
     const scoreSystem = window.scoreSystem;
+    const visualEffects = window.visualEffects;
     let stakeAmount = window.scoreSystem.getStakeAmount();
     scoreSystem.resetStake();
 
@@ -56,6 +57,7 @@ export async function getAndRenderFeedback(refresh = true) {
     if (feedbackTextContainer.firstChild.classList.contains('hint')) {
         //feedbackControlContainer.classList.remove('hidden');
         scoreSystem.addToScore(-stakeAmount);
+        visualEffects.showScoreEffect(stakeAmount, 'loss');
         return;
     }
 
@@ -63,6 +65,8 @@ export async function getAndRenderFeedback(refresh = true) {
     const taskButton = window.taskStrip.getActiveButton();
     const reward = parseInt(taskButton.getAttribute('data-reward'));
     scoreSystem.addToScore(reward + stakeAmount);
+    //visualEffects.showScoreEffect(reward + stakeAmount, 'win');
+    visualEffects.showCelebrationEffect(reward + stakeAmount);
 
     // Store the correction locally
     localStorage.setItem(`feedback/${taskId}`, data.feedback);
