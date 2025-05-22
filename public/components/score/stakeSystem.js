@@ -47,7 +47,7 @@ export function initStakeSystem(activityNumber) {
             const angle = (sliderValue - MIN_STAKE) / (MAX_STAKE - MIN_STAKE);
             stakeSlider.style.setProperty("--thumb-rotate", `${angle * 720}deg`);
             
-            const stakeAmount = Math.ceil(score * sliderValue / 100);
+            const stakeAmount = Math.floor(score * sliderValue / 100);
             checkButton.textContent = `Stake ${stakeAmount} squalions`;
 
             stakeContainer.classList.remove('hidden');
@@ -66,7 +66,7 @@ export function initStakeSystem(activityNumber) {
             localStorage.setItem(scoreKey, score);
             scoreDisplay.textContent = `${score}`;
             updateCheckElements();
-            checkButton.disabled = true;
+            checkButton.disabled = (score > 0);
         },
 
         /**
@@ -74,7 +74,7 @@ export function initStakeSystem(activityNumber) {
         * @returns {number} Current stake amount
         */
         getStakeAmount: () => {
-            return Math.ceil(score * parseInt(stakeSlider.value) / 100);
+            return Math.floor(score * parseInt(stakeSlider.value) / 100);
         },
 
         /**
