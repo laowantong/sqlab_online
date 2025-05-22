@@ -14,6 +14,7 @@ import { initSqlEditor } from './components/sqlEditor.js';
 
 import { initLocalization } from './localization/initLocalization.js';
 import { initScoreSystem } from './components/scoreSystem.js';
+import { initVisualEffects } from './components/visualEffects.js';
 window.i18n.init().catch(err => console.error('Failed to initialize localization:', err));
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -37,6 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.taskStrip = await initTaskStrip();
     window.taskStrip.getActiveButton().click();
     window.scoreSystem = initScoreSystem(window.currentActivityNumber);
+    window.visualEffects = initVisualEffects();
 
     initFeedback();
 
