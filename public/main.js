@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.taskStrip.getActiveButton().click();
     window.scoreSystem = initScoreSystem(window.currentActivityNumber);
 
-
     initFeedback();
 
     window.loadAndRenderCoreTableList = loadAndRenderCoreTableList;
