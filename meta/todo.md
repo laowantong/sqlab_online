@@ -39,3 +39,4 @@
 - [ ] Quand la page d'accueil sera faite, le menu hamburger sera remplacé par un bouton home, et ses fonctionnalités seront intégrées dans la page d'accueil ou dans une page de paramètres.
 - [ ] Gestion des utilisateurs
 - [ ] Tester les trucs importants (fonctions du modèle serveur, certaines fonctions du client ?  )
+- [ ] Le modèle teste d'abord si les colonnes de la requête sont celles attendues. Quand ce n'est pas le cas, le client ne devrait pas décrémenter le score, mais juste rappeler la liste des colonnes attendues.
