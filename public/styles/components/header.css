@@ -110,6 +110,24 @@ h1 {
     transform: rotate(45deg);
 }
 
+/*  ====  Score ===== */
+.score-display {
+    position: absolute;
+    right: var(--spacing-md);
+    top: 50%;
+    transform: translateY(-50%);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-white);
+    padding: var(--spacing-xs) var(--spacing-md);
+}
+
+.squalion-icon {
+    height: 30px;
+    width: 30px;
+    vertical-align: middle;
+    margin-left: 4px;
+}
+
 /* == Responsive == */
 @media (max-width: 768px) {
     .hamburger-menu {
@@ -147,5 +165,10 @@ h1 {
 /* ===== Dark theme Language Selector ===== */
 .dark-theme #language-selector {
     color: var(--dark-text);
+
+}
+
+.dark-theme #language-selector option {
     background-color: var(--dark-element);
+
 }

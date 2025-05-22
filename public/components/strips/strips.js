@@ -19,7 +19,7 @@ export function createStrip(container, buttonsProperties) {
     // Remove any existing strip container
     const existingStrip = container.querySelector('.strip-container');
     if (existingStrip) container.removeChild(existingStrip);
-    
+
     // Create new DOM structure for the strip
     const stripContainer = document.createElement('nav');
     stripContainer.className = 'strip-container';
@@ -34,16 +34,21 @@ export function createStrip(container, buttonsProperties) {
         button.className = 'strip-button';
         button.setAttribute('index', index);
         button.textContent = properties.label;
-        
         // Add classes if provided
         if (properties.classes) {
             properties.classes.forEach(cls => button.classList.add(cls));
             if (properties.classes.includes('active')) activeButtonIndex = index;
         }
-        
+
+        if (properties.data) {
+            Object.entries(properties.data).forEach(([key, value]) => {
+                button.setAttribute(`data-${key}`, value);
+            })
+        }
+
         // Set tooltip if provided
         if (properties.title) button.setAttribute('title', properties.title);
-        
+
         // Add click handler if provided
         if (typeof properties.onClick === 'function') {
             button.addEventListener('click', e => {
@@ -51,7 +56,7 @@ export function createStrip(container, buttonsProperties) {
                 changeActiveButton(index);
             });
         }
-        
+
         stripButtons.appendChild(button);
         buttonElements.push(button);
     })
@@ -64,12 +69,12 @@ export function createStrip(container, buttonsProperties) {
      * @param {number} index - Index of the button to activate
      * @returns {void}
     */
-   function changeActiveButton(index) {
-       buttonElements[activeButtonIndex].classList.remove('active');
-       buttonElements[index].classList.add('active');
-       activeButtonIndex = index;
+    function changeActiveButton(index) {
+        buttonElements[activeButtonIndex].classList.remove('active');
+        buttonElements[index].classList.add('active');
+        activeButtonIndex = index;
     }
-    
+
     // Public API for strip management
     return {
 
@@ -85,7 +90,7 @@ export function createStrip(container, buttonsProperties) {
                 button.classList.add(className);
             }
         },
-        
+
         /**
          * Removes a class from a button
          * @param {number} index - Index of the button

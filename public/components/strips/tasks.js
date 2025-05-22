@@ -22,6 +22,9 @@ export async function initTaskStrip() {
             label: task.task_number,
             title: `${task.task_title}\n${task.reward} squalions`,
             classes: task.classes || [],
+            data: {
+                reward: task.reward
+            },
             onClick: () => {
                 if (task.task_number === window.currentTaskNumber) {
                     window.sqlEditor.setValue(prequery);
@@ -48,7 +51,7 @@ export async function initTaskStrip() {
 
         return result;
     });
-    
+
     const taskStripContainer = document.getElementById('task-strip');
     return createStrip(taskStripContainer, properties);
 }
