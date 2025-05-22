@@ -50,8 +50,8 @@ export async function getAndRenderFeedback(refresh = true) {
 
     const scoreSystem = window.scoreSystem;
     const visualEffects = window.visualEffects;
-    let stakeAmount = window.scoreSystem.getStakeAmount();
-    window.scoreSystem.resetCheckElements();
+    let stakeAmount = scoreSystem.getStakeAmount();
+    scoreSystem.resetCheckElements();
 
     // The feeback can be a hint.
     if (feedbackTextContainer.firstChild.classList.contains('hint')) {
