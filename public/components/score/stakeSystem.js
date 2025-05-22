@@ -36,6 +36,7 @@ export function initStakeSystem(activityNumber) {
      * - the check button, based on the current score.
      */
     function updateCheckElements() {
+        checkButton.disabled = false;
         if (score === 0) {
             checkButton.textContent = window.i18n.t('execution-tab.checkQuery');
             stakeContainer.classList.add('hidden');
@@ -49,7 +50,7 @@ export function initStakeSystem(activityNumber) {
 
             stakeContainer.classList.remove('hidden');
         }
-     }
+    }
 
     return {
 
@@ -63,6 +64,7 @@ export function initStakeSystem(activityNumber) {
             localStorage.setItem(scoreKey, score);
             scoreDisplay.textContent = `${score}`;
             updateCheckElements();
+            checkButton.disabled = true;
         },
 
         /**
