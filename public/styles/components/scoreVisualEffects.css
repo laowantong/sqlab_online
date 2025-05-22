@@ -44,7 +44,7 @@
 
 .score-effect-overlay.win .score-effect-amount {
     color: #FFFFFF;
-    font-size: 2.5rem;
+    font-size: 5rem;
     font-weight: 700;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     animation: bounce 1s ease-in-out infinite alternate;
@@ -57,19 +57,10 @@
 
 .score-effect-overlay.loss .score-effect-amount {
     color: #FFAAAA;
-    font-size: 2.5rem;
+    font-size: 5rem;
     font-weight: 700;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     animation: shake 0.5s ease-in-out infinite;
-}
-
-/* == Coin icons == */
-.score-effect-coin {
-    width: 80px;
-    height: 80px;
-    margin: 0 2rem;
-    animation: spin-float 2s linear infinite;
-    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));
 }
 
 /* == Falling coins animation == */
@@ -126,12 +117,6 @@
 @media (max-width: 768px) {
     .score-effect-overlay .score-effect-amount {
         font-size: 1.5rem;
-    }
-    
-    .score-effect-coin {
-        width: 50px;
-        height: 50px;
-        margin: 0 1rem;
     }
 }
 

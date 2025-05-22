@@ -39,24 +39,19 @@ export function initScoreVisualEffects() {
      * @returns {HTMLElement} The effect overlay element
      */
     function createEffectOverlay(amount) {
-        const type = amount > 0 ? 'win' : 'loss';
-        const overlay = document.createElement('div');
-        overlay.className = `score-effect-overlay ${type}`;
-
         const content = document.createElement('div');
-        content.className = 'score-effect-content';
-
+        
         const amountText = document.createElement('div');
         amountText.className = 'score-effect-amount';
         amountText.textContent = `${amount} squalions`;
-
-        const coin = createCoin('score-effect-coin');
-
-        content.appendChild(coin.cloneNode());
         content.appendChild(amountText);
-        content.appendChild(coin.cloneNode());
-
+        
+        const type = amount > 0 ? 'win' : 'loss';
+        const overlay = document.createElement('div');
+        overlay.className = `score-effect-overlay ${type}`;
+        content.className = 'score-effect-content';
         overlay.appendChild(content);
+
         return overlay;
     }
 
