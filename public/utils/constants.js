@@ -13,4 +13,6 @@ export const DRAG_END_DELAY = 50; // ms
 export const TEMP_STARTING_ACTIVITY = 0;
 
 // Score system
-export const DEFAULT_STARTING_SCORE = 1000;
+export const DEFAULT_STARTING_SCORE = 0;
+export const MIN_STAKE = 10;
+export const MAX_STAKE = 50;

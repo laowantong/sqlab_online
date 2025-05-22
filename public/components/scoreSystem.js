@@ -1,10 +1,16 @@
-import { DEFAULT_STARTING_SCORE } from "../utils/constants";
+import { DEFAULT_STARTING_SCORE, MIN_STAKE, MAX_STAKE } from "../utils/constants.js";
+
 /**
  * Initializes the score system for a specific activity.
  * @param {number|string} activityNumber - The identifier for the activity whose score is being managed.
  * @returns {Object} API for score management
  */
 export function initScoreSystem(activityNumber) {
+    const scoreValue = document.getElementById('score-value');
+    const slider = document.getElementById('stake-slider');
+    const checkButton = document.getElementById('check-button');
+    const stakeContainer = document.getElementById('stake-container');
+
     const score = localStorage.getItem(`score/${activityNumber}`) || DEFAULT_STARTING_SCORE;
     localStorage.setItem(`score/${activityNumber}`, score);
     updateScoreDisplay(score);
@@ -19,97 +25,87 @@ export function initScoreSystem(activityNumber) {
     }
 
     /**
-   * Adds amount to the score (negative to subtract)
-   * @param {number} amount - Amount to add
-   * @returns {number} New score
-   */
-    function addToScore(amount) {
-        const newScore = getScore() + amount;
-        localStorage.setItem(`score/${activityNumber}`, newScore);
-        updateScoreDisplay(newScore);
-        updateStakeButton(newScore);
+     * Update the score display
+     * @param {number} score - Current score
+    */
+    function updateScoreDisplay(score) {
+        const scoreDisplay = document.getElementById('score-value');
+        scoreDisplay.textContent = `${score}`;
     }
 
     /**
-    * Gets the current stake amount based on slider value
-    * @returns {number} Current stake amount
+    * Updates the text content of the check button to reflect the amount of "squalions" to stake,
+    * based on the current score and the percentage selected by the stake slider.
+    *
+    * @param {number} score - The current score used to calculate the stake amount.
     */
-    function getStakeAmount() {
-        const slider = document.getElementById('stake-slider');
+    function updateCheckButton(score) {
         const percentage = parseInt(slider.value);
-        return Math.ceil(getScore() * percentage / 100);
-    }
+        const amount = Math.ceil(score * percentage / 100);
 
-    /**
-    * Applies the result of a stake (win or lose)
-    * @param {boolean} isWin - Whether the stake was won
-    * @returns {number} Amount won or lost
-    */
-    function applyStakeResult(isWin) {
-        const stakeAmount = getStakeAmount();
-        if (isWin) {
-            addToScore(stakeAmount);
+        if (score === 0) {
+            checkButton.textContent = window.i18n.t('execution-tab.checkQuery');
+            stakeContainer.classList.add('hidden');
         }
         else {
-            addToScore(-stakeAmount);
+            checkButton.textContent = `Stake ${amount} squalions`;
+            stakeContainer.classList.remove('hidden');
         }
     }
 
     /**
-     * Resets the stake slider to initial state
+     * Initializes the stake slider,
+     * sets its initial rotation, and updates the check button based on the score.
+     * Also attaches an input event listener to update the slider's thumb rotation and check button
+     * as the slider value changes.
+     *
+     * @param {number} score - The initial score to use for updating the check button.
      */
-    function resetStake() {
-        const slider = document.getElementById('stake-slider');
-        slider.value = 10;
-        const percentage = parseInt(slider.value);
-        const currentScore = getScore();
-        const amount = Math.ceil(getScore() * percentage / 100);
-        const stakeButton = document.getElementById('stake-button');
-        stakeButton.textContent = `Stake ${amount} squalions`;
+    function initStakeSlider(score) {
+        slider.style.setProperty("--thumb-rotate", "0deg");
+        updateCheckButton(score);
+
+        slider.addEventListener('input', () => {
+            const currentScore = getScore();
+            const rotationValue = (slider.value - MIN_STAKE) / (MAX_STAKE - MIN_STAKE);
+            slider.style.setProperty("--thumb-rotate", `${rotationValue * 720}deg`);
+            updateCheckButton(currentScore);
+        });
     }
 
     return {
-        getScore,
-        addToScore,
-        getStakeAmount,
-        applyStakeResult,
-        resetStake
+
+        /**
+        * Adds amount to the score (negative to subtract)
+        * @param {number} amount - Amount to add
+        * @returns {number} New score
+        */
+        addToScore: (amount) => {
+            const newScore = getScore() + amount;
+            localStorage.setItem(`score/${activityNumber}`, newScore);
+            updateScoreDisplay(newScore);
+            updateCheckButton(newScore);
+        },
+
+
+        /**
+        * Gets the current stake amount based on slider value
+        * @returns {number} Current stake amount
+        */
+        getStakeAmount: () => {
+            const percentage = parseInt(slider.value);
+            return Math.ceil(getScore() * percentage / 100);
+        },
+
+
+        /**
+         * Resets the stake slider to initial state
+         */
+        resetStake: () => {
+            slider.value = MIN_STAKE;
+            slider.style.setProperty("--thumb-rotate", "0deg");
+            updateCheckButton(getScore());
+        },
     };
 
-}
-
-function initStakeSlider(score) {
-    const slider = document.getElementById('stake-slider');
-    const stakeButton = document.getElementById('stake-button');
-    slider.style.setProperty("--thumb-rotate", "0deg");
-    updateStakeButton(score);
-    slider.addEventListener('input', () => {
-        const currentScore = parseInt(localStorage.getItem(`score/${window.currentActivityNumber}`));
-        const rotationValue = (slider.value - 10) / 40 // Normalize to 0-1 range
-        slider.style.setProperty("--thumb-rotate", `${rotationValue * 720}deg`);
-        updateStakeButton(currentScore);
-    });
-}
-
-/**
- * Update the score display
- * @param {number} score - Current score
- */
-function updateScoreDisplay(score) {
-    const scoreDisplay = document.getElementById('score-display');
-    scoreDisplay.textContent = `${score} squalions`;
-}
-
-/**
- * Updates the text content of the stake button to reflect the amount of "squalions" to stake,
- * based on the current score and the percentage selected by the stake slider.
- *
- * @param {number} score - The current score used to calculate the stake amount.
- */
-function updateStakeButton(score) {
-    const slider = document.getElementById('stake-slider');
-    const stakeButton = document.getElementById('stake-button');
-    const percentage = parseInt(slider.value);
-    const amount = Math.ceil(score * percentage / 100);
-    stakeButton.textContent = `Stake ${amount} squalions`;
 }

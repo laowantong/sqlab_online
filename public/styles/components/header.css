@@ -121,6 +121,13 @@ h1 {
     padding: var(--spacing-xs) var(--spacing-md);
 }
 
+.squalion-icon {
+    height: 30px;
+    width: 30px;
+    vertical-align: middle;
+    margin-left: 4px;
+}
+
 /* == Responsive == */
 @media (max-width: 768px) {
     .hamburger-menu {

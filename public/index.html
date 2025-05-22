@@ -42,7 +42,10 @@
         <h1><span id="activity-title"></span></h1>
 
         <!-- Score display -->
-        <div id="score-display" class="score-display">0 squalions</div>
+        <div id="score-display" class="score-display">
+            <span id="score-value">0</span>
+            <img src="assets/squalion-512x512.png" alt="squalions" class="squalion-icon">    
+        </div>
     </header>
 
     <!-- Task strip -->
@@ -88,7 +91,6 @@
             <div id="stake-container" class="stake-container">
                 <div class="slider-container">
                     <input id="stake-slider" type="range" min="10" max="50" value="10">
-                    <button id="stake-button">Stake 0 squalions</button>
                 </div>
             </div>
             <button id="check-button" data-i18n="execution-tab.checkQuery">Check query</button>
