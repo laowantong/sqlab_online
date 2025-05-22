@@ -17,7 +17,7 @@ const FALLING_COIN_THRESHOLD = 0.5;
  */
 export function initScoreVisualEffects() {
     const body = document.body;
-    
+
     /**
      * Creates a coin icon element
      * @param {string} className - The class name for the icon
@@ -49,11 +49,11 @@ export function initScoreVisualEffects() {
         amountText.textContent = `${amount} squalions`;
 
         const coin = createCoin('score-effect-coin');
-        
+
         content.appendChild(coin.cloneNode());
         content.appendChild(amountText);
         content.appendChild(coin.cloneNode());
-        
+
         overlay.appendChild(content);
         return overlay;
     }
@@ -82,7 +82,8 @@ export function initScoreVisualEffects() {
          * @param {number} amount - The amount won (positive) or lost (negative)
          */
         updateScore: (score, amount) => {
-           
+            const effect = createEffectOverlay(amount);
+            body.appendChild(effect);
             if (amount > FALLING_COIN_THRESHOLD * score) {
                 // Show falling coins for big wins
                 for (let i = 0; i < CELEBRATION_COIN_COUNT; i++) {
@@ -91,8 +92,7 @@ export function initScoreVisualEffects() {
                     }, i * COIN_DROP_INTERVAL);
                 }
             }
-            const effect = createEffectOverlay(amount);
-            body.appendChild(effect);
+
 
             // Trigger main animation
             requestAnimationFrame(() => effect.classList.add('active'));
