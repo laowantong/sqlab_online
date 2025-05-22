@@ -50,7 +50,7 @@ export async function getAndRenderFeedback(refresh = true) {
 
     const stakeSystem = window.stakeSystem;
     
-    let stakeAmount = stakeSystem.getStakeAmount();
+    const stakeAmount = stakeSystem.getStakeAmount();
     stakeSystem.resetCheckElements();
 
     // The feeback can be a hint.
