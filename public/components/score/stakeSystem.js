@@ -25,8 +25,10 @@ export function initStakeSystem(activityNumber) {
     };
     scoreDisplay.textContent = `${score}`;
 
-    // Initialize the position and the listener of the stake slider
-    stakeSlider.value = 0;
+    // Initialize the range, the position and the listener of the stake slider
+    stakeSlider.min = MIN_STAKE;
+    stakeSlider.max = MAX_STAKE;
+    stakeSlider.value = MIN_STAKE;
     updateCheckElements();
     stakeSlider.addEventListener('input', updateCheckElements);
 
