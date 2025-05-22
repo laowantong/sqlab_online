@@ -1,4 +1,99 @@
 /**
+ * Check button and stake slider
+ */
+
+/* == Check Query Button == */
+
+#check-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: var(--spacing-md);
+    gap: var(--spacing-md);
+}
+
+#check-button {
+    min-width: 200px;
+    background-color: var(--color-accent);
+    color: var(--color-white);
+    font-family: var(--font-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    padding: var(--spacing-xs) var(--spacing-md);
+    border: none;
+    border-radius: var(--border-radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+
+#check-button:hover {
+    transform: translateY(-2px);
+}
+
+#check-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #ccc;
+}
+
+/* == stake slider ==*/
+.slider-container {
+    display: flex;
+    align-items: center;
+    width: 20vw;
+}
+
+input[type="range"] {
+    appearance: none;
+    background: transparent;
+    outline: none;
+    margin-right: var(--spacing-md);
+    width: 100%;
+}
+
+input[type="range"]:focus,
+input[type="range"]:active {
+    border: 0;
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    border: none;
+    height: 60px;
+    width: 60px;
+    background-color: transparent;
+    background-image: url("../../assets/squalion-512x512.png");
+    background-position: center;
+    background-size: contain;
+    transform: rotateZ(var(--thumb-rotate, 5deg));
+    cursor: pointer;
+    margin-top: -20px;
+    -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb:active {
+    background-position: center;
+    transform: rotateZ(var(--thumb-rotate, 5deg));
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 15px;
+    background: #eee;
+    border-radius: 10px;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+    -webkit-appearance: none;
+}
+
+
+/**
  * Visual effects CSS for score changes
  * Fullscreen animations for wins and losses only
  */
@@ -44,7 +139,7 @@
 
 .score-effect-overlay.win .score-effect-amount {
     color: #FFFFFF;
-    font-size: 2.5rem;
+    font-size: 5rem;
     font-weight: 700;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     animation: bounce 1s ease-in-out infinite alternate;
@@ -57,19 +152,10 @@
 
 .score-effect-overlay.loss .score-effect-amount {
     color: #FFAAAA;
-    font-size: 2.5rem;
+    font-size: 5rem;
     font-weight: 700;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
     animation: shake 0.5s ease-in-out infinite;
-}
-
-/* == Coin icons == */
-.score-effect-coin {
-    width: 80px;
-    height: 80px;
-    margin: 0 2rem;
-    animation: spin-float 2s linear infinite;
-    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.6));
 }
 
 /* == Falling coins animation == */
@@ -127,12 +213,6 @@
     .score-effect-overlay .score-effect-amount {
         font-size: 1.5rem;
     }
-    
-    .score-effect-coin {
-        width: 50px;
-        height: 50px;
-        margin: 0 1rem;
-    }
 }
 
 /* == Dark theme adjustments == */
@@ -142,4 +222,10 @@
 
 .dark-theme .score-effect-overlay.loss .score-effect-amount {
     color: #FFB6C1;
+}
+
+.dark-theme #check-button {
+    background-color: var(--dark-secondary);
+    color: var(--dark-text);
+    box-shadow: var(--shadow-sm);
 }

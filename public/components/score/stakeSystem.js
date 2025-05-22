@@ -25,8 +25,10 @@ export function initStakeSystem(activityNumber) {
     };
     scoreDisplay.textContent = `${score}`;
 
-    // Initialize the position and the listener of the stake slider
-    stakeSlider.value = 0;
+    // Initialize the range, the position and the listener of the stake slider
+    stakeSlider.min = MIN_STAKE;
+    stakeSlider.max = MAX_STAKE;
+    stakeSlider.value = MIN_STAKE;
     updateCheckElements();
     stakeSlider.addEventListener('input', updateCheckElements);
 
@@ -36,6 +38,7 @@ export function initStakeSystem(activityNumber) {
      * - the check button, based on the current score.
      */
     function updateCheckElements() {
+        checkButton.disabled = false;
         if (score === 0) {
             checkButton.textContent = window.i18n.t('execution-tab.checkQuery');
             stakeContainer.classList.add('hidden');
@@ -44,12 +47,12 @@ export function initStakeSystem(activityNumber) {
             const angle = (sliderValue - MIN_STAKE) / (MAX_STAKE - MIN_STAKE);
             stakeSlider.style.setProperty("--thumb-rotate", `${angle * 720}deg`);
             
-            const stakeAmount = Math.ceil(score * sliderValue / 100);
+            const stakeAmount = Math.floor(score * sliderValue / 100);
             checkButton.textContent = `Stake ${stakeAmount} squalions`;
 
             stakeContainer.classList.remove('hidden');
         }
-     }
+    }
 
     return {
 
@@ -63,6 +66,7 @@ export function initStakeSystem(activityNumber) {
             localStorage.setItem(scoreKey, score);
             scoreDisplay.textContent = `${score}`;
             updateCheckElements();
+            checkButton.disabled = (score > 0);
         },
 
         /**
@@ -70,7 +74,7 @@ export function initStakeSystem(activityNumber) {
         * @returns {number} Current stake amount
         */
         getStakeAmount: () => {
-            return Math.ceil(score * parseInt(stakeSlider.value) / 100);
+            return Math.floor(score * parseInt(stakeSlider.value) / 100);
         },
 
         /**

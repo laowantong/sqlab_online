@@ -117,7 +117,7 @@ h1 {
     top: 50%;
     transform: translateY(-50%);
     font-weight: var(--font-weight-bold);
-    color: var(--color-white);
+    color: rgba(249, 198, 3, 1);
     padding: var(--spacing-xs) var(--spacing-md);
 }
 
