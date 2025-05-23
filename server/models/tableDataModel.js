@@ -21,26 +21,26 @@ export async function queryCoreTableData(tableName, offset, limit, sortColumn, s
     }
     query += ` LIMIT ? OFFSET ?`;
 
-    const rows = await executeQuery(query, [limit, offset]);
+    let rows = await executeQuery(query, [limit, offset]);
 
     // Suppress the column exactly named "hash"
-    const filteredColumns = rows.length > 0
+    const columns = rows.length > 0
         ? Object.keys(rows[0]).filter(col => col !== 'hash')
         : [];
 
     // Filter out hash columns from results
-    const filteredRows = rows.map(row => {
-        return filteredColumns.map(col => row[col]);
+    rows = rows.map(row => {
+        return columns.map(col => row[col]);
     });
 
     return {
         tableName,
         total,
-        offset: offset,
-        limit: limit,
-        columns: filteredColumns,
-        rows: filteredRows,
-        sortColumn: sortColumn,     
-        sortDirection: sortDirection
+        offset,
+        limit,
+        columns,
+        rows,
+        sortColumn,
+        sortDirection
     };
 }
