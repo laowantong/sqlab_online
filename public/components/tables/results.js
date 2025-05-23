@@ -34,6 +34,7 @@ export function initQueryExecution() {
         if (!query) {
             updateExecutionListener(false);
             checkContainer.classList.add(('hidden'));
+            checkIcon.classList.add('hidden');
         }
     }
 
