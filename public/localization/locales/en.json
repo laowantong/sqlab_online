@@ -20,6 +20,7 @@
     "coreTables": "Tables",
     "schema": "Schema",
     "execution": "Run",
+    "emptyQuery": "Empty query",
     "feedback": "Feedback",
     "notes-tab": "Notes"
   },
@@ -45,7 +46,7 @@
       "rows": "Rows"
     },
     "nullValue": "NULL",
-    "clickToInsert" : "Click to insert cell content"
+    "clickToInsert": "Click to insert cell content"
   },
   "database": {
     "fetchError": "Failed to fetch database information: {status}",

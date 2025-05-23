@@ -16,7 +16,10 @@ export function initQueryExecution() {
     const checkContainer = document.getElementById('check-container');
     const refreshIcon = document.querySelector('[data-tab="execution-tab"] .refresh');
     const checkIcon = document.querySelector('[data-tab="execution-tab"] .check');
+    const emptyIcon = document.querySelector('[data-tab="execution-tab"] .empty');
+    const tabText = document.querySelector('[data-tab="execution-tab"] span');
     let executionListener = null;
+    showEmptyState();
     window.sqlEditor.on('change', handleEditorChange);
 
     /**
@@ -34,7 +37,7 @@ export function initQueryExecution() {
         if (!query) {
             updateExecutionListener(false);
             checkContainer.classList.add(('hidden'));
-            checkIcon.classList.add('hidden');
+            showEmptyState();
         }
     }
 
@@ -55,8 +58,9 @@ export function initQueryExecution() {
             executionTab.removeEventListener('click', executionListener);
             executionListener = null;
         }
-        refreshIcon.classList.toggle('hidden', !shouldEnable);
-        checkIcon.classList.toggle('hidden', shouldEnable);
+        if (shouldEnable) {
+            showRefreshIcon();
+        }
     }
 
     /**
@@ -79,12 +83,14 @@ export function initQueryExecution() {
         updateExecutionListener(false);
 
         if (result.rows.length > 0) {
+            showCheckIcon();
             checkContainer.classList.remove('hidden');
         }
         else {
             checkContainer.classList.add(('hidden'));
-            refreshIcon.classList.add('hidden');
             checkIcon.classList.add('hidden');
+            refreshIcon.classList.add('hidden');
+            emptyIcon.classList.remove('hidden');
         }
     }
 
@@ -115,5 +121,36 @@ export function initQueryExecution() {
             showError(error.message, resultsContainer);
             return null;
         }
+    }
+
+    /**
+     * Hides the refresh and check icons, shows the empty icon,
+     * and sets the tab text to indicate that the query is empty.
+     */
+    function showEmptyState() {
+        checkIcon.classList.add('hidden');
+        refreshIcon.classList.add('hidden');
+        emptyIcon.classList.remove('hidden');
+        tabText.textContent = window.i18n.t('tabs.emptyQuery');
+    }
+
+    /**
+     * Hides the check and empty icons, shows the refresh icon,
+     */
+    function showRefreshIcon() {
+        checkIcon.classList.add('hidden');
+        emptyIcon.classList.add('hidden');
+        refreshIcon.classList.remove('hidden');
+        tabText.textContent = window.i18n.t('tabs.execution');
+    }
+
+    /**
+    * Hides the refresh and empty icons, shows the check icon,
+    */
+    function showCheckIcon() {
+        refreshIcon.classList.add('hidden');
+        emptyIcon.classList.add('hidden');
+        checkIcon.classList.remove('hidden');
+        tabText.textContent = window.i18n.t('tabs.execution');
     }
 }
