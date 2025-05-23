@@ -41,3 +41,8 @@
 - [ ] Gestion des utilisateurs
 - [ ] Tester les trucs importants (fonctions du modèle serveur, certaines fonctions du client ?  )
 - [ ] Le modèle teste d'abord si les colonnes de la requête sont celles attendues. Quand ce n'est pas le cas, le client ne devrait pas décrémenter le score, mais juste rappeler la liste des colonnes attendues.
+- [ ] Quand on clique sur le score, un carousel de statistiques s'ouvre au-dessous de la barre de titre. Il peut y avoir dedans :
+  - Un graphe de l'évolution du score du joueur, sous la forme d'une courbe avec des points apparents. Abscisse : numéro d'exécution (1, 2, ...). Ordonnée : score (échelle semi-logarithmique ?). Au survol d'un point, une info-bulle avec le timestamp et le numéro de la question.
+  - Un graphe avec les questions traitées par le joueur, sous la forme d'un nuage de points. Abcisse  numéro d'exécution _successful_ (1, 2, ...). Ordonnée : numéro de la question. Au survol d'un point, une info-bulle avec le timestamp.
+  - Une version globale du premier graphe, avec la possibilité de mettre en évidence tel ou tel joueur.
+  - Une version globale du second graphe, avec la possibilité de mettre en évidence tel ou tel joueur.
