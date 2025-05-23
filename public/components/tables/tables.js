@@ -22,103 +22,42 @@ export function mayRecreateTableContainerIn(container) {
 }
 
 /**
- * Enables sortable column headers on the given table element.
- * Handles 3-state sorting (asc, desc, none) and updates row order and visual cues.
- *
- * @param {HTMLElement} tableElement - The table DOM element containing the header and rows.
- * @param {Object} data - The table data (with original rows).
- * @param {number} offset - The row offset for numbering.
- */
-function makeColumnsSortable(tableElement, data, offset) {
-    let currentSort = {
-        columnIndex: null,
-        direction: null // 'asc', 'desc', or null
-    };
-
-    tableElement.querySelectorAll('th.sortable-header').forEach(th => {
-        th.addEventListener('click', () => {
-            const index = parseInt(th.dataset.index, 10);
-
-            // Determine the new sorting direction
-            if (currentSort.columnIndex === index) {
-                if (currentSort.direction === 'asc') {
-                    currentSort.direction = 'desc';
-                } else if (currentSort.direction === 'desc') {
-                    currentSort.columnIndex = null;
-                    currentSort.direction = null;
-                } else {
-                    currentSort.direction = 'asc';
-                }
-            } else {
-                currentSort.columnIndex = index;
-                currentSort.direction = 'asc';
-            }
-
-            // Sort the data locally
-            const sortedRows = [...data.rows];
-            if (currentSort.direction) {
-                sortedRows.sort((a, b) => {
-                    const valA = a[index];
-                    const valB = b[index];
-                    if (valA === null) return 1;
-                    if (valB === null) return -1;
-                    if (valA === valB) return 0;
-                    return currentSort.direction === 'asc'
-                        ? valA > valB ? 1 : -1
-                        : valA < valB ? 1 : -1;
-                });
-            }
-
-            // Update the display
-            const rows = generateTableRowsWithNumbers(sortedRows, offset);
-            tableElement.querySelector('tbody').innerHTML = rows;
-            addClickToInsert(tableElement); // Re-ajoute les événements sur les nouvelles cellules
-
-            // Update the styles
-            tableElement.querySelectorAll('th').forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
-            if (currentSort.columnIndex !== null) {
-                const th = tableElement.querySelector(`th[data-index="${currentSort.columnIndex}"]`);
-                th.classList.add(currentSort.direction === 'asc' ? 'sort-asc' : 'sort-desc');
-            }
-        });
-    });
-}
-
-
-/**
  * Renders a complete table with pagination, header and rows
  * @param {Object} data - Table data with columns, rows and pagination metadata
  * @param {HTMLElement} container - Container element for the table
  * @param {Function} onPageChange - Callback for pagination changes
- * @param {Function} onPageChange - Function called when the page changes.
+ * @param {Function} onSortChange - Callback for sorting changes (optional)
  */
-export function renderPaginatedTable(data, container, onPageChange) {
+export function renderPaginatedTable(data, container, onPageChange, onSortChange = null) {
     createPageStrip(container, data.offset, data.limit, data.total, onPageChange);
-
     const tableElement = container.querySelector('.table-content');
     const headers = generateTableHeaderRow(data.columns);
     const rows = generateTableRowsWithNumbers(data.rows, data.offset);
     tableElement.innerHTML = `<thead>${headers}</thead><tbody>${rows}</tbody>`;
-
     addClickToInsert(tableElement);
-    makeColumnsSortable(tableElement, data, data.offset);
+
+    if (onSortChange) {
+        addSortingEvents(tableElement, onSortChange);
+        if (data.sortColumn) {
+            updateSortVisual(tableElement, data.sortColumn, data.sortDirection);
+        }
+    }
 }
 
 // All the remaining functions are private and not exported
 
 /**
  * Generates an HTML table header row with an added row number column
- * and dynamic column headers.
+ * and dynamic column headers - ALL sortable.
  * @param {string[]} columnNames - An array of column names to be used as table headers
  * @returns {string} HTML string representing the table header row
  */
 function generateTableHeaderRow(columnNames) {
     return [
         '<tr><th class="row-number-header"></th>',
-        ...columnNames.map((column, index) =>
-            `<th class="sortable-header" data-index="${index}">${escapeHtml(column)}</th>`),
+        ...columnNames.map(column => `<th class="sortable" data-column="${escapeHtml(column)}">${escapeHtml(column)}</th>`),
         '</tr>'
-    ].join('');
+    ].join('')
 }
 
 /**
@@ -169,4 +108,42 @@ function addClickToInsert(tableElement) {
             e.preventDefault();
         });
     });
+}
+
+/**
+ * Adds sorting event listeners to sortable table headers.
+ * @param {HTMLElement} tableElement - The table element containing sortable headers
+ * @param {Function} onSortChange - Callback function called when sort changes
+ */
+function addSortingEvents(tableElement, onSortChange) {
+    tableElement.querySelectorAll('th.sortable').forEach(header => {
+        header.addEventListener('click', function () {
+            const columnName = this.dataset.column;
+            const currentSortColumn = tableElement.dataset.sortColumn;
+            const currentSortDirection = tableElement.dataset.sortDirection || 'ASC';
+
+            let newDirection = 'ASC';
+            if (currentSortColumn === columnName && currentSortDirection === 'ASC') {
+                newDirection = 'DESC';
+            }
+
+            tableElement.dataset.sortColumn = columnName;
+            tableElement.dataset.sortDirection = newDirection;
+            updateSortVisual(tableElement, columnName, newDirection);
+            onSortChange(columnName, newDirection);
+        });
+    });
+}
+
+function updateSortVisual(tableElement, sortColumn, sortDirection) {
+    // Remove data-direction from all headers
+    tableElement.querySelectorAll('th.sortable').forEach(th => {
+        th.removeAttribute('data-direction');
+    });
+
+    // Add data-direction to the active header
+    const activeHeader = tableElement.querySelector(`th[data-column="${sortColumn}"]`);
+    if (activeHeader) {
+        activeHeader.setAttribute('data-direction', sortDirection);
+    }
 }

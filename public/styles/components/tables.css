@@ -44,18 +44,21 @@ th {
   font-weight: var(--font-weight-bold);
 }
 
-th.sortable-header {
-    cursor: pointer;
-    border-top: 3px solid transparent;
-    border-bottom: 3px solid transparent;
+/* == Sortables headers == */
+th.sortable {
+  cursor: pointer;
 }
 
-th.sortable-header.sort-asc {
-    border-top: 3px solid #333;
+th.sortable:hover {
+  background-color: #d0e7f0;
 }
 
-th.sortable-header.sort-desc {
-    border-bottom: 3px solid #333;
+th.sortable[data-direction="ASC"] {
+  border-bottom: 3px solid black;
+}
+
+th.sortable[data-direction="DESC"] {
+  border-top: 3px solid black;
 }
 
 tr:nth-child(even) {
@@ -113,7 +116,15 @@ td.insert-success {
   color: #bbb;
 }
 
+.dark-theme th.sortable:hover {
+  background-color: #4a5568;
+}
 
+.dark-theme th.sortable[data-direction="ASC"] {
+  border-bottom: 3px solid white;
+}
 
-
+.dark-theme th.sortable[data-direction="DESC"] {
+  border-top: 3px solid white;
+}
 

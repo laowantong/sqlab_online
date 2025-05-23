@@ -8,18 +8,20 @@ import { executeQuery } from '../services/databaseService.js';
  * @returns {Promise<Object>} Table data and metadata
  */
 
-export async function queryCoreTableData(tableName, offset, limit) {
+export async function queryCoreTableData(tableName, offset, limit, sortColumn, sortDirection) {
 
     // Get total row count
     const [{ total }] = await executeQuery(
         `SELECT COUNT(*) AS total FROM ${tableName}`
     );
 
-    // Fetch the required slice of the rows
-    const rows = await executeQuery(
-        `SELECT * FROM ${tableName} LIMIT ? OFFSET ?`,
-        [limit, offset]
-    );
+    let query = `SELECT * FROM ${tableName}`;
+    if (sortColumn) {
+        query += ` ORDER BY \`${sortColumn}\` ${sortDirection === 'DESC' ? 'DESC' : 'ASC'}`;
+    }
+    query += ` LIMIT ? OFFSET ?`;
+
+    const rows = await executeQuery(query, [limit, offset]);
 
     // Suppress the column exactly named "hash"
     const filteredColumns = rows.length > 0
@@ -38,5 +40,7 @@ export async function queryCoreTableData(tableName, offset, limit) {
         limit: limit,
         columns: filteredColumns,
         rows: filteredRows,
+        sortColumn: sortColumn,     
+        sortDirection: sortDirection
     };
 }
