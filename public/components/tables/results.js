@@ -17,9 +17,8 @@ export function initQueryExecution() {
     const refreshIcon = document.querySelector('[data-tab="execution-tab"] .refresh');
     const checkIcon = document.querySelector('[data-tab="execution-tab"] .check');
     let executionListener = null;
-    const initialQuery = window.sqlEditor.getValue().trim();
-    updateExecutionListener(initialQuery !== '');
     window.sqlEditor.on('change', handleEditorChange);
+ 
 
     /**
      * Handles changes in the SQL editor.
