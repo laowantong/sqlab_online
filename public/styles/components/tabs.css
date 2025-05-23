@@ -98,18 +98,17 @@
   display: block;
 }
 
-
-.tab .icon {
-  width: 16px;
-  height: 16px;
-  margin-left: 4px;
-  vertical-align: middle;
+/* == tab icons ==*/
+.tab .icon-space {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-left: var(--spacing-xs);
 }
 
 .tab .icon.hidden {
   display: none;
 }
-
 
 /* == Responsive == */
 @media (max-width: 768px) {
