@@ -12,7 +12,7 @@
 - [ ] Localiser les messages du système de score.
 - [ ] Au passage, gérer correctement le pluriel (le système de localisation devrait permettre de le faire, regarder).
 - [ ] Côté modèle, traitement des requêtes de l'utilisateur : transmettre au client des données comportant une réponse (ok ou non) et un message d'erreur si la requête a échoué (erreur SQL) ou si la vérification n'a pas produit de feedback ; dans le client, afficher les erreurs éventuelles dans la zone appropriée.
-- [ ] Faire apparaître systématiquement une icone dans l'onglet :
+- [x] Faire apparaître systématiquement une icone dans l'onglet :
   - [ Exécuter ↻ ] lorsque cliquer sur l'onglet (ré)exécute la requête.
   - [ Exécuter ✓ ] lorsque l'exécution est à jour.
   - Pour les icones, utiliser [Heroicons](https://heroicons.com) (tailwindlabs), resp. `arrow-path` et `check-circle` dans le pack `solid`.
@@ -29,7 +29,7 @@
   document.querySelector('.refresh').classList.toggle('hidden', !flag);
   document.querySelector('.check').classList.toggle('hidden', flag);
   ```
-- [ ] Supprimer la dépendance à Font-awesome de la même manière pour les icones des modes sombre et clair.
+- [x] Supprimer la dépendance à Font-awesome de la même manière pour les icones des modes sombre et clair.
 - [ ] Au moment du clic sur Exécuter, reformater la requête SQL avec https://github.com/nene/prettier-plugin-sql-cst. C'est la requête formatée qui sera envoyée au serveur. Par défaut, elle remplace également le contenu de l'éditeur. Ajouter une option pour ne pas le faire dans le menu Hamburger.
 - [ ] Réparer le coin d'agrandissement de la zone de codeMirrorEditor qui semble ne plus fonctionner.
 
