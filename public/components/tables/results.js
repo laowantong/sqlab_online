@@ -54,6 +54,10 @@ export function initQueryExecution() {
             executionTab.removeEventListener('click', executionListener);
             executionListener = null;
         }
+        const refreshIcon = document.querySelector('[data-tab="execution-tab"] .refresh');
+        const checkIcon = document.querySelector('[data-tab="execution-tab"] .check');
+        refreshIcon.classList.toggle('hidden', !shouldEnable);
+        checkIcon.classList.toggle('hidden', shouldEnable);
     }
     
     /**

@@ -54,9 +54,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Apply stored theme preference
     if (isDarkTheme) {
-        document.body.classList.add('dark-theme');
-        themeToggle.classList.remove('fa-moon');
-        themeToggle.classList.add('fa-sun');
+      document.querySelector('.moon-icon').classList.add('hidden');
+    document.querySelector('.sun-icon').classList.remove('hidden');
     }
     await loadAndRenderRelationalSchema(isDarkTheme);
 
@@ -68,25 +67,27 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Save user preference
         localStorage.setItem('darkTheme', isDark);
 
+        const moonIcon = document.querySelector('.moon-icon');
+        const sunIcon = document.querySelector('.sun-icon');
         // Update icon based on theme
         if (isDark) {
-            themeToggle.classList.remove('fa-moon');
-            themeToggle.classList.add('fa-sun');
+            moonIcon.classList.add('hidden');
+            sunIcon.classList.remove('hidden');
         } else {
-            themeToggle.classList.remove('fa-sun');
-            themeToggle.classList.add('fa-moon');
-        };
+            moonIcon.classList.remove('hidden');
+            sunIcon.classList.add('hidden');
+        }
 
         // Reload relational schema with the new theme
         loadAndRenderRelationalSchema(isDark);
     });
 
-    // Hamburger menu handling
+    // home menu handling
     const menuToggle = document.getElementById('menu-toggle');
     const dropdownMenu = document.querySelector('.dropdown-menu');
 
     if (menuToggle && dropdownMenu) {
-        // Toggle dropdown menu visibility on hamburger icon click
+        // Toggle dropdown menu visibility on home icon click
         menuToggle.addEventListener('click', (event) => {
             event.stopPropagation(); // Prevent immediate closing
             dropdownMenu.classList.toggle('active');
@@ -99,7 +100,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Close the menu when clicking outside
         document.addEventListener('click', (event) => {
-            if (!event.target.closest('.hamburger-menu') && dropdownMenu.classList.contains('active')) {
+            if (!event.target.closest('.home-menu') && dropdownMenu.classList.contains('active')) {
                 dropdownMenu.classList.remove('active');
                 menuToggle.style.transform = 'rotate(0)';
             }
