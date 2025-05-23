@@ -54,8 +54,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Apply stored theme preference
     if (isDarkTheme) {
-      document.querySelector('.moon-icon').classList.add('hidden');
-    document.querySelector('.sun-icon').classList.remove('hidden');
+        document.querySelector('.moon-icon').classList.add('hidden');
+        document.querySelector('.sun-icon').classList.remove('hidden');
     }
     await loadAndRenderRelationalSchema(isDarkTheme);
 
@@ -82,12 +82,12 @@ document.addEventListener('DOMContentLoaded', async () => {
         loadAndRenderRelationalSchema(isDark);
     });
 
-    // home menu handling
+    // hamburger menu handling
     const menuToggle = document.getElementById('menu-toggle');
     const dropdownMenu = document.querySelector('.dropdown-menu');
 
     if (menuToggle && dropdownMenu) {
-        // Toggle dropdown menu visibility on home icon click
+        // Toggle dropdown menu visibility on hamburger icon click
         menuToggle.addEventListener('click', (event) => {
             event.stopPropagation(); // Prevent immediate closing
             dropdownMenu.classList.toggle('active');
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Close the menu when clicking outside
         document.addEventListener('click', (event) => {
-            if (!event.target.closest('.home-menu') && dropdownMenu.classList.contains('active')) {
+            if (!event.target.closest('.hamburger-menu') && dropdownMenu.classList.contains('active')) {
                 dropdownMenu.classList.remove('active');
                 menuToggle.style.transform = 'rotate(0)';
             }

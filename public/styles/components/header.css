@@ -1,6 +1,6 @@
 /**
  * Header component styles
- * Includes the main header, logo, theme toggle and home menu
+ * Includes the main header, logo, theme toggle and hamburger menu
  */
 
 /* == Header container == */
@@ -24,8 +24,8 @@ h1 {
     text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
 }
 
-/* === home menu === */
-.home-menu {
+/* === hamburger menu === */
+.hamburger-menu {
     position: absolute;
     left: var(--spacing-md);
     top: 50%;
@@ -34,21 +34,21 @@ h1 {
     z-index: 1000;
 }
 
-.home-icon {
+.hamburger-icon {
     width: 24px;
     height: 24px;
     cursor: pointer;
     transition: transform var(--transition-medium);
 }
 
-.home-icon svg {
+.hamburger-icon svg {
     width: 100%;
     height: 100%;
     color: var(--color-white);
     transition: transform var(--transition-medium);
 }
 
-.home-icon:hover svg {
+.hamburger-icon:hover svg {
     transform: scale(1.1);
 }
 
@@ -152,7 +152,7 @@ h1 {
 
 /* == Responsive == */
 @media (max-width: 768px) {
-    .home-menu {
+    .hamburger-menu {
         left: var(--spacing-sm);
     }
 }
@@ -166,7 +166,7 @@ h1 {
     color: var(--dark-text);
 }
 
-/* == Dark theme home menu ==  */
+/* == Dark theme hamburger menu ==  */
 .dark-theme .dropdown-menu {
     background-color: var(--dark-element);
     border: 1px solid #444;
