@@ -19,7 +19,6 @@ export function initQueryExecution() {
     let executionListener = null;
     window.sqlEditor.on('change', handleEditorChange);
  
-
     /**
      * Handles changes in the SQL editor.
      * - If the editor content is dirty (modified), updates the execution listener and hides the check button.
