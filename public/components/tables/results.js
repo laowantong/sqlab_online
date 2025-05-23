@@ -14,9 +14,9 @@ export function initQueryExecution() {
     const resultsContainer = document.getElementById('results-container');
     const executionTab = document.querySelector('.tab[data-tab="execution-tab"]');
     const checkContainer = document.getElementById('check-container');
+    const refreshIcon = document.querySelector('[data-tab="execution-tab"] .refresh');
+    const checkIcon = document.querySelector('[data-tab="execution-tab"] .check');
     let executionListener = null;
-    const initialQuery = window.sqlEditor.getValue().trim();
-    updateExecutionListener(initialQuery !== '');
     window.sqlEditor.on('change', handleEditorChange);
 
     /**
@@ -54,8 +54,10 @@ export function initQueryExecution() {
             executionTab.removeEventListener('click', executionListener);
             executionListener = null;
         }
+        refreshIcon.classList.toggle('hidden', !shouldEnable);
+        checkIcon.classList.toggle('hidden', shouldEnable);
     }
-    
+
     /**
      * Executes the current SQL query from the editor, renders the results,
      * updates the editor's dirty state, and toggles the visibility of the
@@ -80,6 +82,8 @@ export function initQueryExecution() {
         }
         else {
             checkContainer.classList.add(('hidden'));
+            refreshIcon.classList.add('hidden');
+            checkIcon.classList.add('hidden');
         }
     }
 
