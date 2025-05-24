@@ -1,4 +1,4 @@
-import { DEFAULT_STARTING_SCORE, MIN_STAKE, MAX_STAKE } from "../../utils/constants.js";
+import { DEFAULT_STARTING_SCORE, MIN_STAKE_PERCENTAGE, MAX_STAKE_PERCENTAGE } from "../../utils/constants.js";
 
 /**
  * Initializes the stake system for a specific activity.
@@ -26,9 +26,9 @@ export function initStakeSystem(activityNumber) {
     scoreDisplay.textContent = `${score}`;
 
     // Initialize the range, the position and the listener of the stake slider
-    stakeSlider.min = MIN_STAKE;
-    stakeSlider.max = MAX_STAKE;
-    stakeSlider.value = MIN_STAKE;
+    stakeSlider.min = MIN_STAKE_PERCENTAGE;
+    stakeSlider.max = MAX_STAKE_PERCENTAGE;
+    stakeSlider.value = MIN_STAKE_PERCENTAGE;
     updateCheckElements();
     stakeSlider.addEventListener('input', updateCheckElements);
 
@@ -44,7 +44,7 @@ export function initStakeSystem(activityNumber) {
             stakeContainer.classList.add('hidden');
         } else {
             const sliderValue = parseInt(stakeSlider.value);
-            const angle = (sliderValue - MIN_STAKE) / (MAX_STAKE - MIN_STAKE);
+            const angle = (sliderValue - MIN_STAKE_PERCENTAGE) / (MAX_STAKE_PERCENTAGE - MIN_STAKE_PERCENTAGE);
             stakeSlider.style.setProperty("--thumb-rotate", `${angle * 720}deg`);
             
             const stakeAmount = Math.floor(score * sliderValue / 100);

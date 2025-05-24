@@ -5,7 +5,7 @@ import { decryptToken } from "./decryptionModel.js";
 import { parseSqlToAst, isSafeForEvaluation, asciiMapper } from "../utils/sqlAst.js";
 
 
-export async function checkQuery(query, activityNumber, taskNumber) {
+export async function checkQuery(query, activityNumber, taskNumber, stakeAmount) {
     const activities = await queryMetadata("activities");
     const task = activities[activityNumber].tasks[taskNumber - 1];
 
@@ -38,14 +38,25 @@ export async function checkQuery(query, activityNumber, taskNumber) {
 
     const token = result[0].token;
     if (!token) throw new Error("noTokenError");
-    return decryptToken(token);
+    const message = await decryptToken(token);
+    const data = JSON.parse(message);
+
+    if (data.feedback.startsWith("<div class='hint'>")) {
+        data.scoreDelta = -stakeAmount;
+    } else if (data.feedback.startsWith("<div class='correction'>")) {
+        data.scoreDelta = task.reward + stakeAmount;
+    } else {
+        console.warn(`Feedback for token ${token} does not start with a hint or correction.`);
+        data.scoreDelta = 0;
+    };
+    return JSON.stringify(data);
 }
 
 async function executeQueryWithFormula(passNumber, formula, queryTemplate) {
     let query = queryTemplate.replace('`SQLAB_COLUMN_PLACEHOLDER`', formula);
     query = asciiMapper.decode(query);
     try {
-        const result = await executeQuery(query);
+        const result = await runSqlStatement(query);
         if (result.length === 0) throw new Error("emptyResultError");
         return result;
     } catch (error) {

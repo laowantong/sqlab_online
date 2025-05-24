@@ -1,5 +1,15 @@
 
 /**
+ * Function to stake a certain amount on a query and check its validity.
+ * @param {string} query - The SQL query to be checked.
+ * @param {number} activityNumber - The activity number associated with the query.
+ * @param {number} taskNumber - The task number associated with the query.
+ * @param {number} stakeAmount - The amount to stake on the query.
+ * @returns {Promise<Object>} - A promise that resolves to the response from the server.
+ * 
+ * TODO: don't trust the client to send a stake amount.
+ * Instead, store the score server-side, expect a percentage  and check it is
+ * within MIN_STAKE_PERCENTAGE and MAX_STAKE_PERCENTAGE.
  */
 
 export async function checkQuery(query, activityNumber, taskNumber, stakeAmount) {
