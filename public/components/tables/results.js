@@ -17,56 +17,43 @@ export function initQueryExecution() {
     const refreshIcon = document.querySelector('[data-tab="execution-tab"] .refresh');
     const checkIcon = document.querySelector('[data-tab="execution-tab"] .check');
     const emptyIcon = document.querySelector('[data-tab="execution-tab"] .empty');
-    const tabText = document.querySelector('[data-tab="execution-tab"] span');
-    let executionListener = null;
-    showEmptyState();
     window.sqlEditor.on('change', handleEditorChange);
 
     /**
-     * Handles changes in the SQL editor.
-     * - If the editor content is dirty (modified), updates the execution listener and hides the check button.
-     * - If the query is empty, disables the execution listener and hides the check button.
+     * Set the behavior to trigger when the SQL editor content changes.
+     * 
+     * Depending on whether this content is empty or not, it will:
+     * - Add or remove the event listener for executing the query when the execution tab
+     *   is clicked. Note that adding an event listener already registered does nothing,
+     *   and removing an event listener not registered does nothing either.
+     * - Set the tab icon to either the refresh or empty icon.
+     * 
+     * In both cases, hide the controls for checking the query.
      */
     function handleEditorChange() {
-        const query = window.sqlEditor.getValue().trim();
-        if (window.sqlEditor.isDirty) {
-            updateExecutionListener(true);
-            checkContainer.classList.add(('hidden'));
+        if (window.sqlEditor.getValue().trim()) {
+            executionTab.addEventListener('click', triggerExecutionOfNewQuery);
+            setTabIconTo(refreshIcon);
+        } else {
+            executionTab.removeEventListener('click', triggerExecutionOfNewQuery);
+            setTabIconTo(emptyIcon);
         }
-
-        if (!query) {
-            updateExecutionListener(false);
-            checkContainer.classList.add(('hidden'));
-            showEmptyState();
-        }
+        checkContainer.classList.add(('hidden'));
     }
 
     /**
-     * Enables or disables the execution listener for the execution tab.
-     *
-     * When enabled, attaches the `triggerExecutionOfNewQuery` function as a click event listener
-     * to the `executionTab` element. When disabled, removes the event listener if it exists.
-     *
-     * @param {boolean} shouldEnable - Determines whether to enable (true) or disable (false) the execution listener.
+     * Shows the given icon and hides the others.
+     * @param {HTMLElement} iconToShow - The icon element to show.
      */
-    function updateExecutionListener(shouldEnable) {
-        if (shouldEnable && !executionListener) {
-            executionListener = triggerExecutionOfNewQuery;
-            executionTab.addEventListener('click', executionListener);
-
-        } else if (!shouldEnable && executionListener) {
-            executionTab.removeEventListener('click', executionListener);
-            executionListener = null;
-        }
-        if (shouldEnable) {
-            showRefreshIcon();
-        }
+    function setTabIconTo(iconToShow) {
+        checkIcon.classList.toggle('hidden', checkIcon !== iconToShow);
+        refreshIcon.classList.toggle('hidden', refreshIcon !== iconToShow);
+        emptyIcon.classList.toggle('hidden', emptyIcon !== iconToShow);
     }
 
     /**
      * Executes the current SQL query from the editor, renders the results,
-     * updates the editor's dirty state, and toggles the visibility of the
-     * check container based on whether any rows are returned.
+     * removes the event listener for further executions, and updates the UI.
      *
      * @async
      * @function triggerExecutionOfNewQuery
@@ -74,28 +61,15 @@ export function initQueryExecution() {
      */
     async function triggerExecutionOfNewQuery() {
         const query = window.sqlEditor.getValue().trim();
-        if (!query) {
-            showError(window.i18n.t('query.emptyError'), resultsContainer);
-            return;
-        }
         const result = await runQueryAndRenderResults(query);
-        window.sqlEditor.isDirty = false;
-        updateExecutionListener(false);
-
-        if (result.rows.length > 0) {
-            showCheckIcon();
-            checkContainer.classList.remove('hidden');
-        }
-        else {
-            checkContainer.classList.add(('hidden'));
-            checkIcon.classList.add('hidden');
-            refreshIcon.classList.add('hidden');
-            emptyIcon.classList.remove('hidden');
-        }
+        executionTab.removeEventListener('click', triggerExecutionOfNewQuery);
+        setTabIconTo(checkIcon);
+        checkContainer.classList.toggle('hidden', !result || result.rows.length === 0);
     }
 
     /**
-     * Executes a SQL query, handles pagination, and renders the results in a table.
+     * Executes a SQL query, renders the results and handles pagination,
+     * which means re-running this function on the same query with a new offset.
      *
      * @async
      * @function
@@ -117,40 +91,11 @@ export function initQueryExecution() {
             // Render the paginated table with results and page change handler
             renderPaginatedTable(data, resultsContainer, onPageChange);
             return data;
+            
         } catch (error) {
             showError(error.message, resultsContainer);
             return null;
         }
     }
 
-    /**
-     * Hides the refresh and check icons, shows the empty icon,
-     * and sets the tab text to indicate that the query is empty.
-     */
-    function showEmptyState() {
-        checkIcon.classList.add('hidden');
-        refreshIcon.classList.add('hidden');
-        emptyIcon.classList.remove('hidden');
-        tabText.textContent = window.i18n.t('tabs.emptyQuery');
-    }
-
-    /**
-     * Hides the check and empty icons, shows the refresh icon,
-     */
-    function showRefreshIcon() {
-        checkIcon.classList.add('hidden');
-        emptyIcon.classList.add('hidden');
-        refreshIcon.classList.remove('hidden');
-        tabText.textContent = window.i18n.t('tabs.execution');
-    }
-
-    /**
-    * Hides the refresh and empty icons, shows the check icon,
-    */
-    function showCheckIcon() {
-        refreshIcon.classList.add('hidden');
-        emptyIcon.classList.add('hidden');
-        checkIcon.classList.remove('hidden');
-        tabText.textContent = window.i18n.t('tabs.execution');
-    }
 }
