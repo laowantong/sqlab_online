@@ -3,9 +3,17 @@ import { queryMetadata } from './metadataModel.js';
 import { injectPlaceholderColumn, calculateFirstPassFormula, calculateSecondPassFormula } from "../utils/sqlAst.js";
 import { decryptToken } from "./decryptionModel.js";
 import { parseSqlToAst, isSafeForEvaluation, asciiMapper } from "../utils/sqlAst.js";
+import { globalState } from '../server.js';
+import { MIN_STAKE_PERCENTAGE, MAX_STAKE_PERCENTAGE } from "../../public/utils/constants.js";
 
+export async function checkQuery(query, activityNumber, taskNumber, stakePercentage) {
 
-export async function checkQuery(query, activityNumber, taskNumber, stakeAmount) {
+    // Validate stake percentage and calculate the corresponding stake amount
+    if (stakePercentage < MIN_STAKE_PERCENTAGE || stakePercentage > MAX_STAKE_PERCENTAGE) {
+        throw new Error(`Stake percentage should be between ${MIN_STAKE_PERCENTAGE}% and ${MAX_STAKE_PERCENTAGE}%.`);
+    };
+    const stakeAmount = Math.floor(globalState.score * stakePercentage / 100)
+
     const activities = await queryMetadata("activities");
     const task = activities[activityNumber].tasks[taskNumber - 1];
 
@@ -49,6 +57,9 @@ export async function checkQuery(query, activityNumber, taskNumber, stakeAmount)
         console.warn(`Feedback for token ${token} does not start with a hint or correction.`);
         data.scoreDelta = 0;
     };
+    globalState.score += data.scoreDelta;
+    data.score = globalState.score
+
     return JSON.stringify(data);
 }
 

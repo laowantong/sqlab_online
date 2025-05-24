@@ -57,24 +57,25 @@ export function initStakeSystem(activityNumber) {
     return {
 
         /**
-        * Adds amount to the score (negative to subtract)
-        * @param {number} amount - Amount to add
-        */
+         * Adds amount to the score (negative to subtract)
+         * @param {number} amount - Amount to add
+         */
         addToScore: (amount) => {
+            // For the visual effect, use the local score
             window.scoreVisualEffects.updateScore(score, amount);
-            score += amount;
-            localStorage.setItem(scoreKey, score);
+            // Update the local score to the new score, calculated server-side
+            score = localStorage.getItem(scoreKey);
             scoreDisplay.textContent = `${score}`;
             updateCheckElements();
             checkButton.disabled = (score > 0);
         },
 
         /**
-        * Gets the current stake amount based on slider value
-        * @returns {number} Current stake amount
+        * Gets the current slider value
+        * @returns {number} Current stake value
         */
-        getStakeAmount: () => {
-            return Math.floor(score * parseInt(stakeSlider.value) / 100);
+        getStakePercentage: () => {
+            return parseInt(stakeSlider.value);
         },
 
         /**

@@ -7,9 +7,9 @@ import { checkQuery } from "../models/queryCheckModel.js";
  * @param {Function} next - Express next function
  */
 export async function handleCheckQuery(req, res) {
-  const { query, activityNumber, taskNumber, stakeAmount } = req.body;
+  const { query, activityNumber, taskNumber, stakePercentage } = req.body;
   try {
-    const data = await checkQuery(query, activityNumber, taskNumber, stakeAmount);
+    const data = await checkQuery(query, activityNumber, taskNumber, stakePercentage);
     res.json(data);
   } catch (err) {
     res.status(400).json({

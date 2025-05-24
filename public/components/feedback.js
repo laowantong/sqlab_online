@@ -40,9 +40,13 @@ export async function getAndRenderFeedback(refresh = true) {
     }
 
     // Fetch the object resulting of the query check
-    const stakeAmount = stakeSystem.getStakeAmount();
-    const message = await checkQuery(query, activityNumber, taskNumber, stakeAmount);
+    const stakePercentage = stakeSystem.getStakePercentage();
+    const message = await checkQuery(query, activityNumber, taskNumber, stakePercentage);
     const data = JSON.parse(message);
+
+    // Update the score with the new score calculated by the server
+    const scoreKey = `score/${activityNumber}`;
+    localStorage.setItem(scoreKey, data.score)
 
     // The result has necessarily a feedback part. Display it.
     feedbackTextContainer.innerHTML = data.feedback;
@@ -53,7 +57,6 @@ export async function getAndRenderFeedback(refresh = true) {
 
     // The feeback can be a hint.
     if (feedbackTextContainer.firstChild.classList.contains('hint')) {
-        //feedbackControlContainer.classList.remove('hidden');
         stakeSystem.addToScore(data.scoreDelta);
         return;
     }
