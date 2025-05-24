@@ -39,7 +39,7 @@
     "title": "Exécuter",
     "noResults": "Aucun résultat",
     "runPrompt": "Exécutez une requête pour voir les résultats",
-    "checkQuery": "Vérifier la réponse"
+    "checkAnswer": "Vérifier la réponse"
   },
   "table": {
     "pagination": {

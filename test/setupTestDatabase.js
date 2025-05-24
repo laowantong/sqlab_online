@@ -14,7 +14,7 @@ const __dirname = path.dirname(__filename);
 export async function setupTestDatabase() {
     try {
         const dumpFilePath = path.join(__dirname, 'testDatabase.sql');
-        const command = `mysql -h${dbConfig.host} -P${dbConfig.port} -u${dbConfig.user} -p${dbConfig.password} < "${dumpFilePath}"`;
+        const command = `mysql --skip_ssl -h${dbConfig.host} -P${dbConfig.port} -u${dbConfig.user} -p${dbConfig.password} < "${dumpFilePath}"`;
         await execPromise(command);
 
     } catch (error) {
