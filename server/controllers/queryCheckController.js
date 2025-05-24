@@ -1,4 +1,4 @@
-import { checkQuery } from "../models/checkQueryModel.js";
+import { checkQuery } from "../models/queryCheckModel.js";
 
 /**
  * Check a user query against the database

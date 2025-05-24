@@ -1,4 +1,4 @@
-import { customQuery } from "../models/customQueryModel.js";
+import { executeQuery } from "../models/queryExecutionModel.js";
 
 /**
  * Executes a SQL query and returns the results
@@ -9,7 +9,7 @@ import { customQuery } from "../models/customQueryModel.js";
 export async function handleExecuteQuery(req, res) {
   const { query, offset, limit } = req.body;
   try {
-    const data = await customQuery(query, offset, limit);
+    const data = await executeQuery(query, offset, limit);
     res.json(data);
   } catch (err) {
     res.status(400).json({

@@ -2,11 +2,11 @@
 /**
  */
 
-export async function checkQuery(query, activityNumber, taskNumber) {
+export async function checkQuery(query, activityNumber, taskNumber, stakeAmount) {
     const response = await fetch('/check-query', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query, activityNumber, taskNumber })
+        body: JSON.stringify({ query, activityNumber, taskNumber, stakeAmount })
     });
 
     // If the request failed, throw an error with the message from the backend

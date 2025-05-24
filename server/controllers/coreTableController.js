@@ -1,4 +1,4 @@
-import { queryCoreTableData } from '../models/tableDataModel.js';
+import { queryCoreTable } from '../models/coreTableModel.js';
 
 /**
  * Retrieves core table data with pagination
@@ -6,7 +6,7 @@ import { queryCoreTableData } from '../models/tableDataModel.js';
  * @param {Object} res - Express response
  * @param {Function} next - Express next function
  */
-export async function handleQueryTableData(req, res, next) {
+export async function handleQueryCoreTable(req, res, next) {
   const { tableName } = req.params;
 
   /* the middleware paginationValidator.js has already validated
@@ -15,7 +15,7 @@ export async function handleQueryTableData(req, res, next) {
   const offset = req.offset;
   
   try {
-    const data = await queryCoreTableData(tableName, offset, limit);
+    const data = await queryCoreTable(tableName, offset, limit);
     res.json(data);
   } catch (err) {
     next(err);

@@ -1,4 +1,4 @@
-import { executeQuery } from '../services/databaseService.js';
+import { runSqlStatement } from '../services/databaseService.js';
 
 /**
  * Retrieves a value from the sqlab_metadata table based on the provided name.
@@ -6,7 +6,7 @@ import { executeQuery } from '../services/databaseService.js';
  * @returns {Promise<*>} The value or null if not found
  */
 export async function queryMetadata(name) {
-    const rows = await executeQuery(
+    const rows = await runSqlStatement(
         `SELECT value FROM sqlab_metadata WHERE name = ? LIMIT 1`,
         [name],
         { skipPagination: true }

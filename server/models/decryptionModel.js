@@ -1,4 +1,4 @@
-import { executeQuery } from '../services/databaseService.js';
+import { runSqlStatement } from '../services/databaseService.js';
 
 /**
  * Decrypt the message corresponding to the given integer token.
@@ -6,7 +6,7 @@ import { executeQuery } from '../services/databaseService.js';
  * @returns {Promise<string>} The decrypted message
  */
 export async function decryptToken(token) {
-    const rows = await executeQuery(
+    const rows = await runSqlStatement(
         `SELECT decrypt(?) AS message`,
         [token],
         { skipPagination: true }

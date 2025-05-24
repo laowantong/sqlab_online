@@ -1,4 +1,4 @@
-import { executeQuery } from "../services/databaseService.js";
+import { runSqlStatement } from "../services/databaseService.js";
 import { queryMetadata } from './metadataModel.js';
 import { injectPlaceholderColumn, calculateFirstPassFormula, calculateSecondPassFormula } from "../utils/sqlAst.js";
 import { decryptToken } from "./decryptionModel.js";

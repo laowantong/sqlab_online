@@ -1,15 +1,15 @@
 import express from 'express';
 const router = express.Router();
 
-import { handleExecuteQuery } from '../controllers/queryController.js';
+import { handleExecuteQuery } from '../controllers/queryExecutionController.js';
 router.post('/execute-query', handleExecuteQuery);
 
-import { handleCheckQuery } from '../controllers/checkQueryController.js';
+import { handleCheckQuery } from '../controllers/queryCheckController.js';
 router.post('/check-query', handleCheckQuery);
 
 import { validatePagination } from '../middlewares/paginationValidator.js';
-import { handleQueryTableData } from '../controllers/tableDataController.js';
-router.get('/table-data/:tableName', validatePagination, handleQueryTableData);
+import { handleQueryCoreTable } from '../controllers/coreTableController.js';
+router.get('/table-data/:tableName', validatePagination, handleQueryCoreTable);
 
 import { handleQueryMetadata } from '../controllers/metadataController.js';
 router.get('/metadata/:name', handleQueryMetadata);

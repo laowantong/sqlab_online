@@ -12,9 +12,9 @@ export async function getAndRenderFeedback(refresh = true) {
     const activityNumber = window.currentActivityNumber;
     const taskNumber = window.currentTaskNumber;
     const taskId = `${activityNumber}/${taskNumber}`;
+    const stakeSystem = window.stakeSystem;
 
     feedbackControlContainer.classList.add('hidden');
-
 
     // If the feedback is already stored, restore it and return.
     let feedback = localStorage.getItem(`feedback/${taskId}`);
@@ -40,7 +40,8 @@ export async function getAndRenderFeedback(refresh = true) {
     }
 
     // Fetch the object resulting of the query check
-    const message = await checkQuery(query, activityNumber, taskNumber);
+    const stakeAmount = stakeSystem.getStakeAmount();
+    const message = await checkQuery(query, activityNumber, taskNumber, stakeAmount);
     const data = JSON.parse(message);
 
     // The result has necessarily a feedback part. Display it.
@@ -48,22 +49,19 @@ export async function getAndRenderFeedback(refresh = true) {
     feedbackTextContainer.classList.remove('hidden');
     document.querySelector('.tab[data-tab="feedback-tab"]').click();
 
-    const stakeSystem = window.stakeSystem;
-    
-    const stakeAmount = stakeSystem.getStakeAmount();
     stakeSystem.resetCheckElements();
 
     // The feeback can be a hint.
     if (feedbackTextContainer.firstChild.classList.contains('hint')) {
         //feedbackControlContainer.classList.remove('hidden');
-        stakeSystem.addToScore(-stakeAmount);
+        stakeSystem.addToScore(data.scoreDelta);
         return;
     }
 
     // Otherwise, the answer was correct, and the feedback gives the official solution.
-    const taskButton = window.taskStrip.getActiveButton();
-    const reward = parseInt(taskButton.getAttribute('data-reward'));
-    stakeSystem.addToScore(reward + stakeAmount);
+    // const taskButton = window.taskStrip.getActiveButton();
+    // const reward = parseInt(taskButton.getAttribute('data-reward'));
+    stakeSystem.addToScore(data.scoreDelta);
 
     // Store the correction locally
     localStorage.setItem(`feedback/${taskId}`, data.feedback);

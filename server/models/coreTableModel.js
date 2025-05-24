@@ -1,4 +1,4 @@
-import { executeQuery } from '../services/databaseService.js';
+import { runSqlStatement } from '../services/databaseService.js';
 
 /**
  * Retrieves a page of a core table data. The hash column is filtered out.
@@ -8,15 +8,15 @@ import { executeQuery } from '../services/databaseService.js';
  * @returns {Promise<Object>} Table data and metadata
  */
 
-export async function queryCoreTableData(tableName, offset, limit) {
+export async function queryCoreTable(tableName, offset, limit) {
 
     // Get total row count
-    const [{ total }] = await executeQuery(
+    const [{ total }] = await runSqlStatement(
         `SELECT COUNT(*) AS total FROM ${tableName}`
     );
 
     // Fetch the required slice of the rows
-    const rows = await executeQuery(
+    const rows = await runSqlStatement(
         `SELECT * FROM ${tableName} LIMIT ? OFFSET ?`,
         [limit, offset]
     );
