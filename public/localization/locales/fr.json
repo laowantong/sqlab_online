@@ -20,7 +20,6 @@
     "coreTables": "Tables",
     "schema": "Schéma",
     "execution": "Exécuter",
-    "emptyQuery": "Requête vide",
     "feedback": "Retours",
     "notes": "Notes"
   },

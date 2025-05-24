@@ -20,7 +20,6 @@
     "coreTables": "Tables",
     "schema": "Schema",
     "execution": "Run",
-    "emptyQuery": "Empty query",
     "feedback": "Feedback",
     "notes-tab": "Notes"
   },
