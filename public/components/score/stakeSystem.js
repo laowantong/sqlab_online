@@ -40,7 +40,7 @@ export function initStakeSystem(activityNumber) {
     function updateCheckElements() {
         checkButton.disabled = false;
         if (score === 0) {
-            checkButton.textContent = window.i18n.t('execution-tab.checkQuery');
+            checkButton.textContent = window.i18n.t('execution-tab.checkAnswer');
             stakeContainer.classList.add('hidden');
         } else {
             const sliderValue = parseInt(stakeSlider.value);

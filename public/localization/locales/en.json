@@ -39,7 +39,7 @@
     "title": "Run",
     "noResults": "No results",
     "runPrompt": "Run a query to see the results",
-    "checkQuery": "Check the answer"
+    "checkAnswer": "Check the answer"
   },
   "table": {
     "pagination": {
