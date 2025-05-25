@@ -1,4 +1,4 @@
-import { executeQuery } from "../services/databaseService.js";
+import { runSqlStatement } from "../services/databaseService.js";
 
 /**
  * Executes a custom SQL query with optional pagination support
@@ -7,7 +7,7 @@ import { executeQuery } from "../services/databaseService.js";
  * @param {number} limit - Number of rows to return - Must be a positive integer
  * @returns {Promise<Object>} Query results with metadata
  */
-export async function customQuery(query, offset=0, limit=0) {
+export async function executeQuery(query, offset=0, limit=0) {
 
     if (!query || query.trim() === "") {
         throw new Error("Query cannot be empty");
@@ -15,7 +15,7 @@ export async function customQuery(query, offset=0, limit=0) {
 
     let result;
     try {
-        result = await executeQuery(query);
+        result = await runSqlStatement(query);
     }
     catch (error) {
         console.log(`SQL error: ${error.message}`);

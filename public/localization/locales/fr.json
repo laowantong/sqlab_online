@@ -13,7 +13,7 @@
     "loadError": "Impossible de charger le contenu de l'épisode"
   },
   "query": {
-    "placeholder": "Entrez votre requête SQL ici...",
+    "placeholder": "Entrez ici votre requête SQL...\nAstuce : cliquer à nouveau sur le numéro de la tâche en cours pré-compose une requête avec le nom des colonnes attendues.",
     "emptyError": "Veuillez entrer une requête SQL"
   },
   "tabs": {
@@ -38,14 +38,14 @@
     "title": "Exécuter",
     "noResults": "Aucun résultat",
     "runPrompt": "Exécutez une requête pour voir les résultats",
-    "checkQuery": "Vérifier la réponse"
+    "checkAnswer": "Vérifier la réponse"
   },
   "table": {
     "pagination": {
       "rows": "Lignes"
     },
     "nullValue": "NULL",
-    "clickToInsert" :"Cliquez pour insérer le contenu de la cellule"
+    "clickToInsert": "Cliquez pour insérer le contenu de la cellule"
   },
   "database": {
     "fetchError": "Impossible de récupérer les informations de la base de données : {status}",

@@ -6,6 +6,11 @@ import { databaseConnection } from './services/databaseService.js';
 const app = express();
 const port = process.env.PORT || 3000;
 
+// TODO: remove this global variable when implementing user sessions
+export const globalState = {
+  score: 0,
+};
+
 import { fileURLToPath } from 'url';
 
 // Recreate __dirname

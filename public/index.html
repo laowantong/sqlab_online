@@ -8,8 +8,6 @@
     <title data-i18n="app.title">SQLab</title>
     <!-- Main stylesheet -->
     <link rel="stylesheet" href="styles/main.css">
-    <!-- Icon library (Font Awesome) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- CodeMirror -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.2/codemirror.min.css">
 </head>
@@ -18,9 +16,15 @@
 
     <!-- Header with dynamic database name and left-positioned hamburger menu -->
     <header>
-        <!-- Hamburger menu that contains language selector and theme toggle -->
+        <!-- hamburger menu that contains language selector and theme toggle -->
         <div class="hamburger-menu">
-            <i id="menu-toggle" class="fas fa-bars"></i>
+            <div id="menu-toggle" class="hamburger-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                    <path fill-rule="evenodd"
+                        d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
+                        clip-rule="evenodd" />
+                </svg>
+            </div>
             <div class="dropdown-menu">
                 <!-- Language selector -->
                 <div class="menu-item language-container">
@@ -33,7 +37,21 @@
                 <!-- Theme toggle -->
                 <div class="menu-item theme-container">
                     <span class="menu-label" data-i18n="header.theme">Theme</span>
-                    <i id="toggle-theme" class="fas fa-moon theme-icon"></i>
+                    <div id="toggle-theme" class="theme-toggle">
+                        <!-- Moon -->
+                        <svg class="theme-icon moon-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M9.528 1.718a.75.75 0 0 1 .162.819A8.97 8.97 0 0 0 9 6a9 9 0 0 0 9 9 8.97 8.97 0 0 0 3.463-.69.75.75 0 0 1 .981.98 10.503 10.503 0 0 1-9.694 6.46c-5.799 0-10.5-4.7-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 0 1 .818.162Z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <!-- Sun -->
+                        <svg class="theme-icon sun-icon hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path
+                                d="M12 2.25a.75.75 0 0 1 .75.75v2.25a.75.75 0 0 1-1.5 0V3a.75.75 0 0 1 .75-.75ZM7.5 12a4.5 4.5 0 1 1 9 0 4.5 4.5 0 0 1-9 0ZM18.894 6.166a.75.75 0 0 0-1.06-1.06l-1.591 1.59a.75.75 0 1 0 1.06 1.061l1.591-1.59ZM21.75 12a.75.75 0 0 1-.75.75h-2.25a.75.75 0 0 1 0-1.5H21a.75.75 0 0 1 .75.75ZM17.834 18.894a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 1 0-1.061 1.06l1.59 1.591ZM12 18a.75.75 0 0 1 .75.75V21a.75.75 0 0 1-1.5 0v-2.25A.75.75 0 0 1 12 18ZM7.758 17.303a.75.75 0 0 0-1.061-1.06l-1.591 1.59a.75.75 0 0 0 1.06 1.061l1.591-1.59ZM6 12a.75.75 0 0 1-.75.75H3a.75.75 0 0 1 0-1.5h2.25A.75.75 0 0 1 6 12ZM6.697 7.757a.75.75 0 0 0 1.06-1.06l-1.59-1.591a.75.75 0 0 0-1.061 1.06l1.59 1.591Z" />
+                        </svg>
+                    </div>
                 </div>
             </div>
         </div>
@@ -44,7 +62,7 @@
         <!-- Score display -->
         <div id="score-display" class="score-display">
             <span id="score-value">0</span>
-            <img src="assets/squalion-512x512.png" alt="squalions" class="squalion-icon">    
+            <img src="assets/squalion-512x512.png" alt="squalions" class="squalion-icon">
         </div>
     </header>
 
@@ -66,7 +84,30 @@
     <div class="tabs">
         <div class="tab" data-tab="schema-tab" data-i18n="tabs.schema">Schema</div>
         <div class="tab active" data-tab="core-tables-tab" data-i18n="tabs.coreTables">Tables</div>
-        <div class="tab" data-tab="execution-tab" data-i18n="tabs.execution">Run</div>
+        <div class="tab" data-tab="execution-tab">
+            <span data-i18n="tabs.execution">Run</span>
+            <div class="icon-space">
+                <!-- Icon refresh -->
+                <svg class="icon refresh hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                    fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M4.755 10.059a7.5 7.5 0 0 1 12.548-3.364l1.903 1.903h-3.183a.75.75 0 1 0 0 1.5h4.992a.75.75 0 0 0 .75-.75V4.356a.75.75 0 0 0-1.5 0v3.18l-1.9-1.9A9 9 0 0 0 3.306 9.67a.75.75 0 1 0 1.45.388Zm15.408 3.352a.75.75 0 0 0-.919.53 7.5 7.5 0 0 1-12.548 3.364l-1.902-1.903h3.183a.75.75 0 0 0 0-1.5H2.984a.75.75 0 0 0-.75.75v4.992a.75.75 0 0 0 1.5 0v-3.18l1.9 1.9a9 9 0 0 0 15.059-4.035.75.75 0 0 0-.53-.918Z"
+                        clip-rule="evenodd" />
+                </svg>
+                <!--  Icon check -->
+                <svg class="icon check hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                    fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12Zm13.36-1.814a.75.75 0 1 0-1.22-.872l-3.236 4.53L9.53 12.22a.75.75 0 0 0-1.06 1.06l2.25 2.25a.75.75 0 0 0 1.14-.094l3.75-5.25Z"
+                        clip-rule="evenodd" />
+                </svg>
+                <!-- Icon empty -->
+                <svg class="icon empty" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                    stroke-width="1.5" stroke="currentColor">
+                    <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+            </div>
+        </div>
         <div class="tab" data-tab="feedback-tab" data-i18n="tabs.feedback">Check</div>
         <div class="tab" data-tab="notes-tab" data-i18n="tabs.notes">Notes</div>
     </div>
@@ -93,7 +134,7 @@
                     <input id="stake-slider" type="range">
                 </div>
             </div>
-            <button id="check-button" data-i18n="execution-tab.checkQuery">Check query</button>
+            <button id="check-button" data-i18n="execution-tab.checkAnswer">Check query</button>
         </div>
     </div>
 

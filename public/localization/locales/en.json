@@ -13,7 +13,7 @@
     "loadError": "Failed to load episode content"
   },
   "query": {
-    "placeholder": "Enter your SQL query here...",
+    "placeholder": "Enter your SQL query here...\nTip: clicking the task number again pre-fills a query with the expected column names.",
     "emptyError": "Please enter a SQL query"
   },
   "tabs": {
@@ -38,14 +38,14 @@
     "title": "Run",
     "noResults": "No results",
     "runPrompt": "Run a query to see the results",
-    "checkQuery": "Check the answer"
+    "checkAnswer": "Check the answer"
   },
   "table": {
     "pagination": {
       "rows": "Rows"
     },
     "nullValue": "NULL",
-    "clickToInsert" : "Click to insert cell content"
+    "clickToInsert": "Click to insert cell content"
   },
   "database": {
     "fetchError": "Failed to fetch database information: {status}",

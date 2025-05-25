@@ -1,6 +1,6 @@
 import mariadb from 'mariadb';
 
-export let executeQuery;
+export let runSqlStatement;
 export let databaseClose;
 
 /**
@@ -14,7 +14,7 @@ export async function databaseConnection(cnxPath) {
   // Retrieve the database configuration from the provided path
   const cnx = await import(cnxPath);
   const pool = mariadb.createPool(cnx.dbConfig);
-  executeQuery = async (query, params = []) => {
+  runSqlStatement = async (query, params = []) => {
     let conn;
     try {
       conn = await pool.getConnection();

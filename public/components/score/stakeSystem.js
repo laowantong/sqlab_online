@@ -1,4 +1,4 @@
-import { DEFAULT_STARTING_SCORE, MIN_STAKE, MAX_STAKE } from "../../utils/constants.js";
+import { DEFAULT_STARTING_SCORE, MIN_STAKE_PERCENTAGE, MAX_STAKE_PERCENTAGE } from "../../utils/constants.js";
 
 /**
  * Initializes the stake system for a specific activity.
@@ -26,9 +26,9 @@ export function initStakeSystem(activityNumber) {
     scoreDisplay.textContent = `${score}`;
 
     // Initialize the range, the position and the listener of the stake slider
-    stakeSlider.min = MIN_STAKE;
-    stakeSlider.max = MAX_STAKE;
-    stakeSlider.value = MIN_STAKE;
+    stakeSlider.min = MIN_STAKE_PERCENTAGE;
+    stakeSlider.max = MAX_STAKE_PERCENTAGE;
+    stakeSlider.value = MIN_STAKE_PERCENTAGE;
     updateCheckElements();
     stakeSlider.addEventListener('input', updateCheckElements);
 
@@ -40,11 +40,11 @@ export function initStakeSystem(activityNumber) {
     function updateCheckElements() {
         checkButton.disabled = false;
         if (score === 0) {
-            checkButton.textContent = window.i18n.t('execution-tab.checkQuery');
+            checkButton.textContent = window.i18n.t('execution-tab.checkAnswer');
             stakeContainer.classList.add('hidden');
         } else {
             const sliderValue = parseInt(stakeSlider.value);
-            const angle = (sliderValue - MIN_STAKE) / (MAX_STAKE - MIN_STAKE);
+            const angle = (sliderValue - MIN_STAKE_PERCENTAGE) / (MAX_STAKE_PERCENTAGE - MIN_STAKE_PERCENTAGE);
             stakeSlider.style.setProperty("--thumb-rotate", `${angle * 720}deg`);
             
             const stakeAmount = Math.floor(score * sliderValue / 100);
@@ -57,24 +57,25 @@ export function initStakeSystem(activityNumber) {
     return {
 
         /**
-        * Adds amount to the score (negative to subtract)
-        * @param {number} amount - Amount to add
-        */
+         * Adds amount to the score (negative to subtract)
+         * @param {number} amount - Amount to add
+         */
         addToScore: (amount) => {
+            // For the visual effect, use the local score
             window.scoreVisualEffects.updateScore(score, amount);
-            score += amount;
-            localStorage.setItem(scoreKey, score);
+            // Update the local score to the new score, calculated server-side
+            score = localStorage.getItem(scoreKey);
             scoreDisplay.textContent = `${score}`;
             updateCheckElements();
             checkButton.disabled = (score > 0);
         },
 
         /**
-        * Gets the current stake amount based on slider value
-        * @returns {number} Current stake amount
+        * Gets the current slider value
+        * @returns {number} Current stake value
         */
-        getStakeAmount: () => {
-            return Math.floor(score * parseInt(stakeSlider.value) / 100);
+        getStakePercentage: () => {
+            return parseInt(stakeSlider.value);
         },
 
         /**

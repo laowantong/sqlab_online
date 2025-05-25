@@ -10,11 +10,21 @@ export function initSqlEditor(containerId) {
         throw new Error(`Element with id "${containerId}" not found`);
     }
     
-    const editor = CodeMirror.fromTextArea(container);
-    editor.isDirty = false;
-    editor.on('change', function () {
-        editor.isDirty = true;
-    });
+    const editor = CodeMirror.fromTextArea(
+        container,
+        {
+            mode: 'text/x-sql',
+            indentUnit: 2,
+            tabSize: 2,
+            matchBrackets: true,
+            autoCloseBrackets: true,
+            lineWrapping: true,
+            extraKeys: {
+                'Ctrl-Space': 'autocomplete',
+                'Ctrl-Enter': () => document.querySelector('.tab[data-tab="execution-tab"]').click()
+            }
+        }
+    );
     
     return editor;
 }
