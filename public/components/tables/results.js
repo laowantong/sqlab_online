@@ -60,7 +60,16 @@ export function initQueryExecution() {
      * @returns {Promise<void>} Resolves when the query execution and UI updates are complete.
      */
     async function triggerExecutionOfNewQuery() {
-        const query = window.sqlEditor.getValue().trim();
+        let query = window.sqlEditor.getValue().trim();
+        query = sqlFormatter.format(query, {
+            language: 'mysql',
+            tabWidth: 2,
+            keywordCase: 'upper',
+            dataTypeCase: 'upper',
+            functionCase: 'lower',
+            linesBetweenQueries: 2,
+        });
+        window.sqlEditor.setValue(query);
         const result = await runQueryAndRenderResults(query);
         executionTab.removeEventListener('click', triggerExecutionOfNewQuery);
         setTabIconTo(checkIcon);
