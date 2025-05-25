@@ -26,31 +26,38 @@ export function mayRecreateTableContainerIn(container) {
  * @param {Object} data - Table data with columns, rows and pagination metadata
  * @param {HTMLElement} container - Container element for the table
  * @param {Function} onPageChange - Callback for pagination changes
+ * @param {Function} onSortChange - Callback for sorting changes (optional)
  */
-export function renderPaginatedTable(data, container, onPageChange) {
+export function renderPaginatedTable(data, container, onPageChange, onSortChange = null) {
     createPageStrip(container, data.offset, data.limit, data.total, onPageChange);
     const tableElement = container.querySelector('.table-content');
     const headers = generateTableHeaderRow(data.columns);
     const rows = generateTableRowsWithNumbers(data.rows, data.offset);
     tableElement.innerHTML = `<thead>${headers}</thead><tbody>${rows}</tbody>`;
     addClickToInsert(tableElement);
+
+    if (onSortChange) {
+        addSortingEvents(tableElement, onSortChange);
+        if (data.sortColumn) {
+            updateSortVisual(tableElement, data.sortColumn, data.sortDirection);
+        }
+    }
 }
 
 // All the remaining functions are private and not exported
 
 /**
  * Generates an HTML table header row with an added row number column
- * and dynamic column headers.
+ * and dynamic column headers - ALL sortable.
  * @param {string[]} columnNames - An array of column names to be used as table headers
  * @returns {string} HTML string representing the table header row
  */
 function generateTableHeaderRow(columnNames) {
     return [
         '<tr><th class="row-number-header"></th>',
-        ...columnNames.map(column => `<th>${escapeHtml(column)}</th>`),
+        ...columnNames.map(column => `<th class="sortable" data-column="${escapeHtml(column)}">${escapeHtml(column)}</th>`),
         '</tr>'
     ].join('')
-
 }
 
 /**
@@ -86,8 +93,8 @@ function addClickToInsert(tableElement) {
 
             if (window.sqlEditor) {
                 const editor = window.sqlEditor;
-                const cursor = editor.getCursor(); 
-                editor.replaceRange(textToInsert, cursor); 
+                const cursor = editor.getCursor();
+                editor.replaceRange(textToInsert, cursor);
 
                 this.classList.add('insert-success');
                 setTimeout(() => {
@@ -101,4 +108,70 @@ function addClickToInsert(tableElement) {
             e.preventDefault();
         });
     });
+}
+
+
+/**
+ * Attaches click event listeners to sortable table headers.
+ * Updates the table's dataset with the current sort column and direction,
+ * toggles sorting state (ASC, DESC, or none), updates visual indicators,
+ * and invokes a callback when the sort state changes.
+ *
+ * @param {HTMLElement} tableElement - The table element containing sortable headers.
+ * @param {function(string|null, string|null): void} onSortChange - Callback invoked when the sort state changes.
+ *        Receives the column name and direction ('ASC', 'DESC', or null if sorting is removed).
+ */
+function addSortingEvents(tableElement, onSortChange) {
+    tableElement.querySelectorAll('th.sortable').forEach(header => {
+        header.addEventListener('click', function () {
+            const columnName = this.dataset.column;
+            const currentSortColumn = tableElement.dataset.sortColumn;
+            const currentSortDirection = tableElement.dataset.sortDirection || 'ASC';
+            let newDirection, removeSort = false;
+
+            if (currentSortColumn === columnName && currentSortDirection === 'ASC') {
+                newDirection = 'DESC';
+            } else if (currentSortColumn === columnName && currentSortDirection === 'DESC') {
+                removeSort = true;
+            } else {
+                newDirection = 'ASC';
+            }
+
+            if (removeSort) {
+                delete tableElement.dataset.sortColumn;
+                delete tableElement.dataset.sortDirection;
+                updateSortVisual(tableElement, null, null);
+                onSortChange(null, null);
+            } else {
+                tableElement.dataset.sortColumn = columnName;
+                tableElement.dataset.sortDirection = newDirection;
+                updateSortVisual(tableElement, columnName, newDirection);
+                onSortChange(columnName, newDirection);
+            }
+        });
+    });
+}
+
+
+/**
+ * Updates the visual indicators for sorting on a table's header columns.
+ *
+ * Removes any existing sort direction indicators from all sortable headers,
+ * then sets the sort direction attribute on the currently sorted column.
+ *
+ * @param {HTMLElement} tableElement - The table element containing the headers to update.
+ * @param {string} sortColumn - The column identifier to mark as sorted.
+ * @param {'asc'|'desc'} sortDirection - The direction of sorting ('asc' for ascending, 'desc' for descending).
+ */
+function updateSortVisual(tableElement, sortColumn, sortDirection) {
+    tableElement.querySelectorAll('th.sortable').forEach(th => {
+        th.removeAttribute('data-direction');
+    });
+
+    if (sortColumn && sortDirection) {
+        const activeHeader = tableElement.querySelector(`th[data-column="${sortColumn}"]`);
+        if (activeHeader) {
+            activeHeader.setAttribute('data-direction', sortDirection);
+        }
+    }
 }

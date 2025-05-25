@@ -44,6 +44,23 @@ th {
   font-weight: var(--font-weight-bold);
 }
 
+/* == Sortables headers == */
+th.sortable {
+  cursor: pointer;
+}
+
+th.sortable:hover {
+  background-color: #d0e7f0;
+}
+
+th.sortable[data-direction="ASC"] {
+    box-shadow: inset 0 -1.5px 0 0 var(--color-primary);
+}
+th.sortable[data-direction="DESC"] {
+    box-shadow: inset 0 1.5px 0 0 var(--color-primary);
+}
+
+
 tr:nth-child(even) {
   background-color: #f8f8f8;
 }
@@ -99,5 +116,15 @@ td.insert-success {
   color: #bbb;
 }
 
+.dark-theme th.sortable:hover {
+  background-color: #4a5568;
+}
 
+.dark-theme th.sortable[data-direction="ASC"] {
+  border-bottom: 3px solid white;
+}
+
+.dark-theme th.sortable[data-direction="DESC"] {
+  border-top: 3px solid white;
+}
 

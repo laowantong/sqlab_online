@@ -7,8 +7,7 @@ import { runSqlStatement } from '../services/databaseService.js';
  * @param {number} offset - Starting index
  * @returns {Promise<Object>} Table data and metadata
  */
-
-export async function queryCoreTable(tableName, offset, limit) {
+export async function queryCoreTable(tableName, offset, limit, sortColumn, sortDirection) {
 
     // Get total row count
     const [{ total }] = await runSqlStatement(
@@ -16,27 +15,29 @@ export async function queryCoreTable(tableName, offset, limit) {
     );
 
     // Fetch the required slice of the rows
-    const rows = await runSqlStatement(
-        `SELECT * FROM ${tableName} LIMIT ? OFFSET ?`,
-        [limit, offset]
-    );
+    let query = `SELECT * FROM ${tableName}`;
+    query += ` ORDER BY ${sortColumn ? `\`${sortColumn}\`` : `NULL`} ${sortDirection === 'DESC' ? 'DESC' : 'ASC'}`;
+    query += ` LIMIT ? OFFSET ?`;
+    let rows = await runSqlStatement(query, [limit, offset]);
 
     // Suppress the column exactly named "hash"
-    const filteredColumns = rows.length > 0
+    const columns = rows.length > 0
         ? Object.keys(rows[0]).filter(col => col !== 'hash')
         : [];
 
     // Filter out hash columns from results
-    const filteredRows = rows.map(row => {
-        return filteredColumns.map(col => row[col]);
+    rows = rows.map(row => {
+        return columns.map(col => row[col]);
     });
 
     return {
         tableName,
         total,
-        offset: offset,
-        limit: limit,
-        columns: filteredColumns,
-        rows: filteredRows,
+        offset,
+        limit,
+        columns,
+        rows,
+        sortColumn,
+        sortDirection
     };
 }
