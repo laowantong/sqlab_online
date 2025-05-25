@@ -15,7 +15,7 @@ export async function initTaskStrip() {
 
     const properties = activity.tasks.map(task => {
 
-        const prequery = `SELECT ${task.columns.map((col, i) => `${i > 0 ? '     , ' : ''}${col}`).join('\n')}\nFROM `;
+        const prequery = `SELECT\n  ${task.columns.join(',\n  ')}\nFROM\n  `;
 
         // Initialize the properties of the current task
         const result = {
