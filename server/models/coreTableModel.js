@@ -7,8 +7,7 @@ import { runSqlStatement } from '../services/databaseService.js';
  * @param {number} offset - Starting index
  * @returns {Promise<Object>} Table data and metadata
  */
-
-export async function queryCoreTable(tableName, offset, limit) {
+export async function queryCoreTable(tableName, offset, limit, sortColumn, sortDirection) {
 
     // Get total row count
     const [{ total }] = await runSqlStatement(
@@ -16,10 +15,10 @@ export async function queryCoreTable(tableName, offset, limit) {
     );
 
     // Fetch the required slice of the rows
-    const rows = await runSqlStatement(
-        `SELECT * FROM ${tableName} LIMIT ? OFFSET ?`,
-        [limit, offset]
-    );
+    let query = `SELECT * FROM ${tableName}`;
+    query += ` ORDER BY ${sortColumn ? `\`${sortColumn}\`` : `NULL`} ${sortDirection === 'DESC' ? 'DESC' : 'ASC'}`;
+    query += ` LIMIT ? OFFSET ?`;
+    let rows = await runSqlStatement(query, [limit, offset]);
 
     // Suppress the column exactly named "hash"
     const columns = rows.length > 0

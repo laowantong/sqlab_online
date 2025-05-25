@@ -13,11 +13,11 @@ export async function handleQueryCoreTable(req, res, next) {
   the following values or provided default ones. */
   const limit = req.limit;
   const offset = req.offset;
-   const sortColumn = req.query.sort_column || null;
-  const sortDirection = req.query.sort_direction || 'ASC';
-  
+  const sortColumn = req.query.sort_column;
+  const sortDirection = req.query.sort_direction;
+
   try {
-    const data = await queryCoreTable(tableName, offset, limit);
+    const data = await queryCoreTable(tableName, offset, limit, sortColumn, sortDirection);
     res.json(data);
   } catch (err) {
     next(err);

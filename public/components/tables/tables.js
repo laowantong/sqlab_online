@@ -110,10 +110,16 @@ function addClickToInsert(tableElement) {
     });
 }
 
+
 /**
- * Adds sorting event listeners to sortable table headers.
- * @param {HTMLElement} tableElement - The table element containing sortable headers
- * @param {Function} onSortChange - Callback function called when sort changes
+ * Attaches click event listeners to sortable table headers.
+ * Updates the table's dataset with the current sort column and direction,
+ * toggles sorting state (ASC, DESC, or none), updates visual indicators,
+ * and invokes a callback when the sort state changes.
+ *
+ * @param {HTMLElement} tableElement - The table element containing sortable headers.
+ * @param {function(string|null, string|null): void} onSortChange - Callback invoked when the sort state changes.
+ *        Receives the column name and direction ('ASC', 'DESC', or null if sorting is removed).
  */
 function addSortingEvents(tableElement, onSortChange) {
     tableElement.querySelectorAll('th.sortable').forEach(header => {
@@ -121,29 +127,51 @@ function addSortingEvents(tableElement, onSortChange) {
             const columnName = this.dataset.column;
             const currentSortColumn = tableElement.dataset.sortColumn;
             const currentSortDirection = tableElement.dataset.sortDirection || 'ASC';
+            let newDirection, removeSort = false;
 
-            let newDirection = 'ASC';
             if (currentSortColumn === columnName && currentSortDirection === 'ASC') {
                 newDirection = 'DESC';
+            } else if (currentSortColumn === columnName && currentSortDirection === 'DESC') {
+                removeSort = true;
+            } else {
+                newDirection = 'ASC';
             }
 
-            tableElement.dataset.sortColumn = columnName;
-            tableElement.dataset.sortDirection = newDirection;
-            updateSortVisual(tableElement, columnName, newDirection);
-            onSortChange(columnName, newDirection);
+            if (removeSort) {
+                delete tableElement.dataset.sortColumn;
+                delete tableElement.dataset.sortDirection;
+                updateSortVisual(tableElement, null, null);
+                onSortChange(null, null);
+            } else {
+                tableElement.dataset.sortColumn = columnName;
+                tableElement.dataset.sortDirection = newDirection;
+                updateSortVisual(tableElement, columnName, newDirection);
+                onSortChange(columnName, newDirection);
+            }
         });
     });
 }
 
+
+/**
+ * Updates the visual indicators for sorting on a table's header columns.
+ *
+ * Removes any existing sort direction indicators from all sortable headers,
+ * then sets the sort direction attribute on the currently sorted column.
+ *
+ * @param {HTMLElement} tableElement - The table element containing the headers to update.
+ * @param {string} sortColumn - The column identifier to mark as sorted.
+ * @param {'asc'|'desc'} sortDirection - The direction of sorting ('asc' for ascending, 'desc' for descending).
+ */
 function updateSortVisual(tableElement, sortColumn, sortDirection) {
-    // Remove data-direction from all headers
     tableElement.querySelectorAll('th.sortable').forEach(th => {
         th.removeAttribute('data-direction');
     });
 
-    // Add data-direction to the active header
-    const activeHeader = tableElement.querySelector(`th[data-column="${sortColumn}"]`);
-    if (activeHeader) {
-        activeHeader.setAttribute('data-direction', sortDirection);
+    if (sortColumn && sortDirection) {
+        const activeHeader = tableElement.querySelector(`th[data-column="${sortColumn}"]`);
+        if (activeHeader) {
+            activeHeader.setAttribute('data-direction', sortDirection);
+        }
     }
 }

@@ -54,12 +54,12 @@ th.sortable:hover {
 }
 
 th.sortable[data-direction="ASC"] {
-  border-bottom: 3px solid black;
+    box-shadow: inset 0 -1.5px 0 0 var(--color-primary);
+}
+th.sortable[data-direction="DESC"] {
+    box-shadow: inset 0 1.5px 0 0 var(--color-primary);
 }
 
-th.sortable[data-direction="DESC"] {
-  border-top: 3px solid black;
-}
 
 tr:nth-child(even) {
   background-color: #f8f8f8;
