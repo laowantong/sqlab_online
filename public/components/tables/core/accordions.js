@@ -161,6 +161,8 @@ function dragStart(e) {
 
     if (!draggableItem) return;
 
+    e.stopPropagation();
+
     pointerStartX = e.clientX || e.touches?.[0]?.clientX;
     pointerStartY = e.clientY || e.touches?.[0]?.clientY;
 

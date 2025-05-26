@@ -8,7 +8,7 @@ header {
     display: flex;
     justify-content: center;
     align-self: center;
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
     padding: var(--spacing-md) 0;
     position: relative;
     background: var(--gradient-header);
