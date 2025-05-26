@@ -1,38 +1,80 @@
 /**
- * Accordion component styles
+ * Accordion component styles with drag & drop functionality
  * For collapsible table containers and content
  */
 
-/* ===== Table Accordions ===== */
-.accordion {
-  margin-bottom: var(--spacing-md);
-  border: 1px solid #ddd;
-  border-radius: var(--border-radius-md);
-  position: relative;
-  transition: all var(--transition-medium);
-  overflow: hidden;
-  box-shadow: var(--shadow-sm);
+/* ===== Accordion List Container ===== */
+.accordion-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
 }
 
+/* ===== Accordion Items ===== */
+.accordion-item {
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius-md);
+  background-color: var(--color-white);
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  will-change: transform;
+  overflow: hidden;
+  transition: all var(--transition-medium);
+}
+
+.accordion-item.is-idle {
+  transition: 0.25s ease transform;
+}
+
+.accordion-item.is-draggable {
+  z-index: 10;
+  box-shadow: var(--shadow-lg);
+}
+
+/* ===== Table Outline (Header) ===== */
 .table-outline {
   background-color: var(--color-light-blue);
   color: var(--color-primary);
   display: flex;
-  justify-content: space-between;
   align-items: center;
   padding: var(--spacing-md);
-  cursor: pointer;
   font-weight: var(--font-weight-bold);
   border-bottom: 1px solid #ddd;
   transition: background-color var(--transition-fast);
   user-select: none;
-  gap: 10px;
+  gap: var(--spacing-sm);
+  position: relative;
+  padding-right: 60px;
+  /* Space for drag handle */
 }
 
-.table-outline:hover {
-  background-color: var(--color-light-blue);
+
+/* ===== Toggle Icon ===== */
+.toggle-icon {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
 }
 
+.toggle-icon::after {
+  content: '▶';
+  font-size: 12px;
+  transition: transform var(--transition-fast);
+}
+
+.accordion-item.expanded .toggle-icon::after {
+  transform: rotate(90deg);
+}
+
+/* ===== Table Name ===== */
 .table-name {
   font-weight: var(--font-weight-bold);
   color: var(--color-primary);
@@ -40,10 +82,13 @@
   background-color: rgba(255, 255, 255, 0.4);
   border-radius: var(--border-radius-md);
   border: 1px solid rgba(8, 76, 97, 0.2);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
-  transition: all var(--transition-fast);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
+
+/* ===== Table Columns ===== */
 .table-columns {
   flex: 1;
   font-size: var(--font-size-sm);
@@ -51,14 +96,14 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  text-align: left;
   padding: var(--spacing-xs) var(--spacing-sm);
   margin-left: var(--spacing-sm);
+  min-width: 0;
+  /* Allow shrinking */
 }
 
 .column-name {
   font-style: italic;
-  color: var(--color-dark);
 }
 
 .no-columns {
@@ -71,37 +116,62 @@
   font-size: 0.85em;
 }
 
+/* ===== Drag Handle ===== */
+.drag-handle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 44px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.drag-handle::after {
+  content: '⠿';
+  font-size: 20px;
+  color: rgba(0, 0, 0, 0.4);
+  transition: color var(--transition-fast);
+}
+
+.accordion-item.is-idle .drag-handle {
+  cursor: grab;
+}
+
+.accordion-item.is-idle .drag-handle:hover::after {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.accordion-item.is-draggable .drag-handle {
+  cursor: grabbing;
+}
+
+/* ===== Collapsible Content ===== */
 .paginated-table {
   display: none;
   padding: 0;
-  min-height: min-content;
+  border-top: 1px solid #eee;
 }
 
 .paginated-table.active {
   display: flex;
   flex-direction: column;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
-  margin-top: var(--spacing-sm);
 }
 
-.accordion.dragging {
-  opacity: 0.6;
-  border: 1px dashed var(--color-primary);
-}
-
-/* == Dark theme == */
-.dark-theme .accordion {
+/* ===== Dark Theme Support ===== */
+.dark-theme .accordion-item {
   border-color: #444;
+  background-color: var(--dark-bg, #2a2a2a);
 }
 
 .dark-theme .table-outline {
   background-color: var(--dark-primary);
   color: var(--dark-text);
-  border-bottom: 1px solid #444;
-}
-
-.dark-theme .table-outline:hover {
-  background-color: var(--dark-secondary);
+  border-bottom-color: #444;
 }
 
 .dark-theme .table-name {
@@ -114,10 +184,6 @@
   color: var(--dark-text);
 }
 
-.dark-theme .column-name {
-  color: var(--dark-text);
-}
-
 .dark-theme .no-columns {
   color: #777;
 }
@@ -126,10 +192,18 @@
   color: #ff7b7b;
 }
 
+.dark-theme .paginated-table {
+  border-top-color: #444;
+}
+
 .dark-theme .paginated-table.active {
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.dark-theme .accordion.dragging {
-  border-color: var(--dark-light);
+.dark-theme .drag-handle::after {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.dark-theme .accordion-item.is-idle .drag-handle:hover::after {
+  color: rgba(255, 255, 255, 0.6);
 }

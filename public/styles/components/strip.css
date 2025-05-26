@@ -23,7 +23,6 @@
     display: inline-flex;
     gap: var(--spacing-sm);
     padding: var(--spacing-sm);
-    padding-top: 0;
 }
 
 .strip-button {

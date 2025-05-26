@@ -3,8 +3,18 @@
 ## Prioritaire
 
 - [x] Rendre hidden le bouton feedBack lorsque la zone de codeMirrorEditor est dirty
-- [ ] Refonte Drag to reorder (+ Icone de zone préhension (à droite) et pour dérouler le bandeau (à gauche) l'icone de zone de préhension doit être fixe et ne pas pouvoir être repoussé par le nom des colonnes)
-- [ ] Implémenter clique to insert pour les données dans le bandeau (après avoir fait la refonte Drag to reorder)
+- [x] Refonte Drag to reorder (+ Icone de zone préhension (à droite) et pour dérouler le bandeau (à gauche) l'icone de zone de préhension doit être fixe et ne pas pouvoir être repoussé par le nom des colonnes)
+
+- [ ] Implémenter click to insert pour les données dans le bandeau.
+  Pour la mise en forme du nom de la table et des colonnes, je verrais quelque chose comme ça (ne pas tenir compte des couleurs) :
+
+    <img width="758" alt="image" src="https://github.com/user-attachments/assets/119c2e40-e8eb-4f7f-a50f-98663965b790" />
+
+  Autrement dit, une grande zone cliquable comme fond. Tout clic sur la zone compose le nom de la table, sauf sur :
+  - le triangle qui ouvre / ferme.
+  - les boutons (?) des noms de colonnes, qui composent un nom de colonne.
+  - la zone de préhension.
+
 - [x] Implémenter système de score en utilisant `task.reward` généré à partir de SQLab 0.7.9.
     - Bouton mise score -> Un slider pour miser un pourcentage de son score 10 à 50% de son score. 
     - Dans local storage : `score/${activityNumber}`.
