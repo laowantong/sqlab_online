@@ -3,6 +3,12 @@ import { showError, escapeHtml } from '../../../utils/genericUtils.js';
 import { loadAndRenderCoreTableColumns } from './columns.js';
 import { DEFAULT_PAGE_OFFSET } from '../../../utils/constants.js';
 
+/***************************************************************************
+ *      Code adapted from: https://github.com/TahaSh/drag-to-reorder       *
+ *  https://tahazsh.com/blog/seamless-ui-with-js-drag-to-reorder-example/  *
+ *             MIT License. Copyright (c) 2023 Taha Shashtari.             *
+ ***************************************************************************/
+
 /***********************
  *      Variables       *
  ***********************/
@@ -176,6 +182,7 @@ function dragStart(e) {
 
     if (!draggableItem) return;
 
+    e.preventDefault();
     e.stopPropagation();
 
     pointerStartX = e.clientX || e.touches?.[0]?.clientX;
