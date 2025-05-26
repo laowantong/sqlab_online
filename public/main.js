@@ -21,8 +21,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Reset the local storage for testing purposes. TODO: remove this line in production
     localStorage.clear();
 
-    window.sqlEditor = initSqlEditor('sql-editor'); // before initLocalization
+    window.currentActivityNumber = TEMP_STARTING_ACTIVITY;
 
+    window.sqlEditor = initSqlEditor('sql-editor'); // before initLocalization
     initLocalization();
 
     await loadAndRenderActivityTitle();
@@ -34,7 +35,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     initNotes();
 
     // Initialize the task strip and simulate a click on the active button
-    window.currentActivityNumber = TEMP_STARTING_ACTIVITY;
     window.taskStrip = await initTaskStrip();
     window.taskStrip.getActiveButton().click();
     window.stakeSystem = initStakeSystem(window.currentActivityNumber);
