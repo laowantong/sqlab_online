@@ -105,6 +105,21 @@ function createAccordionItem(container, tableName) {
     });
 
     accordionItem.appendChild(tableOutline);
+
+    const tableNameDiv = tableOutline.querySelector('.table-name');
+    tableNameDiv.addEventListener('click', function () {
+        const textToInsert = this.textContent.trim();
+        if (window.sqlEditor) {
+            const editor = window.sqlEditor;
+            const cursor = editor.getCursor();
+            editor.replaceRange(textToInsert, cursor);
+            this.classList.add('insert-success');
+            setTimeout(() => this.classList.remove('insert-success'), 300);
+        }
+    });
+    tableNameDiv.addEventListener('dblclick', function (e) { e.preventDefault(); });
+
+
     accordionItem.appendChild(paginatedTable);
     container.appendChild(accordionItem);
 

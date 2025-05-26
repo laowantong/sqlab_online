@@ -18,6 +18,27 @@ import { initScoreVisualEffects } from './components/score/visualEffects.js';
 window.i18n.init().catch(err => console.error('Failed to initialize localization:', err));
 
 document.addEventListener('DOMContentLoaded', async () => {
+    document.addEventListener('click', function (e) {
+        // Target only .column-names inside a .table-columns
+        if (
+            e.target.classList.contains('column-name') &&
+            e.target.closest('.table-columns')
+        ) {
+            const textToInsert = e.target.textContent.trim();
+            if (window.sqlEditor && textToInsert) {
+                const editor = window.sqlEditor;
+                const cursor = editor.getCursor();
+                editor.replaceRange(textToInsert, cursor);
+
+                // Visual effect
+                e.target.classList.add('insert-success');
+                setTimeout(() => {
+                    e.target.classList.remove('insert-success');
+                }, 300);
+            }
+        }
+    });
+
     // Reset the local storage for testing purposes. TODO: remove this line in production
     localStorage.clear();
 
