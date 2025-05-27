@@ -8,13 +8,19 @@ import { checkQuery } from "../models/queryCheckModel.js";
  */
 export async function handleCheckQuery(req, res) {
   const { query, activityNumber, taskNumber, stakePercentage } = req.body;
+
   try {
-    const data = await checkQuery(query, activityNumber, taskNumber, stakePercentage);
-    res.json(data);
+    const jsonData = await checkQuery(query, activityNumber, taskNumber, stakePercentage);
+    const data = JSON.parse(jsonData);
+    
+    if (data.success) {
+      res.status(200).json(data);
+    } else {
+      res.status(400).json(data);
+    }
   } catch (err) {
-    res.status(400).json({
-      // TODO: is this error message correct?
-      error: `Database error: ${err.message}`
+    res.status(500).json({
+      error: "Error server"
     });
   }
 }

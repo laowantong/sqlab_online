@@ -7,60 +7,73 @@ import { globalState } from '../server.js';
 import { MIN_STAKE_PERCENTAGE, MAX_STAKE_PERCENTAGE } from "../../public/utils/constants.js";
 
 export async function checkQuery(query, activityNumber, taskNumber, stakePercentage) {
-
-    // Validate stake percentage and calculate the corresponding stake amount
-    if (stakePercentage < MIN_STAKE_PERCENTAGE || stakePercentage > MAX_STAKE_PERCENTAGE) {
-        throw new Error(`Stake percentage should be between ${MIN_STAKE_PERCENTAGE}% and ${MAX_STAKE_PERCENTAGE}%.`);
-    };
-    const stakeAmount = Math.floor(globalState.score * stakePercentage / 100)
-
-    const activities = await queryMetadata("activities");
-    const task = activities[activityNumber].tasks[taskNumber - 1];
-
-    query = asciiMapper.encode(query);
-    const ast = parseSqlToAst(query).ast;
-
-    if (!task.formula) throw new Error("noFormulaError");
-    let formula = calculateFirstPassFormula(ast, task.formula);
-
-    const queryTemplateData = await injectPlaceholderColumn(ast);
-    const queryTemplate = queryTemplateData.result;
-    let result = await executeQueryWithFormula("first", formula, queryTemplate);
-
-    const tweakExpression = task.tweak_javascript;
-    if (tweakExpression) {
-        if (!isSafeForEvaluation(tweakExpression)) throw new Error("unsafeTweakError");
-
-        let tweakValue;
-        try {
-            // Create a new function with only the allowed parameters in scope
-            const func = new Function('result', 'query', `return (${tweakExpression});`);
-            tweakValue = func(result, query);
-        } catch (error) {
-            throw new Error("tweakEvaluationError");
-        }
-
-        formula = calculateSecondPassFormula(formula, tweakValue);
-        result = await executeQueryWithFormula("second", formula, queryTemplate);
+    let resultData = {
+        success: false,
+        message: null,
+        score: globalState.score,
+        scoreDelta: 0
     };
 
-    const token = result[0].token;
-    if (!token) throw new Error("noTokenError");
-    const message = await decryptToken(token);
-    const data = JSON.parse(message);
+    try {
+        // Validate stake percentage and calculate the corresponding stake amount
+        if (stakePercentage < MIN_STAKE_PERCENTAGE || stakePercentage > MAX_STAKE_PERCENTAGE) {
+            throw new Error(`Stake percentage should be between ${MIN_STAKE_PERCENTAGE}% and ${MAX_STAKE_PERCENTAGE}%.`);
+        };
+        const stakeAmount = Math.floor(globalState.score * stakePercentage / 100)
 
-    if (data.feedback.startsWith("<div class='hint'>")) {
-        data.scoreDelta = -stakeAmount;
-    } else if (data.feedback.startsWith("<div class='correction'>")) {
-        data.scoreDelta = task.reward + stakeAmount;
-    } else {
-        console.warn(`Feedback for token ${token} does not start with a hint or correction.`);
-        data.scoreDelta = 0;
-    };
-    globalState.score += data.scoreDelta;
-    data.score = globalState.score
+        const activities = await queryMetadata("activities");
+        const task = activities[activityNumber].tasks[taskNumber - 1];
 
-    return JSON.stringify(data);
+        query = asciiMapper.encode(query);
+        const ast = parseSqlToAst(query).ast;
+
+        if (!task.formula) throw new Error("noFormulaError");
+        let formula = calculateFirstPassFormula(ast, task.formula);
+
+        const queryTemplateData = await injectPlaceholderColumn(ast);
+        const queryTemplate = queryTemplateData.result;
+        let result = await executeQueryWithFormula("first", formula, queryTemplate);
+
+        const tweakExpression = task.tweak_javascript;
+        if (tweakExpression) {
+            if (!isSafeForEvaluation(tweakExpression)) throw new Error("unsafeTweakError");
+
+            let tweakValue;
+            try {
+                // Create a new function with only the allowed parameters in scope
+                const func = new Function('result', 'query', `return (${tweakExpression});`);
+                tweakValue = func(result, query);
+            } catch (error) {
+                throw new Error("tweakEvaluationError");
+            }
+
+            formula = calculateSecondPassFormula(formula, tweakValue);
+            result = await executeQueryWithFormula("second", formula, queryTemplate);
+        };
+
+        const token = result[0].token;
+        if (!token) throw new Error("noTokenError");
+        const message = await decryptToken(token);
+        const data = JSON.parse(message);
+
+        if (data.feedback.startsWith("<div class='hint'>")) {
+            resultData.scoreDelta = -stakeAmount;
+        } else if (data.feedback.startsWith("<div class='correction'>")) {
+            resultData.scoreDelta = task.reward + stakeAmount;
+        } else {
+            console.warn(`Feedback for token ${token} does not start with a hint or correction.`);
+            resultData.scoreDelta = 0;
+        };
+        globalState.score += resultData.scoreDelta;
+        resultData.score = globalState.score;
+        resultData.success = true;
+        resultData.feedback = data.feedback;
+        resultData.task = data.task;
+    } catch (error) {
+        resultData.message = error.message;
+    }
+
+    return JSON.stringify(resultData);
 }
 
 async function executeQueryWithFormula(passNumber, formula, queryTemplate) {
