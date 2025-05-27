@@ -29,7 +29,10 @@ export function mayRecreateTableContainerIn(container) {
  * @param {Function} onSortChange - Callback for sorting changes (optional)
  */
 export function renderPaginatedTable(data, container, onPageChange, onSortChange = null) {
-    createPageStrip(container, data.offset, data.limit, data.total, onPageChange);
+    if (data.offset === 0) {
+        // Avoid resetting the strip to the leftmost position if it already exists
+        createPageStrip(container, data.offset, data.limit, data.total, onPageChange);
+    };
     const tableElement = container.querySelector('.table-content');
     const headers = generateTableHeaderRow(data.columns);
     const rows = generateTableRowsWithNumbers(data.rows, data.offset);
