@@ -2,6 +2,7 @@ import { fetchMetadata } from '../../../api/fetchMetadata.js';
 import { showError, escapeHtml } from '../../../utils/genericUtils.js';
 import { loadAndRenderCoreTableColumns } from './columns.js';
 import { DEFAULT_PAGE_OFFSET } from '../../../utils/constants.js';
+import { addClickToInsert } from '../tables.js';
 
 /***************************************************************************
  *      Code adapted from: https://github.com/TahaSh/drag-to-reorder       *
@@ -49,7 +50,8 @@ function isItemToggled(item) {
  ***********************/
 
 /**
- * Loads and renders a list of core tables with their column names
+ * Loads and renders the list of core tables, passing their column names to each accordion item.
+ * Initializes drag & drop functionality.
  * @returns {Promise<void>}
  */
 export async function loadAndRenderCoreTableList() {
@@ -67,7 +69,8 @@ export async function loadAndRenderCoreTableList() {
 
         // For each table, create an accordion item
         tableNames.forEach(tableName => {
-            createAccordionItem(accordionList, tableName);
+            const columns = tableStructures[tableName] || [];
+            createAccordionItem(accordionList, tableName, columns);
         });
 
         // Initialize drag and drop after all items are created
@@ -79,31 +82,36 @@ export async function loadAndRenderCoreTableList() {
 }
 
 /**
- * Creates a single accordion item for a table
+ * Creates and appends a single accordion item for a table, with its columns as buttons.
  * @param {HTMLElement} container - The container to append the item to
  * @param {string} tableName - The name of the table
+ * @param {Array} columns - The column names for the table
  */
-function createAccordionItem(container, tableName) {
+function createAccordionItem(container, tableName, columns = []) {
     const accordionItem = document.createElement('div');
     accordionItem.className = 'accordion-item is-idle js-accordion-item';
     accordionItem.dataset.table = tableName;
 
-    // Create the table outline (header)
+    // We don't know the columns here, so leave them blank for now
     const tableOutline = document.createElement('div');
     tableOutline.className = 'table-outline';
+
+    // Basic structure
     tableOutline.innerHTML = `
         <div class="toggle-icon js-toggle-icon"></div>
-        <div class="table-name">${escapeHtml(tableName)}</div>
-        <div class="table-columns" id="columns-${tableName}"></div>
+        <div class="outline-click-zone">
+            <span class="table-name">${escapeHtml(tableName)}</span>
+            <div class="columns-buttons" id="columns-${tableName}"></div>
+        </div>
         <div class="drag-handle js-drag-handle"></div>
     `;
 
-    // Create the collapsible content area
+    // Creates the collapsible content area
     const paginatedTable = document.createElement('div');
     paginatedTable.id = `core-table-${tableName}`;
     paginatedTable.className = 'paginated-table';
 
-    // Handle accordion open/close - only on toggle icon
+    // Gestion du toggle
     const toggleIcon = tableOutline.querySelector('.js-toggle-icon');
     toggleIcon.addEventListener('click', function (e) {
         e.stopPropagation(); // Prevent event bubbling
@@ -111,26 +119,15 @@ function createAccordionItem(container, tableName) {
     });
 
     accordionItem.appendChild(tableOutline);
-
-    const tableNameDiv = tableOutline.querySelector('.table-name');
-    tableNameDiv.addEventListener('click', function () {
-        const textToInsert = this.textContent.trim();
-        if (window.sqlEditor) {
-            const editor = window.sqlEditor;
-            const cursor = editor.getCursor();
-            editor.replaceRange(textToInsert, cursor);
-            this.classList.add('insert-success');
-            setTimeout(() => this.classList.remove('insert-success'), 300);
-        }
-    });
-    tableNameDiv.addEventListener('dblclick', function (e) { e.preventDefault(); });
-
-
     accordionItem.appendChild(paginatedTable);
     container.appendChild(accordionItem);
 
     // Load column names for this table
-    loadAndRenderCoreTableColumns(tableName);
+    loadAndRenderCoreTableColumns(tableName, columns);
+
+    // Adds click handling (table name, column...)
+    addClickToInsert(tableOutline, { tableName });
+
 }
 
 /**
