@@ -19,5 +19,10 @@ export function escapeHtml(unsafe) {
  * @param {HTMLElement} containerElement - Container to show the error in
  */
 export function showError(message, containerElement) {
-    containerElement.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
+    if (message.endsWith('Error')) {
+        const translatedMessage = window.i18n.t(`error.${message}`);
+        containerElement.innerHTML = `<div class="error" data-i18n="error.${message}">${escapeHtml(translatedMessage)}</div>`;
+    } else {
+        containerElement.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
+    }
 }

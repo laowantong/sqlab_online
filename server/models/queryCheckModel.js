@@ -7,60 +7,89 @@ import { globalState } from '../server.js';
 import { MIN_STAKE_PERCENTAGE, MAX_STAKE_PERCENTAGE } from "../../public/utils/constants.js";
 
 export async function checkQuery(query, activityNumber, taskNumber, stakePercentage) {
-
-    // Validate stake percentage and calculate the corresponding stake amount
-    if (stakePercentage < MIN_STAKE_PERCENTAGE || stakePercentage > MAX_STAKE_PERCENTAGE) {
-        throw new Error(`Stake percentage should be between ${MIN_STAKE_PERCENTAGE}% and ${MAX_STAKE_PERCENTAGE}%.`);
+    let resultData = {
+        success: false,
+        message: null,
+        score: globalState.score,
+        scoreDelta: 0
     };
-    const stakeAmount = Math.floor(globalState.score * stakePercentage / 100)
 
-    const activities = await queryMetadata("activities");
-    const task = activities[activityNumber].tasks[taskNumber - 1];
+    // TODO: Extract other simple validations from try/catch
+    // - if (stakePercentage < MIN_STAKE_PERCENTAGE || stakePercentage > MAX_STAKE_PERCENTAGE) -> return JSON.stringify(resultData); 
+    // - if (!task.formula) → return 
+    // - if (!isSafeForEvaluation()) → return 
+    // - if (!token) → return 
+    // Keep in try/catch only risky operations (DB, parsing, etc.)
+    try {
+        // Validate stake percentage and calculate the corresponding stake amount
+        if (stakePercentage < MIN_STAKE_PERCENTAGE || stakePercentage > MAX_STAKE_PERCENTAGE) {
+            throw new Error("stakePercentageError");
+        };
+        const stakeAmount = Math.floor(globalState.score * stakePercentage / 100)
 
-    query = asciiMapper.encode(query);
-    const ast = parseSqlToAst(query).ast;
+        const activities = await queryMetadata("activities");
+        const task = activities[activityNumber].tasks[taskNumber - 1];
 
-    if (!task.formula) throw new Error("noFormulaError");
-    let formula = calculateFirstPassFormula(ast, task.formula);
+        query = asciiMapper.encode(query);
+        const ast = parseSqlToAst(query).ast;
 
-    const queryTemplateData = await injectPlaceholderColumn(ast);
-    const queryTemplate = queryTemplateData.result;
-    let result = await executeQueryWithFormula("first", formula, queryTemplate);
-
-    const tweakExpression = task.tweak_javascript;
-    if (tweakExpression) {
-        if (!isSafeForEvaluation(tweakExpression)) throw new Error("unsafeTweakError");
-
-        let tweakValue;
-        try {
-            // Create a new function with only the allowed parameters in scope
-            const func = new Function('result', 'query', `return (${tweakExpression});`);
-            tweakValue = func(result, query);
-        } catch (error) {
-            throw new Error("tweakEvaluationError");
+        const userCols = ast.columns.map(col => asciiMapper.decode(col.expr.column));
+        const expectedSet = new Set(task.columns);
+        const userSet = new Set(userCols);
+        const columnsMatch = expectedSet.size === userSet.size && [...expectedSet].every(col => userSet.has(col));
+        
+        if (!columnsMatch) {
+            resultData.message = "wrongColumnsError";
+            return JSON.stringify(resultData);
         }
 
-        formula = calculateSecondPassFormula(formula, tweakValue);
-        result = await executeQueryWithFormula("second", formula, queryTemplate);
-    };
+        if (!task.formula) throw new Error("noFormulaError");
+        let formula = calculateFirstPassFormula(ast, task.formula);
 
-    const token = result[0].token;
-    if (!token) throw new Error("noTokenError");
-    const message = await decryptToken(token);
-    const data = JSON.parse(message);
+        const queryTemplateData = await injectPlaceholderColumn(ast);
+        const queryTemplate = queryTemplateData.result;
+        let result = await executeQueryWithFormula("first", formula, queryTemplate);
 
-    if (data.feedback.startsWith("<div class='hint'>")) {
-        data.scoreDelta = -stakeAmount;
-    } else if (data.feedback.startsWith("<div class='correction'>")) {
-        data.scoreDelta = task.reward + stakeAmount;
-    } else {
-        console.warn(`Feedback for token ${token} does not start with a hint or correction.`);
-        data.scoreDelta = 0;
-    };
-    globalState.score += data.scoreDelta;
-    data.score = globalState.score
+        const tweakExpression = task.tweak_javascript;
+        if (tweakExpression) {
+            if (!isSafeForEvaluation(tweakExpression)) throw new Error("unsafeTweakError");
 
-    return JSON.stringify(data);
+            let tweakValue;
+            try {
+                // Create a new function with only the allowed parameters in scope
+                const func = new Function('result', 'query', `return (${tweakExpression});`);
+                tweakValue = func(result, query);
+            } catch (error) {
+                throw new Error("tweakEvaluationError");
+            }
+
+            formula = calculateSecondPassFormula(formula, tweakValue);
+            result = await executeQueryWithFormula("second", formula, queryTemplate);
+        };
+
+        const token = result[0].token;
+        if (!token) throw new Error("noTokenError");
+        const message = await decryptToken(token);
+        const data = JSON.parse(message);
+
+        if (data.feedback.startsWith("<div class='hint'>")) {
+            resultData.scoreDelta = -stakeAmount;
+        } else if (data.feedback.startsWith("<div class='correction'>")) {
+            resultData.scoreDelta = task.reward + stakeAmount;
+        } else {
+            console.warn(`Feedback for token ${token} does not start with a hint or correction.`);
+            resultData.scoreDelta = 0;
+        };
+        globalState.score += resultData.scoreDelta;
+        resultData.score = globalState.score;
+        resultData.success = true;
+        resultData.feedback = data.feedback;
+        resultData.task = data.task;
+    } catch (error) {
+        resultData.message = error.message;
+    }
+
+    return JSON.stringify(resultData);
 }
 
 async function executeQueryWithFormula(passNumber, formula, queryTemplate) {
