@@ -51,7 +51,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
+  cursor: zoom-in;
   padding: var(--spacing-xs);
   border-radius: var(--border-radius-sm);
   transition: all var(--transition-fast);
@@ -63,6 +63,10 @@
   content: '▶';
   font-size: 12px;
   transition: transform var(--transition-fast);
+}
+
+.accordion-item.expanded .toggle-icon {
+  cursor: zoom-out;
 }
 
 .accordion-item.expanded .toggle-icon::after {
@@ -93,7 +97,7 @@
 }
 
 .accordion-item.is-idle .drag-handle {
-  cursor: grab;
+  cursor: move;
 }
 
 .accordion-item.is-idle .drag-handle:hover::after {
@@ -101,7 +105,7 @@
 }
 
 .accordion-item.is-draggable .drag-handle {
-  cursor: grabbing;
+  cursor: move;
 }
 
 /* ===== Collapsible Content ===== */
@@ -153,15 +157,13 @@
 .column-name-btn {
   margin-top: 6px;
   margin-bottom: 6px;
-  /* border: 2px solid var(--color-primary); */
   border: none;
   border-radius: 5px;
   padding: 4px 14px;
-  background: var(--color-secondary);
+  background: var(--color-light-gray);
   color: var(--color-primary);
   font-family: inherit;
-  font-size: 1em;
-  font-weight: bold;
+  font-size: var(--font-size-sm);
   cursor: pointer;
   transition: all var(--transition-fast);
 }

@@ -111,7 +111,7 @@ function createAccordionItem(container, tableName, columns = []) {
     paginatedTable.id = `core-table-${tableName}`;
     paginatedTable.className = 'paginated-table';
 
-    // Gestion du toggle
+    // Add click handling for the toggle icon
     const toggleIcon = tableOutline.querySelector('.js-toggle-icon');
     toggleIcon.addEventListener('click', function (e) {
         e.stopPropagation(); // Prevent event bubbling
