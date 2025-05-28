@@ -14,10 +14,16 @@ export async function checkQuery(query, activityNumber, taskNumber, stakePercent
         scoreDelta: 0
     };
 
+    // TODO: Extract other simple validations from try/catch
+    // - if (stakePercentage < MIN_STAKE_PERCENTAGE || stakePercentage > MAX_STAKE_PERCENTAGE) -> return JSON.stringify(resultData); 
+    // - if (!task.formula) → return 
+    // - if (!isSafeForEvaluation()) → return 
+    // - if (!token) → return 
+    // Keep in try/catch only risky operations (DB, parsing, etc.)
     try {
         // Validate stake percentage and calculate the corresponding stake amount
         if (stakePercentage < MIN_STAKE_PERCENTAGE || stakePercentage > MAX_STAKE_PERCENTAGE) {
-            throw new Error(`Stake percentage should be between ${MIN_STAKE_PERCENTAGE}% and ${MAX_STAKE_PERCENTAGE}%.`);
+            throw new Error("stakePercentageError");
         };
         const stakeAmount = Math.floor(globalState.score * stakePercentage / 100)
 

@@ -53,6 +53,14 @@
     "unknown": "Inconnu"
   },
   "error": {
-    "tableData": "Impossible de charger les données de la table"
+    "tableData": "Impossible de charger les données de la table",
+    "stakePercentageError": "Pourcentage de mise invalide",
+    "noFormulaError": "Aucune formule disponible",
+    "unsafeTweakError": "Expression d'ajustement non sécurisée",
+    "tweakEvaluationError": "Échec de l'évaluation de l'ajustement",
+    "noTokenError": "Aucun token trouvé",
+    "emptyResultError": "Résultat vide",
+    "firstPassExecutionError": "Échec de l'exécution de la première passe",
+    "secondPassExecutionError": "Échec de l'exécution de la seconde passe",
   }
 }

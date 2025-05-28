@@ -53,6 +53,14 @@
     "unknown": "Unknown"
   },
   "error": {
-    "tableData": "Failed to load table data"
+    "tableData": "Failed to load table data",
+    "stakePercentageError": "Invalid stake percentage",
+    "noFormulaError": "No formula available",
+    "unsafeTweakError": "Unsafe tweak expression",
+    "tweakEvaluationError": "Tweak evaluation failed",
+    "noTokenError": "No token found",
+    "emptyResultError": "Empty result",
+    "firstPassExecutionError": "First pass execution failed",
+    "secondPassExecutionError": "Second pass execution failed",
   }
 }
