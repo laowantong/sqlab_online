@@ -19,5 +19,5 @@ export function createPageStrip(container, offset, limit, total, onPageChange) {
             onClick: () => onPageChange(i * limit)
         };
     });
-    createStrip(container, properties);
+    createStrip(container, properties, total);
 }

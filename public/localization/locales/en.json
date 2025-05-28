@@ -42,7 +42,7 @@
   },
   "table": {
     "pagination": {
-      "rows": "Rows"
+      "rows": "rows"
     },
     "nullValue": "NULL",
     "clickToInsert": "Click to insert cell content"
