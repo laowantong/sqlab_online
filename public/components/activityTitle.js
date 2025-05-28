@@ -9,10 +9,12 @@ import { fetchMetadata } from '../api/fetchMetadata.js';
  */
 
 export async function loadAndRenderActivityTitle() {
-    const titleElement = document.getElementById('activity-title');
-    const title = await fetchMetadata('title', { 
-        defaultValue: window.i18n.t('database.unknown') 
-    });
+    const title = await fetchMetadata('title');
     document.title = title;
-    titleElement.textContent = title;
+
+    const activityNumber = window.currentActivityNumber;
+    const activities = await fetchMetadata('activities');
+    const activity = activities[activityNumber];
+    const titleElement = document.getElementById('activity-title');
+    titleElement.textContent = `${title} — ${activity.label}: ${activity.title}`;
 }

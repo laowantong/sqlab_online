@@ -25,6 +25,21 @@
     padding: var(--spacing-sm);
 }
 
+.row-count {
+    font-size: var(--font-size-sm);
+    white-space: nowrap;
+    margin: 0 var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    cursor: default;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
 .strip-button {
     min-width: 50px;
     height: 36px;

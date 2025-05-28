@@ -15,7 +15,7 @@
  * @returns {Object} The created strip component with methods to manipulate it
  */
 
-export function createStrip(container, buttonsProperties) {
+export function createStrip(container, buttonsProperties, rowCount = null) {
     // Remove any existing strip container
     const existingStrip = container.querySelector('.strip-container');
     if (existingStrip) container.removeChild(existingStrip);
@@ -25,6 +25,12 @@ export function createStrip(container, buttonsProperties) {
     stripContainer.className = 'strip-container';
     const stripButtons = document.createElement('div');
     stripButtons.className = 'strip-buttons';
+    if (rowCount !== null) {
+        const rowCountElement = document.createElement('div');
+        rowCountElement.className = 'row-count';
+        rowCountElement.textContent = `${rowCount} ${window.i18n.t('table.pagination.rows')}`;
+        stripButtons.appendChild(rowCountElement);
+    }
 
     // Create the buttons based on properties and store the active button index
     let activeButtonIndex;
