@@ -21,8 +21,8 @@
     - Adapter le modèle de slider donné dans `public/assets`.
 - [ ] Localiser les messages du système de score.
 - [ ] Au passage, gérer correctement le pluriel (le système de localisation devrait permettre de le faire, regarder).
-- [ ] Côté modèle, traitement des requêtes de l'utilisateur. Transmettre au client un objet comportant systématiquement un champ `success` (booléen). En cas d'erreur, remplir un champ `message` destiné à être affiché dans la zone de feedback du client, ainsi que `score` et `scoreDelta`. Jusqu'ici, des exceptions sont levées dans les cas problématiques. Il faut que `queryCheckModel.js` les rattrape pour renvoyer l'objet approprié. Pour la structuration du code, je tenterais un [`try/catch`](https://stackoverflow.com/questions/33781818/multiple-catch-in-javascript) avec un seul `return` à la fin de la fonction. Veiller à minimiser les répétitions.
-- [ ] Côté modèle, ajouter une garde sur la requête de l'utilisateur : si l'**ensemble** des noms de colonnes n'est pas celui attendu, ne pas décrémenter le score, mais juste rappeler la liste des colonnes attendues.
+- [x] Côté modèle, traitement des requêtes de l'utilisateur. Transmettre au client un objet comportant systématiquement un champ `success` (booléen). En cas d'erreur, remplir un champ `message` destiné à être affiché dans la zone de feedback du client, ainsi que `score` et `scoreDelta`. Jusqu'ici, des exceptions sont levées dans les cas problématiques. Il faut que `queryCheckModel.js` les rattrape pour renvoyer l'objet approprié. Pour la structuration du code, je tenterais un [`try/catch`](https://stackoverflow.com/questions/33781818/multiple-catch-in-javascript) avec un seul `return` à la fin de la fonction. Veiller à minimiser les répétitions.
+- [x] Côté modèle, ajouter une garde sur la requête de l'utilisateur : si l'**ensemble** des noms de colonnes n'est pas celui attendu, ne pas décrémenter le score, mais juste rappeler la liste des colonnes attendues.
 - [x] Faire apparaître systématiquement une icone dans l'onglet :
   - [ Exécuter ↻ ] lorsque cliquer sur l'onglet (ré)exécute la requête.
   - [ Exécuter ✓ ] lorsque l'exécution est à jour.
@@ -44,6 +44,9 @@
 - [x] Au moment du clic sur Exécuter, reformater la requête SQL avec https://github.com/sql-formatter-org/sql-formatter. C'est la requête formatée qui sera envoyée au serveur. Par défaut, elle remplace également le contenu de l'éditeur.
 - [ ] Ajouter une option pour ne pas le faire dans le menu Hamburger.
 - [ ] Réparer le coin d'agrandissement de la zone de codeMirrorEditor qui semble ne plus fonctionner.
+- [ ] Transformer l'indication du nombre de lignes d'une table en un bouton (mais garder le même style). Cliquer devrait sauter à l'offset maximum.
+- [ ] De la même manière, ajouter avant la bande des tâches un bouton « table des matières » (heroicons `numbered-list`), qui déroule une zone de texte avec le contenu de `web_toc` pour l'activité (à refaire côté Python).
+- [ ] Il faudrait factoriser les deux dernières fonctionnalités, sans doute en passant un élément du DOM et un callback pour le clic.
 
 ## Non prioritaire
 
@@ -52,9 +55,17 @@
 - [ ] Quand la page d'accueil sera faite, le menu hamburger sera remplacé par un bouton home, et ses fonctionnalités seront intégrées dans la page d'accueil ou dans une page de paramètres.
 - [ ] Gestion des utilisateurs
 - [ ] Tester les trucs importants (fonctions du modèle serveur, certaines fonctions du client ?  )
-- [ ] Le modèle teste d'abord si les colonnes de la requête sont celles attendues. Quand ce n'est pas le cas, le client ne devrait pas décrémenter le score, mais juste rappeler la liste des colonnes attendues.
+- [x] Le modèle teste d'abord si les colonnes de la requête sont celles attendues. Quand ce n'est pas le cas, le client ne devrait pas décrémenter le score, mais juste rappeler la liste des colonnes attendues.
 - [ ] Quand on clique sur le score, un carousel de statistiques s'ouvre au-dessous de la barre de titre. Il peut y avoir dedans :
   - Un graphe de l'évolution du score du joueur, sous la forme d'une courbe avec des points apparents. Abscisse : numéro d'exécution (1, 2, ...). Ordonnée : score (échelle semi-logarithmique ?). Au survol d'un point, une info-bulle avec le timestamp et le numéro de la question.
   - Un graphe avec les questions traitées par le joueur, sous la forme d'un nuage de points. Abcisse  numéro d'exécution _successful_ (1, 2, ...). Ordonnée : numéro de la question. Au survol d'un point, une info-bulle avec le timestamp.
   - Une version globale du premier graphe, avec la possibilité de mettre en évidence tel ou tel joueur.
   - Une version globale du second graphe, avec la possibilité de mettre en évidence tel ou tel joueur.
+- [ ] N'employer qu'un jeu limité de couleurs, avec des variations de luminosité ou d'opacité. Passer à SCSS. [Conversation avec ChatGPT](https://chatgpt.com/share/6837375e-6c4c-800e-a710-9d53620ae2c6).
+- [ ] Prévoir un style de présentation (ou une icone) spécifique pour chaque type de feedback :
+    - Succès.
+    - Hint spécifique.
+    - Hint non spécifique (message défaut).
+    - Avertissement non pénalisant (e.g., colonnes différentes de celles attendues).
+    - Erreurs lors de l'injection de la formule.
+    - ?
