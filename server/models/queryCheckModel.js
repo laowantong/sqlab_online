@@ -33,6 +33,16 @@ export async function checkQuery(query, activityNumber, taskNumber, stakePercent
         query = asciiMapper.encode(query);
         const ast = parseSqlToAst(query).ast;
 
+        const userCols = ast.columns.map(col => asciiMapper.decode(col.expr.column));
+        const expectedSet = new Set(task.columns);
+        const userSet = new Set(userCols);
+        const columnsMatch = expectedSet.size === userSet.size && [...expectedSet].every(col => userSet.has(col));
+        
+        if (!columnsMatch) {
+            resultData.message = "wrongColumnsError";
+            return JSON.stringify(resultData);
+        }
+
         if (!task.formula) throw new Error("noFormulaError");
         let formula = calculateFirstPassFormula(ast, task.formula);
 

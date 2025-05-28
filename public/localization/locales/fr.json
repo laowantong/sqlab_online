@@ -62,5 +62,6 @@
     "emptyResultError": "Résultat vide",
     "firstPassExecutionError": "Échec de l'exécution de la première passe",
     "secondPassExecutionError": "Échec de l'exécution de la seconde passe",
+    "wrongColumnsError": "Les noms de colonnes de votre requête ne correspondent pas aux colonnes attendues."
   }
 }

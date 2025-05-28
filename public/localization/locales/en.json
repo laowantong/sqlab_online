@@ -62,5 +62,6 @@
     "emptyResultError": "Empty result",
     "firstPassExecutionError": "First pass execution failed",
     "secondPassExecutionError": "Second pass execution failed",
+    "wrongColumnsError": "The column names in your query do not match the expected columns."
   }
 }
