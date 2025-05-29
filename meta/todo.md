@@ -45,7 +45,7 @@
 - [ ] Ajouter une option pour ne pas le faire dans le menu Hamburger.
 - [ ] Réparer le coin d'agrandissement de la zone de codeMirrorEditor qui semble ne plus fonctionner : https://pagehelper.lets-script.com/blog/codemirror6-resize/
 - [ ] Transformer l'indication du nombre de lignes d'une table en un bouton (mais garder le même style). Cliquer devrait sauter à l'offset maximum.
-- [ ] De la même manière, ajouter avant la bande des tâches un bouton « table des matières » (heroicons `numbered-list`), qui déroule une zone de texte avec le contenu de `web_toc` pour l'activité (à refaire côté Python).
+- [ ] De la même manière, ajouter avant la bande des tâches un bouton « table des matières » (heroicons `numbered-list`), qui déroule une zone de texte avec le contenu de `toc` pour l'activité (à refaire côté Python).
 - [ ] Il faudrait factoriser les deux dernières fonctionnalités, sans doute en passant un élément du DOM et un callback pour le clic.
 
 ## Non prioritaire
