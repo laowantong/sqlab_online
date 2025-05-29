@@ -26,6 +26,31 @@ body {
   display: none !important;
 }
 
+/* Toggle Icon */
+
+.toggle-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  padding: var(--spacing-xs);
+  border-radius: var(--border-radius-sm);
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.toggle-icon::after {
+  content: '▶';
+  font-size: 12px;
+  transition: transform var(--transition-fast);
+}
+
+.expanded .toggle-icon::after {
+  transform: rotate(90deg);
+}
+
+
+
 /* Dark mode styles */
 
 .dark-theme  {

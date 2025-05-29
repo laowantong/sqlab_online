@@ -6,18 +6,28 @@ import { createStrip } from './strips.js';
  * @param {number} offset - Current offset for pagination
  * @param {number} limit - Number of items per page
  * @param {number} total - Total number of items
- * @param {Function} onPageChange - Callback when page is changed
+ * @param {Function} changePage - Callback when page is changed
  * @returns {void} - No need to keep a reference to the strip
  */
-export function createPageStrip(container, offset, limit, total, onPageChange) {
+export function createPageStrip(container, offset, limit, total, changePage) {
     const activePage = Math.floor(offset / limit);
     const totalPages = Math.ceil(total / limit);
     const properties = Array.from({ length: totalPages }, (_, i) => {
         return {
             label: (i + 1) * limit,
             classes: (i === activePage) ? ['active'] : [],
-            onClick: () => onPageChange(i * limit)
+            onClick: () => changePage(i * limit)
         };
     });
-    createStrip(container, properties, total);
-}
+    const rowCountButton = document.createElement('button')
+    rowCountButton.textContent = `${total} ${window.i18n.t('table.pagination.rows')}`;
+    
+    const strip = createStrip(container, properties, rowCountButton);
+
+    rowCountButton.addEventListener('click', () => {
+        const index = totalPages - 1;
+        changePage(index);
+        strip.changeActiveButton(index);
+        strip.getActiveButton().scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
+    })
+};

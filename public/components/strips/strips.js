@@ -12,10 +12,11 @@
  * @param {string[]} [buttonsProperties[].classes] - Array of CSS classes to apply to the button
  * @param {string} [buttonsProperties[].tooltip] - Optional tooltip text for the button
  * @param {Function} [buttonsProperties[].onClick] - Optional click handler for the button
+ * @param {}
  * @returns {Object} The created strip component with methods to manipulate it
  */
 
-export function createStrip(container, buttonsProperties, rowCount = null) {
+export function createStrip(container, buttonsProperties, overviewElement = null) {
     // Remove any existing strip container
     const existingStrip = container.querySelector('.strip-container');
     if (existingStrip) container.removeChild(existingStrip);
@@ -25,11 +26,11 @@ export function createStrip(container, buttonsProperties, rowCount = null) {
     stripContainer.className = 'strip-container';
     const stripButtons = document.createElement('div');
     stripButtons.className = 'strip-buttons';
-    if (rowCount !== null) {
-        const rowCountElement = document.createElement('div');
-        rowCountElement.className = 'row-count';
-        rowCountElement.textContent = `${rowCount} ${window.i18n.t('table.pagination.rows')}`;
-        stripButtons.appendChild(rowCountElement);
+
+    // Start with the overview element if provided
+    if (overviewElement) {
+        overviewElement.classList.add('overview')
+        stripButtons.appendChild(overviewElement);
     }
 
     // Create the buttons based on properties and store the active button index
@@ -116,5 +117,10 @@ export function createStrip(container, buttonsProperties, rowCount = null) {
         getActiveButton: () => {
             return buttonElements[activeButtonIndex];
         },
+
+        /**
+         * Change active button
+         */
+        changeActiveButton
     };
 }
