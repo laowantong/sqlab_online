@@ -85,6 +85,7 @@ h1 {
     font-size: var(--font-size-sm);
     color: var(--color-dark);
     margin-right: var(--spacing-md);
+    text-wrap: nowrap;
 }
 
 .menu-item .theme-icon {

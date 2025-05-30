@@ -7,11 +7,7 @@
     "toggleTheme": "Toggle theme",
     "language": "Interface",
     "theme": "Theme",
-    "formatSql": "Auto-format SQL"
-  },
-  "context": {
-    "loading": "Loading episode...",
-    "loadError": "Failed to load episode content"
+    "formatSql": "Format my queries"
   },
   "query": {
     "placeholder": "Enter your SQL query here...\nTip: clicking the task number again pre-fills a query with the expected column names.",
