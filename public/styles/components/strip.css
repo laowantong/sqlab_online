@@ -142,6 +142,9 @@
     border: 1px solid #555;
 }
 
+.dark-theme .overview{
+    color: var(--dark-text);
+}
 
 .dark-theme .strip-button.active {
     background-color: var(--dark-secondary);
