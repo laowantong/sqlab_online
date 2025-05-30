@@ -60,7 +60,7 @@
 - [ ] Enquêter sur la lenteur du drag n drop.
 - [ ] Ajouter le dark mode pour la table des matières.
 - [ ] Vérifier que tout est responsive.
-- [ ] Vérifier que la liste de noms de colonnes est scrollable quand elle est trop longue.
+- [x] Vérifier que la liste de noms de colonnes est scrollable quand elle est trop longue.
 
 ## Non prioritaire
 
