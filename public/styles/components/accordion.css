@@ -20,7 +20,6 @@
   position: relative;
   will-change: transform;
   overflow: hidden;
-  transition: all var(--transition-medium);
 }
 
 .accordion-item.is-idle {
@@ -41,46 +40,19 @@
   background-color: var(--color-light-blue);
   width: 100%;
   box-sizing: border-box;
-  padding-left: var(--spacing-md);
+  padding: 0 var(--spacing-md);
+  cursor: move;
 }
 
 /* ===== Table Name ===== */
 .table-name {
+  cursor: pointer;
   font-weight: var(--font-weight-bold);
   color: var(--color-primary);
   padding: var(--spacing-sm) 0;
   white-space: nowrap;
   flex-shrink: 0;
   font-size: var(--font-size-sm);
-}
-
-/* ===== Drag Handle ===== */
-.drag-handle {
-  flex-shrink: 0;
-  margin-right: 12px;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-}
-
-.drag-handle::after {
-  content: '⠿';
-  font-size: 20px;
-  color: rgba(0, 0, 0, 0.4);
-  transition: color var(--transition-fast);
-}
-
-.accordion-item.is-idle .drag-handle {
-  cursor: move;
-}
-
-.accordion-item.is-idle .drag-handle:hover::after {
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.accordion-item.is-draggable .drag-handle {
-  cursor: move;
 }
 
 /* ===== Collapsible Content ===== */
@@ -103,7 +75,6 @@
   width: auto;
   height: 100%;
   padding: 4px 10px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 14px;

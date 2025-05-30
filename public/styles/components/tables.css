@@ -35,6 +35,7 @@ td {
   text-align: left;
   border: 1px solid #ddd;
   white-space: nowrap;
+  cursor: pointer;
 }
 
 th {

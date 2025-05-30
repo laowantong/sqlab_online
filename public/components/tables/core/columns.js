@@ -1,5 +1,4 @@
 import { escapeHtml } from '../../../utils/genericUtils.js';
-import { addClickToInsert } from '../tables.js';
 
 /**
  * Renders column names for a core table in its draggable outline
@@ -13,7 +12,7 @@ export async function loadAndRenderCoreTableColumns(tableName, columns = []) {
 
     if (columns.length > 0) {
         columnsElement.innerHTML = columns.map(column =>
-            `<button class="column-name-btn">${escapeHtml(column)}</button>`
+            `<button class="column-name-btn insertable">${escapeHtml(column)}</button>`
         ).join('');
         // Adding listeners to buttons
     } else {

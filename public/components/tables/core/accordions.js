@@ -2,7 +2,6 @@ import { fetchMetadata } from '../../../api/fetchMetadata.js';
 import { showError, escapeHtml } from '../../../utils/genericUtils.js';
 import { loadAndRenderCoreTableColumns } from './columns.js';
 import { DEFAULT_PAGE_OFFSET } from '../../../utils/constants.js';
-import { addClickToInsert } from '../tables.js';
 
 /***************************************************************************
  *      Code adapted from: https://github.com/TahaSh/drag-to-reorder       *
@@ -94,16 +93,15 @@ function createAccordionItem(container, tableName, columns = []) {
 
     // We don't know the columns here, so leave them blank for now
     const tableOutline = document.createElement('div');
-    tableOutline.className = 'table-outline';
+    tableOutline.className = 'table-outline js-drag-area';
 
     // Basic structure
     tableOutline.innerHTML = `
         <div class="toggle-icon js-toggle-icon"></div>
         <div class="outline-click-zone">
-            <span class="table-name">${escapeHtml(tableName)}</span>
+            <span class="table-name js-table-name insertable">${escapeHtml(tableName)}</span>
             <div class="columns-buttons" id="columns-${tableName}"></div>
         </div>
-        <div class="drag-handle js-drag-handle"></div>
     `;
 
     // Creates the collapsible content area
@@ -125,9 +123,8 @@ function createAccordionItem(container, tableName, columns = []) {
     // Load column names for this table
     loadAndRenderCoreTableColumns(tableName, columns);
 
-    // Adds click handling (table name, column...)
-    addClickToInsert(tableOutline, { tableName });
-
+    // Add click handling (table name, column names...)
+    window.sqlEditor.addClickToInsert(tableOutline);
 }
 
 /**
@@ -173,11 +170,19 @@ function setupDragAndDrop() {
  ***********************/
 
 function dragStart(e) {
-    if (e.target.classList.contains('js-drag-handle')) {
-        draggableItem = e.target.closest('.js-accordion-item');
+    // Don't start drag if clicking on table name, toggle icon, or column buttons
+    if (e.target.closest('.js-toggle-icon, .js-table-name, .column-name-btn')) {
+        return;
     }
 
-    if (!draggableItem) return;
+    // Check if clicked element is within a draggable area
+    const dragArea = e.target.closest('.js-drag-area');
+    if (!dragArea) {
+        return;
+    }
+
+    // Update the global draggableItem variable
+    draggableItem = dragArea.closest('.js-accordion-item');
 
     e.preventDefault();
     e.stopPropagation();
