@@ -33,10 +33,17 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadAndRenderActivityTitle();
     await loadAndRenderTableOfContents();
 
+
+    // Load the settings
+    const isDarkTheme = initThemeToggle();
+    initSqlFormattingOption(); // before initQueryExecution
+    initHamburgerMenu();
+
+
     // Initialize core components: tabs, query handling, and core tables
     initTabs();
     document.querySelector('.tab[data-tab="schema-tab"]').click();
-    initQueryExecution();
+    initQueryExecution(); // after initSqlFormattingOption
     initNotes();
 
     // Initialize the task strip and simulate a click on the active button
@@ -52,10 +59,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Automatically load core tables on page load
     window.loadAndRenderCoreTableList();
-
-    const isDarkTheme = initThemeToggle();
-    initSqlFormattingOption();
-    initHamburgerMenu();
 
     // Load relational schema with current theme
     await loadAndRenderRelationalSchema(isDarkTheme);

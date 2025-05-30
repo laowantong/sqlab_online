@@ -4,12 +4,10 @@
  */
 export function initSqlFormattingOption() {
     const formatSqlCheckbox = document.getElementById('format-sql-checkbox');
-    const formatSqlSetting = localStorage.getItem('formatSqlInEditor');
+    const formatSqlSetting = localStorage.getItem('formatSqlInEditor') || 'true';
 
     // Apply stored formatting preference (default is true if not set)
-    if (formatSqlSetting !== null) {
-        formatSqlCheckbox.checked = formatSqlSetting === 'true';
-    }
+    localStorage.setItem('formatSqlInEditor', formatSqlSetting);
 
     // Save formatting preference when changed
     formatSqlCheckbox.addEventListener('change', () => {

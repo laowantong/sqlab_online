@@ -20,15 +20,6 @@ export function initQueryExecution() {
     window.sqlEditor.on('change', handleEditorChange);
 
     /**
-    * Checks if SQL formatting in editor is enabled
-    * @returns {boolean} True if formatting should be applied to the editor
-    */
-    function shouldFormatInEditor() {
-        const formatSqlCheckbox = document.getElementById('format-sql-checkbox');
-        return formatSqlCheckbox ? formatSqlCheckbox.checked : true;
-    }
-
-    /**
      * Set the behavior to trigger when the SQL editor content changes.
      * 
      * Depending on whether this content is empty or not, it will:
@@ -78,7 +69,7 @@ export function initQueryExecution() {
             functionCase: 'lower',
             linesBetweenQueries: 2,
         });
-        if (shouldFormatInEditor()) {
+        if (window.localStorage.getItem('formatSqlInEditor') === 'true') {
             window.sqlEditor.setValue(query);
         }
 
