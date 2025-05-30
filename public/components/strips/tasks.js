@@ -32,6 +32,8 @@ export async function createTaskStrip() {
             onClick: () => {
                 if (task.task_number === window.currentTaskNumber) {
                     window.sqlEditor.setValue(prequery);
+                    window.sqlEditor.focus();
+                    window.sqlEditor.setCursor(prequery.length);
                 } else {
                     window.currentTaskNumber = task.task_number;
                 }
