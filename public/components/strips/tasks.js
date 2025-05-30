@@ -8,10 +8,11 @@ import { getAndRenderFeedback } from '../feedback.js';
  * @param {string} activityNumber - The activity number to fetch tasks for
  * @returns {Object} The task strip component
  */
-export async function initTaskStrip() {
+export async function createTaskStrip() {
     const activityNumber = window.currentActivityNumber;
     const activities = await fetchMetadata('activities');
     const activity = activities[activityNumber];
+    const { tocToggle, closeToc } = createTocToggle(activityNumber === 0);
 
     const properties = activity.tasks.map(task => {
 
@@ -33,6 +34,7 @@ export async function initTaskStrip() {
                 }
                 getAndRenderTask(task.access);
                 getAndRenderFeedback(false); // Don't refresh feedback
+                closeToc();
             },
         };
 
@@ -53,5 +55,44 @@ export async function initTaskStrip() {
     });
 
     const taskStripContainer = document.getElementById('task-strip');
-    return createStrip(taskStripContainer, properties);
+    return createStrip(taskStripContainer, properties, tocToggle);
+}
+
+/**
+ * Creates a toggle for the table of contents or a dummy toggle for an adventure.
+ * @param {boolean} hasToc - true to create a TOC toggle, false to create a dummy toggle
+ * @returns {Object} An object containing the TOC toggle and a function to close the TOC
+ */
+
+function createTocToggle(hasToc) {
+    if (!hasToc) {
+        return {
+            tocButton: null,
+            closeToc: () => {},
+        };
+    }
+
+    const tocContainer = document.getElementById('toc-container');
+    const taskStrip = document.getElementById('task-strip');
+    const tocToggle = document.createElement('div');
+    tocToggle.className = 'toggle-icon js-toggle-icon';
+
+    const closeToc = () => {
+        tocContainer.classList.add('hidden');
+        taskStrip.classList.remove('expanded');
+    };
+
+    tocToggle.addEventListener('click', function() {
+        const isHidden = tocContainer.classList.contains('hidden');
+        
+        if (isHidden) {
+            tocContainer.classList.remove('hidden');
+            taskStrip.classList.add('expanded');
+        } else {
+            tocContainer.classList.add('hidden');
+            taskStrip.classList.remove('expanded');
+        }
+    });
+
+    return { tocToggle, closeToc };
 }

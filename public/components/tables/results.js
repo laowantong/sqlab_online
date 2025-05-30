@@ -95,10 +95,10 @@ export function initQueryExecution() {
             const data = await executeQuery(query, offset, DEFAULT_PAGE_LIMIT);
 
             // Create a closure that handles page changes by re-running the same query with new offset
-            const onPageChange = (newOffset) => { runQueryAndRenderResults(query, newOffset) };
+            const changePage = (newOffset) => { runQueryAndRenderResults(query, newOffset) };
 
             // Render the paginated table with results and page change handler
-            renderPaginatedTable(data, resultsContainer, onPageChange);
+            renderPaginatedTable(data, resultsContainer, changePage);
             return data;
             
         } catch (error) {

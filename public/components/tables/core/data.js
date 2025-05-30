@@ -23,13 +23,13 @@ export async function loadAndRenderCoreTableData(tableName, offset = DEFAULT_PAG
     mayRecreateTableContainerIn(container);
 
     // Render the table data with pagination and sorting
-    const onPageChange = (newOffset) => {
+    const changePage = (newOffset) => { 
         loadAndRenderCoreTableData(tableName, newOffset, sortColumn, sortDirection);
     };
-
-    const onSortChange = (newSortColumn, newSortDirection) => {
+    
+    const changeSort = (newSortColumn, newSortDirection) => {
         loadAndRenderCoreTableData(tableName, DEFAULT_PAGE_OFFSET, newSortColumn, newSortDirection);
     };
-
-    renderPaginatedTable(data, container, onPageChange, onSortChange);
+    
+    renderPaginatedTable(data, container, changePage, changeSort);
 }

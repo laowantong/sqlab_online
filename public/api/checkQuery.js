@@ -21,8 +21,9 @@ export async function checkQuery(query, activityNumber, taskNumber, stakePercent
 
     // If the request failed, throw an error with the message from the backend
     if (!response.ok) {
-        const { error } = await response.json();
-        throw new Error(error || window.i18n.t('database.checkError', { status: response.status }));
+        const errorData = await response.json();
+        const errorMessage = errorData.error || errorData.message || window.i18n.t('database.checkError', { status: response.status });
+        throw new Error(errorMessage);
     }
 
     return response.json();

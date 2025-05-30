@@ -1,4 +1,5 @@
 import { loadAndRenderActivityTitle } from './components/activityTitle.js';
+import { loadAndRenderTableOfContents} from './components/toc.js';
 import { loadAndRenderRelationalSchema } from './components/relationalSchema.js';
 import { loadAndRenderCoreTableList } from './components/tables/core/accordions.js';
 import { loadAndRenderCoreTableData } from './components/tables/core/data.js';
@@ -6,7 +7,7 @@ import { loadAndRenderCoreTableData } from './components/tables/core/data.js';
 import { initTabs } from './components/tabs.js';
 import { initQueryExecution } from './components/tables/results.js';
 import { initNotes } from './components/notes.js';
-import { initTaskStrip } from './components/strips/tasks.js';
+import { createTaskStrip } from './components/strips/tasks.js';
 import { initFeedback } from './components/feedback.js';
 
 import { TEMP_STARTING_ACTIVITY } from './utils/constants.js';
@@ -28,6 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initLocalization();
 
     await loadAndRenderActivityTitle();
+    await loadAndRenderTableOfContents();
 
     // Initialize core components: tabs, query handling, and core tables
     initTabs();
@@ -36,7 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initNotes();
 
     // Initialize the task strip and simulate a click on the active button
-    window.taskStrip = await initTaskStrip();
+    window.taskStrip = await createTaskStrip();
     window.taskStrip.getActiveButton().click();
     window.stakeSystem = initStakeSystem(window.currentActivityNumber);
     window.scoreVisualEffects = initScoreVisualEffects();

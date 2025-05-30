@@ -41,50 +41,62 @@ export async function getAndRenderFeedback(refresh = true) {
 
     // Fetch the object resulting of the query check
     const stakePercentage = stakeSystem.getStakePercentage();
-    const message = await checkQuery(query, activityNumber, taskNumber, stakePercentage);
-    const data = JSON.parse(message);
 
-    // Update the score with the new score calculated by the server
-    const scoreKey = `score/${activityNumber}`;
-    localStorage.setItem(scoreKey, data.score)
+    try {
 
-    // The result has necessarily a feedback part. Display it.
-    feedbackTextContainer.innerHTML = data.feedback;
-    feedbackTextContainer.classList.remove('hidden');
-    document.querySelector('.tab[data-tab="feedback-tab"]').click();
+        const data = await checkQuery(query, activityNumber, taskNumber, stakePercentage);
+        //const data = JSON.parse(message);
 
-    stakeSystem.resetCheckElements();
 
-    // The feeback can be a hint.
-    if (feedbackTextContainer.firstChild.classList.contains('hint')) {
+
+        // Update the score with the new score calculated by the server
+        const scoreKey = `score/${activityNumber}`;
+        localStorage.setItem(scoreKey, data.score)
+
+        // The result has necessarily a feedback part. Display it.
+        feedbackTextContainer.innerHTML = data.feedback;
+        feedbackTextContainer.classList.remove('hidden');
+        document.querySelector('.tab[data-tab="feedback-tab"]').click();
+
+        stakeSystem.resetCheckElements();
+
+        // The feeback can be a hint.
+        if (feedbackTextContainer.firstChild.classList.contains('hint')) {
+            stakeSystem.addToScore(data.scoreDelta);
+            return;
+        }
+
+        // Otherwise, the answer was correct, and the feedback gives the official solution.
+        // const taskButton = window.taskStrip.getActiveButton();
+        // const reward = parseInt(taskButton.getAttribute('data-reward'));
         stakeSystem.addToScore(data.scoreDelta);
-        return;
+
+        // Store the correction locally
+        localStorage.setItem(`feedback/${taskId}`, data.feedback);
+
+        // Freeze the current task strip button.
+        // Note that, contrarily to the task number, the strip button index is 0-based.
+        const strip = window.taskStrip;
+        const index = window.currentTaskNumber - 1;
+        strip.addClass(index, 'frozen');
+
+        // We may have solved a non-sequitur exercise.
+        if (activityNumber === 0) {
+            return
+        }
+
+        // Otherwise, we have solved an episode of an adventure.
+
+        // Store locally the next episode (which can be an epilogue).
+        localStorage.setItem(`task/${activityNumber}/${taskNumber + 1}`, data.task);
+
+        // Make it accessible in the task strip.
+        strip.removeClass(index + 1, 'disabled');
+    } catch (error) {
+        showError(error.message, feedbackTextContainer);
+        feedbackTextContainer.classList.remove('hidden');
+        document.querySelector('.tab[data-tab="feedback-tab"]').click();
+        stakeSystem.resetCheckElements();
     }
 
-    // Otherwise, the answer was correct, and the feedback gives the official solution.
-    // const taskButton = window.taskStrip.getActiveButton();
-    // const reward = parseInt(taskButton.getAttribute('data-reward'));
-    stakeSystem.addToScore(data.scoreDelta);
-
-    // Store the correction locally
-    localStorage.setItem(`feedback/${taskId}`, data.feedback);
-
-    // Freeze the current task strip button.
-    // Note that, contrarily to the task number, the strip button index is 0-based.
-    const strip = window.taskStrip;
-    const index = currentTaskNumber - 1;
-    strip.addClass(index, 'frozen');
-
-    // We may have solved a non-sequitur exercise.
-    if (activityNumber === 0) {
-        return
-    }
-
-    // Otherwise, we have solved an episode of an adventure.
-
-    // Store locally the next episode (which can be an epilogue).
-    localStorage.setItem(`task/${activityNumber}/${taskNumber + 1}`, data.task);
-
-    // Make it accessible in the task strip.
-    strip.removeClass(index + 1, 'disabled');
 }

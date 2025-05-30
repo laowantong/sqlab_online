@@ -44,31 +44,6 @@
 }
 
 
-/* ===== Toggle Icon ===== */
-.toggle-icon {
-  width: 24px;
-  height: 24px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  padding: var(--spacing-xs);
-  border-radius: var(--border-radius-sm);
-  transition: all var(--transition-fast);
-  flex-shrink: 0;
-  margin-left: 12px;
-}
-
-.toggle-icon::after {
-  content: '▶';
-  font-size: 12px;
-  transition: transform var(--transition-fast);
-}
-
-.accordion-item.expanded .toggle-icon::after {
-  transform: rotate(90deg);
-}
-
 /* ===== Table Name ===== */
 .table-name {
   font-weight: var(--font-weight-bold);
