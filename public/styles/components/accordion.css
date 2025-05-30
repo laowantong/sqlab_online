@@ -34,19 +34,14 @@
 
 /* ===== Table Outline (Header) ===== */
 .table-outline {
-  background-color: var(--color-light-blue);
-  color: var(--color-primary);
   display: flex;
   align-items: center;
-  padding: var(--spacing-md);
-  font-weight: var(--font-weight-bold);
-  border-bottom: 1px solid #ddd;
-  transition: background-color var(--transition-fast);
-  user-select: none;
   gap: var(--spacing-sm);
   position: relative;
-  padding-right: 60px;
-  /* Space for drag handle */
+  background-color: var(--color-light-blue);
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: var(--spacing-md);
 }
 
 
@@ -54,56 +49,20 @@
 .table-name {
   font-weight: var(--font-weight-bold);
   color: var(--color-primary);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  background-color: rgba(255, 255, 255, 0.4);
-  border-radius: var(--border-radius-md);
-  border: 1px solid rgba(8, 76, 97, 0.2);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: var(--spacing-sm) 0;
   white-space: nowrap;
   flex-shrink: 0;
-}
-
-
-/* ===== Table Columns ===== */
-.table-columns {
-  flex: 1;
-  font-size: var(--font-size-sm);
-  color: var(--color-dark);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding: var(--spacing-xs) var(--spacing-sm);
-  margin-left: var(--spacing-sm);
-  min-width: 0;
-  /* Allow shrinking */
-}
-
-.column-name {
-  font-style: italic;
-}
-
-.no-columns {
-  font-style: italic;
-  color: #888;
-}
-
-.error-columns {
-  color: #D8000C;
-  font-size: 0.85em;
+  font-size: var(--font-size-sm)
 }
 
 /* ===== Drag Handle ===== */
 .drag-handle {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  width: 44px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: background-color var(--transition-fast);
   flex-shrink: 0;
+  margin-right: 12px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .drag-handle::after {
@@ -114,7 +73,7 @@
 }
 
 .accordion-item.is-idle .drag-handle {
-  cursor: grab;
+  cursor: move;
 }
 
 .accordion-item.is-idle .drag-handle:hover::after {
@@ -122,7 +81,7 @@
 }
 
 .accordion-item.is-draggable .drag-handle {
-  cursor: grabbing;
+  cursor: move;
 }
 
 /* ===== Collapsible Content ===== */
@@ -136,6 +95,71 @@
   display: flex;
   flex-direction: column;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* ===== Clickable Area ===== */
+.outline-click-zone {
+  flex: 1 1 0;
+  min-width: 0;
+  width: auto;
+  height: 100%;
+  padding: 4px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-sizing: border-box;
+  background: var(--color-light-blue);
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* ===== Column buttons ===== */
+.columns-buttons {
+  display: flex;
+  max-width: 100%;
+  gap: var(--spacing-xs, 4px);
+  overflow-x: auto;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* IE/Edge */
+}
+
+.columns-buttons::-webkit-scrollbar {
+  display: none;
+  /* Chrome/Safari/Opera */
+}
+
+.column-name-btn {
+  margin-top: 6px;
+  margin-bottom: 6px;
+  border: none;
+  border-radius: 5px;
+  padding: 4px 14px;
+  background: var(--color-light-gray);
+  color: var(--color-primary);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.column-name-btn:hover {
+  transform: translateY(2px);
+}
+
+/* ===== No columns / Errors ===== */
+.no-columns {
+  font-style: italic;
+  color: #888;
+}
+
+.error-columns {
+  color: #D8000C;
+  font-size: 0.85em;
 }
 
 /* ===== Dark Theme Support ===== */
@@ -154,10 +178,6 @@
   color: var(--dark-text);
   background-color: rgba(0, 0, 0, 0.2);
   border-color: var(--dark-light);
-}
-
-.dark-theme .table-columns {
-  color: var(--dark-text);
 }
 
 .dark-theme .no-columns {

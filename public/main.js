@@ -19,6 +19,7 @@ import { initScoreVisualEffects } from './components/score/visualEffects.js';
 window.i18n.init().catch(err => console.error('Failed to initialize localization:', err));
 
 document.addEventListener('DOMContentLoaded', async () => {
+
     // Reset the local storage for testing purposes. TODO: remove this line in production
     localStorage.clear();
 

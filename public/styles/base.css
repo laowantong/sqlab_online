@@ -29,7 +29,6 @@ body {
 /* Toggle Icon */
 
 .toggle-icon {
-  display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
@@ -37,6 +36,10 @@ body {
   border-radius: var(--border-radius-sm);
   transition: all var(--transition-fast);
   flex-shrink: 0;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .toggle-icon::after {

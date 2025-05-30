@@ -4,23 +4,20 @@ import { escapeHtml } from '../../../utils/genericUtils.js';
 import { mayRecreateTableContainerIn, renderPaginatedTable } from '../tables.js';
 
 /**
- * Loads and renders a specific core table with pagination and sorting
+ * Loads and renders the data for a specific core table, including pagination and sorting controls.
+ * Also ensures the columns are updated in the outline header if needed.
+ *
  * @param {string} tableName - The name of the table
- * @param {number} offset - The starting index for pagination
- * @param {string} sortColumn - Column to sort by (optional)
- * @param {string} sortDirection - Sort direction (optional)
+ * @param {number} offset - The starting index for pagination (default: DEFAULT_PAGE_OFFSET)
+ * @param {string|null} sortColumn - Column to sort by (optional)
+ * @param {string} sortDirection - Sort direction ('ASC' or 'DESC', default: 'ASC')
  */
 export async function loadAndRenderCoreTableData(tableName, offset = DEFAULT_PAGE_OFFSET, sortColumn = null, sortDirection = 'ASC') {
     const data = await fetchCoreTableData(tableName, offset, DEFAULT_PAGE_LIMIT, sortColumn, sortDirection);
-    
+
     // Update the column names in the outline when data is loaded
     const columnsElement = document.getElementById(`columns-${tableName}`);
-    if (columnsElement && data.columns && data.columns.length > 0) {
-        columnsElement.innerHTML = data.columns.map(column =>
-            `<span class="column-name">${escapeHtml(column)}</span>`
-        ).join(', ');
-    }
-    
+
     // Recreate the table structure if needed
     const container = document.getElementById(`core-table-${tableName}`);
     mayRecreateTableContainerIn(container);
