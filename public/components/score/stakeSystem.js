@@ -64,7 +64,7 @@ export function initStakeSystem(activityNumber) {
             // For the visual effect, use the local score
             window.scoreVisualEffects.updateScore(score, amount);
             // Update the local score to the new score, calculated server-side
-            score = parseInt(localStorage.getItem(scoreKey));
+            score = localStorage.getItem(scoreKey);
             scoreDisplay.textContent = `${score}`;
             updateCheckElements();
             checkButton.disabled = (score > 0);
