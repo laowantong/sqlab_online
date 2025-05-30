@@ -41,6 +41,7 @@
   background-color: var(--color-light-blue);
   width: 100%;
   box-sizing: border-box;
+  padding-left: var(--spacing-md);
 }
 
 
@@ -48,16 +49,20 @@
 .table-name {
   font-weight: var(--font-weight-bold);
   color: var(--color-primary);
-  padding: var(--spacing-xs) var(--spacing-sm);
+  padding: var(--spacing-sm) 0;
   white-space: nowrap;
   flex-shrink: 0;
-  font-size: 1.1em;
+  font-size: var(--font-size-sm)
 }
 
 /* ===== Drag Handle ===== */
 .drag-handle {
   flex-shrink: 0;
   margin-right: 12px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .drag-handle::after {
@@ -98,7 +103,6 @@
   min-width: 0;
   width: auto;
   height: 100%;
-  margin: 0 12px 0 12px;
   padding: 4px 10px;
   cursor: pointer;
   display: flex;
@@ -106,6 +110,10 @@
   gap: 14px;
   box-sizing: border-box;
   background: var(--color-light-blue);
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 /* ===== Column buttons ===== */
