@@ -138,6 +138,9 @@ export function addClickToInsert(element, options = {}) {
             ) return;
             insertTextInEditor(tableName, outlineZone);
         });
+        // To prevent selection on double-click on the outline area
+        outlineZone.addEventListener('dblclick', function (e) { e.preventDefault(); });
+
     }
 
     //For column buttons
