@@ -61,6 +61,8 @@
 - [x] Ajouter le dark mode pour la table des matières.
 - [ ] Vérifier que tout est responsive.
 - [x] Vérifier que la liste de noms de colonnes est scrollable quand elle est trop longue.
+- [ ] Corriger https://github.com/laowantong/sqlab_online/issues/18.
+- [ ] Empêcher de refaire un check d'une requête déjà vérifiée.
 
 ## Non prioritaire
 
