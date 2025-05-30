@@ -57,8 +57,8 @@
     - Erreurs lors de l'injection de la formule : x
     - ?
 - [ ] Trouver le texte d'attribution.
-- [ ] Enquêter sur la lenteur du drag n drop.
-- [ ] Ajouter le dark mode pour la table des matières.
+- [x] Enquêter sur la lenteur du drag n drop.
+- [x] Ajouter le dark mode pour la table des matières.
 - [ ] Vérifier que tout est responsive.
 - [x] Vérifier que la liste de noms de colonnes est scrollable quand elle est trop longue.
 
