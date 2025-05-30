@@ -37,7 +37,7 @@ export function renderPaginatedTable(data, container, onPageChange, onSortChange
     const headers = generateTableHeaderRow(data.columns);
     const rows = generateTableRowsWithNumbers(data.rows, data.offset);
     tableElement.innerHTML = `<thead>${headers}</thead><tbody>${rows}</tbody>`;
-    addClickToInsert(tableElement);
+    window.sqlEditor.addClickToInsert(tableElement);
 
     if (onSortChange) {
         addSortingEvents(tableElement, onSortChange);
@@ -80,75 +80,6 @@ function generateTableRowsWithNumbers(rows, offset) {
     });
     return rowsHtml.join('');
 }
-
-/**
- * Inserts the given text at the current cursor position in the global SQL editor (window.sqlEditor).
- * Optionally adds a temporary highlight effect to the provided element for user feedback.
- *
- * @param {string} text - The text to insert into the editor.
- * @param {HTMLElement|null} elementToHighlight - (Optional) The element to temporarily highlight after insertion.
- */
-function insertTextInEditor(text, elementToHighlight = null) {
-    if (window.sqlEditor) {
-        const editor = window.sqlEditor;
-        const cursor = editor.getCursor();
-        editor.replaceRange(text, cursor);
-
-        if (elementToHighlight) {
-            elementToHighlight.classList.add('insert-success');
-            setTimeout(() => {
-                elementToHighlight.classList.remove('insert-success');
-            }, 300);
-        }
-    }
-}
-
-/**
- * Adds click and double-click event listeners for insertion into the SQL editor.
- * Uses insertTextInEditor as a helper to do the insertion and highlight.
- *
- * - On single click on a table cell with class 'insertable', inserts its trimmed text content into the SQL editor.
- * - On click on the blue outline zone (excluding column buttons, drag handle, and toggle icon), inserts the table name.
- * - On click on a column button ('.column-name-btn'), inserts the column name.
- * - On double-click of an insertable cell, prevents default text selection.
- *
- * @param {HTMLElement} element - The root element (table or outline) containing the targets for event listeners.
- * @param {object} [options={}] - Options for insertion (may contain tableName).
- * @param {string} [options.tableName=null] - The name of the table to insert when the blue outline is clicked.
- */
-export function addClickToInsert(element, options = {}) {
-
-    const tableName = options.tableName || null;
-
-    // For cells
-    element.querySelectorAll('td.insertable').forEach(cell => {
-        cell.addEventListener('click', function () {
-            insertTextInEditor(this.textContent.trim(), this);
-        });
-        cell.addEventListener('dblclick', function (e) { e.preventDefault(); });
-    });
-
-    // For clickable blue zone (not on column/drag/toggle)
-    const outlineZone = element.querySelector('.outline-click-zone');
-    if (outlineZone && tableName) {
-        outlineZone.addEventListener('click', function (e) {
-            if (e.target.classList.contains('column-name-btn') ||
-                e.target.classList.contains('js-drag-handle') ||
-                e.target.classList.contains('js-toggle-icon')
-            ) return;
-            insertTextInEditor(tableName, outlineZone);
-        });
-    }
-
-    //For column buttons
-    element.querySelectorAll('.column-name-btn').forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            insertTextInEditor(this.textContent.trim(), this);
-        });
-    });
-}
-
 
 /**
  * Attaches click event listeners to sortable table headers.

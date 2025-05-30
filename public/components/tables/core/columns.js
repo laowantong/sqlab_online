@@ -1,5 +1,4 @@
 import { escapeHtml } from '../../../utils/genericUtils.js';
-import { addClickToInsert } from '../tables.js';
 
 /**
  * Renders column names for a core table in its draggable outline

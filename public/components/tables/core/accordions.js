@@ -2,7 +2,6 @@ import { fetchMetadata } from '../../../api/fetchMetadata.js';
 import { showError, escapeHtml } from '../../../utils/genericUtils.js';
 import { loadAndRenderCoreTableColumns } from './columns.js';
 import { DEFAULT_PAGE_OFFSET } from '../../../utils/constants.js';
-import { addClickToInsert } from '../tables.js';
 
 /***************************************************************************
  *      Code adapted from: https://github.com/TahaSh/drag-to-reorder       *
@@ -125,9 +124,8 @@ function createAccordionItem(container, tableName, columns = []) {
     // Load column names for this table
     loadAndRenderCoreTableColumns(tableName, columns);
 
-    // Adds click handling (table name, column...)
-    addClickToInsert(tableOutline, { tableName });
-
+    // Add click handling (table name, column names...)
+    window.sqlEditor.addClickToInsert(tableOutline);
 }
 
 /**
