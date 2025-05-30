@@ -50,6 +50,28 @@
     font-weight: var(--font-weight-normal);
 }
 
+/* == Dark Theme == */
+.dark-theme #toc-container {
+    background: var(--dark-element);
+    color: var(--dark-text);
+}
+
+.dark-theme .section h3 {
+    color: var(--dark-primary);
+}
+
+.dark-theme .section-intro p {
+    color: var(--dark-text);
+}
+
+.dark-theme .task-title {
+    color: var(--dark-secondary);
+}
+
+.dark-theme .task-numbers {
+    color: var(--dark-text);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     #toc-container {

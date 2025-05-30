@@ -44,7 +44,6 @@
   cursor: move;
 }
 
-
 /* ===== Table Name ===== */
 .table-name {
   cursor: pointer;
@@ -53,7 +52,7 @@
   padding: var(--spacing-sm) 0;
   white-space: nowrap;
   flex-shrink: 0;
-  font-size: var(--font-size-sm)
+  font-size: var(--font-size-sm);
 }
 
 /* ===== Collapsible Content ===== */
@@ -98,8 +97,7 @@
 }
 
 .columns-buttons::-webkit-scrollbar {
-  display: none;
-  /* Chrome/Safari/Opera */
+  display: none; /* Chrome/Safari/Opera */
 }
 
 .column-name-btn {
@@ -134,19 +132,25 @@
 /* ===== Dark Theme Support ===== */
 .dark-theme .accordion-item {
   border-color: #444;
-  background-color: var(--dark-bg, #2a2a2a);
+  background-color: var(--dark-element);
 }
 
 .dark-theme .table-outline {
   background-color: var(--dark-primary);
   color: var(--dark-text);
-  border-bottom-color: #444;
+}
+
+.dark-theme .outline-click-zone {
+  background-color: var(--dark-primary);
 }
 
 .dark-theme .table-name {
   color: var(--dark-text);
-  background-color: rgba(0, 0, 0, 0.2);
-  border-color: var(--dark-light);
+}
+
+.dark-theme .column-name-btn {
+  background-color: var(--dark-element);
+  color: var(--dark-text);
 }
 
 .dark-theme .no-columns {
