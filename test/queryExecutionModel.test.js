@@ -58,6 +58,20 @@ describe('executeQuery', () => {
         expect(result.columns).to.have.lengthOf(2);
     });
 
+    it('handles queries with duplicate column names correctly', async () => {
+        const query = 'SELECT * FROM village JOIN inhabitant USING (villageid)';
+        const result = await executeQuery(query);
+        const expected = [ 'villageid', 'village.name', 'chief', 'personid', 'inhabitant.name', 'gender', 'job', 'gold', 'state' ]
+        expect(result.columns).to.deep.equal(expected);
+    });
+
+    it('handles queries with deduplicated column names correctly', async () => {
+        const query = 'SELECT A.personid AS "id 1", B.personid AS "id 2" FROM inhabitant A JOIN inhabitant B ON A.villageid = B.villageid WHERE A.personid < B.personid';
+        const result = await executeQuery(query);
+        const expected = ['id 1', 'id 2'];
+        expect(result.columns).to.deep.equal(expected);
+    });
+
     it('handles queries with unicode characters correctly', async () => {
         const query = "SELECT owner FROM item WHERE item LIKE '咖啡%'";
         const result = await executeQuery(query);
