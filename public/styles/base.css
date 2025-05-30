@@ -29,6 +29,7 @@ body {
 /* Toggle Icon */
 
 .toggle-icon {
+  display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
