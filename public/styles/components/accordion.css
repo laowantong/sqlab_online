@@ -40,12 +40,14 @@
   background-color: var(--color-light-blue);
   width: 100%;
   box-sizing: border-box;
-  padding-left: var(--spacing-md);
+  padding: 0 var(--spacing-md);
+  cursor: move;
 }
 
 
 /* ===== Table Name ===== */
 .table-name {
+  cursor: pointer;
   font-weight: var(--font-weight-bold);
   color: var(--color-primary);
   padding: var(--spacing-sm) 0;
@@ -74,7 +76,6 @@
   width: auto;
   height: 100%;
   padding: 4px 10px;
-  cursor: pointer;
   display: flex;
   align-items: center;
   gap: 14px;
@@ -92,10 +93,8 @@
   max-width: 100%;
   gap: var(--spacing-xs, 4px);
   overflow-x: auto;
-  scrollbar-width: none;
-  /* Firefox */
-  -ms-overflow-style: none;
-  /* IE/Edge */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge */
 }
 
 .columns-buttons::-webkit-scrollbar {
