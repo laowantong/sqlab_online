@@ -42,8 +42,8 @@
   ```
 - [x] Supprimer la dépendance à Font-awesome de la même manière pour les icones des modes sombre et clair.
 - [x] Au moment du clic sur Exécuter, reformater la requête SQL avec https://github.com/sql-formatter-org/sql-formatter. C'est la requête formatée qui sera envoyée au serveur. Par défaut, elle remplace également le contenu de l'éditeur.
-- [ ] Ajouter une option pour ne pas le faire dans le menu Hamburger.
-- [ ] Réparer le coin d'agrandissement de la zone de codeMirrorEditor qui semble ne plus fonctionner : https://pagehelper.lets-script.com/blog/codemirror6-resize/
+- [x] Ajouter une option pour ne pas le faire dans le menu Hamburger.
+- [ ] Réparer le coin d'agrandissement de la zone de codeMirrorEditor qui ne fonctionne plus sous Safari : https://pagehelper.lets-script.com/blog/codemirror6-resize/
 - [x] Transformer l'indication du nombre de lignes d'une table en un bouton (mais garder le même style). Cliquer devrait sauter à l'offset maximum.
 - [x] De la même manière, ajouter avant la bande des tâches un bouton « table des matières » (heroicons `numbered-list`), qui déroule une zone de texte avec le contenu de `toc` pour l'activité (à refaire côté Python).
 - [x] Il faudrait factoriser les deux dernières fonctionnalités, sans doute en passant un élément du DOM et un callback pour le clic.
@@ -61,8 +61,8 @@
 - [x] Ajouter le dark mode pour la table des matières.
 - [ ] Vérifier que tout est responsive.
 - [x] Vérifier que la liste de noms de colonnes est scrollable quand elle est trop longue.
-- [ ] Corriger https://github.com/laowantong/sqlab_online/issues/18.
-- [ ] Empêcher de refaire un check d'une requête déjà vérifiée.
+- [x] Corriger https://github.com/laowantong/sqlab_online/issues/18.
+- [ ] Empêcher de refaire un check d'une requête déjà vérifiée, cf. https://github.com/laowantong/sqlab_online/issues/23.
 
 ## Non prioritaire
 
