@@ -10,15 +10,14 @@ import { runSqlStatement } from '../services/databaseService.js';
 export async function queryCoreTable(tableName, offset, limit, sortColumn, sortDirection) {
 
     // Get total row count
-    const [{ total }] = await runSqlStatement(
-        `SELECT COUNT(*) AS total FROM ${tableName}`
-    );
+    let sql = `SELECT COUNT(*) AS total FROM \`${tableName}\``;
+    const [{ total }] = await runSqlStatement({ sql });
 
     // Fetch the required slice of the rows
-    let query = `SELECT * FROM ${tableName}`;
-    query += ` ORDER BY ${sortColumn ? `\`${sortColumn}\`` : `NULL`} ${sortDirection === 'DESC' ? 'DESC' : 'ASC'}`;
-    query += ` LIMIT ? OFFSET ?`;
-    let rows = await runSqlStatement(query, [limit, offset]);
+    const col = sortColumn ? `\`${sortColumn}\`` : `NULL`;
+    const dir = sortDirection === 'DESC' ? 'DESC' : 'ASC';
+    sql = `SELECT * FROM ${tableName} ORDER BY ${col} ${dir} LIMIT ? OFFSET ?`
+    let rows = await runSqlStatement({ sql, values: [limit, offset] });
 
     // Suppress the column exactly named "hash"
     const columns = rows.length > 0

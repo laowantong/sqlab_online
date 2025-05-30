@@ -14,11 +14,13 @@ export async function databaseConnection(cnxPath) {
   // Retrieve the database configuration from the provided path
   const cnx = await import(cnxPath);
   const pool = mariadb.createPool(cnx.dbConfig);
-  runSqlStatement = async (query, params = []) => {
+
+  runSqlStatement = async (options, callback = null) => {
     let conn;
     try {
       conn = await pool.getConnection();
-      return await conn.query({ sql: query, checkDuplicate: false }, params);
+      // Doc: https://github.com/mysqljs/mysql?tab=readme-ov-file#performing-queries
+      return await conn.query(options, callback);
     } finally {
       if (conn) conn.release();
     }

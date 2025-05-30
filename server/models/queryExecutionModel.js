@@ -2,20 +2,23 @@ import { runSqlStatement } from "../services/databaseService.js";
 
 /**
  * Executes a custom SQL query with optional pagination support
- * @param {string} query - SQL query to execute - Must contain a valid SQL query
+ * @param {string} sql - SQL query to execute - Must contain a valid SQL query
  * @param {number} offset - Starting index for pagination - Must be a non-negative integer
  * @param {number} limit - Number of rows to return - Must be a positive integer
  * @returns {Promise<Object>} Query results with metadata
  */
-export async function executeQuery(query, offset=0, limit=0) {
+export async function executeQuery(sql, offset=0, limit=0) {
 
-    if (!query || query.trim() === "") {
+    if (!sql || sql.trim() === "") {
         throw new Error("Query cannot be empty");
     }
 
     let result;
     try {
-        result = await runSqlStatement(query);
+        result = await runSqlStatement({
+            sql,
+            nestTables: '.' 
+        });
     }
     catch (error) {
         console.log(`SQL error: ${error.message}`);

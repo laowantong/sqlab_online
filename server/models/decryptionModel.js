@@ -6,11 +6,11 @@ import { runSqlStatement } from '../services/databaseService.js';
  * @returns {Promise<string>} The decrypted message
  */
 export async function decryptToken(token) {
-    const rows = await runSqlStatement(
-        `SELECT decrypt(?) AS message`,
-        [token],
-        { skipPagination: true }
-    );
+    const rows = await runSqlStatement({
+        sql: `SELECT decrypt(?) AS message`,
+        values: [token],
+        skipPagination: true,
+    });
 
     return (rows && rows.length > 0) ? rows[0].message : null;
 }
