@@ -85,6 +85,7 @@ h1 {
     font-size: var(--font-size-sm);
     color: var(--color-dark);
     margin-right: var(--spacing-md);
+    text-wrap: nowrap;
 }
 
 .menu-item .theme-icon {
@@ -130,6 +131,47 @@ h1 {
 
 .theme-icon.hidden {
     display: none;
+}
+
+/* ===== Checkbox for SQL formatting ===== */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+}
+
+#format-sql-checkbox {
+    display: none;
+}
+
+
+.checkbox-label {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--color-primary);
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition-fast);
+}
+
+.checkbox-label::after {
+    content: '✓';
+    color: var(--color-white);
+    font-size: 12px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+}
+
+#format-sql-checkbox:checked + .checkbox-label {
+    background-color: var(--color-primary);
+}
+
+#format-sql-checkbox:checked + .checkbox-label::after {
+    opacity: 1;
 }
 
 /*  ====  Score ===== */

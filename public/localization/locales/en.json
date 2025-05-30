@@ -6,11 +6,8 @@
   "header": {
     "toggleTheme": "Toggle theme",
     "language": "Interface",
-    "theme": "Theme"
-  },
-  "context": {
-    "loading": "Loading episode...",
-    "loadError": "Failed to load episode content"
+    "theme": "Theme",
+    "formatSql": "Format my queries"
   },
   "query": {
     "placeholder": "Enter your SQL query here...\nTip: clicking the task number again pre-fills a query with the expected column names.",

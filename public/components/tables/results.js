@@ -69,7 +69,10 @@ export function initQueryExecution() {
             functionCase: 'lower',
             linesBetweenQueries: 2,
         });
-        window.sqlEditor.setValue(query);
+        if (window.localStorage.getItem('formatSqlInEditor') === 'true') {
+            window.sqlEditor.setValue(query);
+        }
+
         const result = await runQueryAndRenderResults(query);
         executionTab.removeEventListener('click', triggerExecutionOfNewQuery);
         setTabIconTo(checkIcon);
@@ -100,7 +103,7 @@ export function initQueryExecution() {
             // Render the paginated table with results and page change handler
             renderPaginatedTable(data, resultsContainer, changePage);
             return data;
-            
+
         } catch (error) {
             showError(error.message, resultsContainer);
             return null;

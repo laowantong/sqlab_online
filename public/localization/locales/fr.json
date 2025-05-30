@@ -6,11 +6,8 @@
   "header": {
     "toggleTheme": "Changer de thème",
     "language": "Interface",
-    "theme": "Thème"
-  },
-  "context": {
-    "loading": "Chargement de l'épisode...",
-    "loadError": "Impossible de charger le contenu de l'épisode"
+    "theme": "Thème",
+    "formatSql": "Formater mes requêtes"
   },
   "query": {
     "placeholder": "Entrez ici votre requête SQL...\nAstuce : cliquer à nouveau sur le numéro de la tâche en cours pré-compose une requête avec le nom des colonnes attendues.",
