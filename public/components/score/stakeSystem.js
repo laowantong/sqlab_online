@@ -39,7 +39,7 @@ export function initStakeSystem(activityNumber) {
      */
     function updateCheckElements() {
         checkButton.disabled = false;
-        if (score === 0) {
+        if (Math.floor(score * MAX_STAKE_PERCENTAGE / 100) === 0) {
             checkButton.textContent = window.i18n.t('execution-tab.checkAnswer');
             stakeContainer.classList.add('hidden');
         } else {
@@ -64,7 +64,7 @@ export function initStakeSystem(activityNumber) {
             // For the visual effect, use the local score
             window.scoreVisualEffects.updateScore(score, amount);
             // Update the local score to the new score, calculated server-side
-            score = localStorage.getItem(scoreKey);
+            score = parseInt(localStorage.getItem(scoreKey));
             scoreDisplay.textContent = `${score}`;
             updateCheckElements();
             checkButton.disabled = (score > 0);
