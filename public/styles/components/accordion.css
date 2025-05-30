@@ -54,35 +54,6 @@
   font-size: var(--font-size-sm)
 }
 
-/* ===== Drag Handle ===== */
-.drag-handle {
-  flex-shrink: 0;
-  margin-right: 12px;
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-}
-
-.drag-handle::after {
-  content: '⠿';
-  font-size: 20px;
-  color: rgba(0, 0, 0, 0.4);
-  transition: color var(--transition-fast);
-}
-
-.accordion-item.is-idle .drag-handle {
-  cursor: move;
-}
-
-.accordion-item.is-idle .drag-handle:hover::after {
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.accordion-item.is-draggable .drag-handle {
-  cursor: move;
-}
-
 /* ===== Collapsible Content ===== */
 .paginated-table {
   display: none;
