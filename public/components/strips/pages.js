@@ -26,7 +26,7 @@ export function createPageStrip(container, offset, limit, total, changePage) {
 
     rowCountButton.addEventListener('click', () => {
         const index = totalPages - 1;
-        changePage(index);
+        changePage(index * limit);
         strip.changeActiveButton(index);
         strip.getActiveButton().scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
     })

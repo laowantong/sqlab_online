@@ -16,7 +16,10 @@ export async function createTaskStrip() {
 
     const properties = activity.tasks.map(task => {
 
-        const prequery = `SELECT\n  ${task.columns.join(',\n  ')}\nFROM\n  `;
+        const columns = task.columns.map(column => {
+            return column.includes(' ') ? `"${column}"` : column;
+        });
+        const prequery = `SELECT\n  ${columns.join(',\n  ')}\nFROM\n  `;
 
         // Initialize the properties of the current task
         const result = {
@@ -29,6 +32,8 @@ export async function createTaskStrip() {
             onClick: () => {
                 if (task.task_number === window.currentTaskNumber) {
                     window.sqlEditor.setValue(prequery);
+                    window.sqlEditor.focus();
+                    window.sqlEditor.setCursor(prequery.length);
                 } else {
                     window.currentTaskNumber = task.task_number;
                 }

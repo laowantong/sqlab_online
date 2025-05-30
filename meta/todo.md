@@ -47,6 +47,20 @@
 - [x] Transformer l'indication du nombre de lignes d'une table en un bouton (mais garder le même style). Cliquer devrait sauter à l'offset maximum.
 - [x] De la même manière, ajouter avant la bande des tâches un bouton « table des matières » (heroicons `numbered-list`), qui déroule une zone de texte avec le contenu de `toc` pour l'activité (à refaire côté Python).
 - [x] Il faudrait factoriser les deux dernières fonctionnalités, sans doute en passant un élément du DOM et un callback pour le clic.
+- [ ] Vérifier que toutes les colonnes attendues sont dans le SELECT de l'utilisateur. Sinon, dans le message affiché, préciser le nom des colonnes manquantes. Utiliser de simples tableaux.
+- [ ] Tester toutes les questions des exercices et signaler les problèmes rencontrés (ouvrir des issues). Si un problème se reproduit dans plusieurs tâches, éditer l'issue.
+- [ ] Prévoir un style de présentation (ou une icone) spécifique pour chaque type de feedback :
+    - Succès : check
+    - Hint spécifique : ampoule (idée)
+    - Hint non spécifique (message défaut) : ?
+    - Avertissement non pénalisant (e.g., colonnes différentes de celles attendues): triangle jaune
+    - Erreurs lors de l'injection de la formule : x
+    - ?
+- [ ] Trouver le texte d'attribution.
+- [ ] Enquêter sur la lenteur du drag n drop.
+- [ ] Ajouter le dark mode pour la table des matières.
+- [ ] Vérifier que tout est responsive.
+- [ ] Vérifier que la liste de noms de colonnes est scrollable quand elle est trop longue.
 
 ## Non prioritaire
 
@@ -55,17 +69,9 @@
 - [ ] Quand la page d'accueil sera faite, le menu hamburger sera remplacé par un bouton home, et ses fonctionnalités seront intégrées dans la page d'accueil ou dans une page de paramètres.
 - [ ] Gestion des utilisateurs
 - [ ] Tester les trucs importants (fonctions du modèle serveur, certaines fonctions du client ?  )
-- [x] Le modèle teste d'abord si les colonnes de la requête sont celles attendues. Quand ce n'est pas le cas, le client ne devrait pas décrémenter le score, mais juste rappeler la liste des colonnes attendues.
 - [ ] Quand on clique sur le score, un carousel de statistiques s'ouvre au-dessous de la barre de titre. Il peut y avoir dedans :
   - Un graphe de l'évolution du score du joueur, sous la forme d'une courbe avec des points apparents. Abscisse : numéro d'exécution (1, 2, ...). Ordonnée : score (échelle semi-logarithmique ?). Au survol d'un point, une info-bulle avec le timestamp et le numéro de la question.
   - Un graphe avec les questions traitées par le joueur, sous la forme d'un nuage de points. Abcisse  numéro d'exécution _successful_ (1, 2, ...). Ordonnée : numéro de la question. Au survol d'un point, une info-bulle avec le timestamp.
   - Une version globale du premier graphe, avec la possibilité de mettre en évidence tel ou tel joueur.
   - Une version globale du second graphe, avec la possibilité de mettre en évidence tel ou tel joueur.
 - [ ] N'employer qu'un jeu limité de couleurs, avec des variations de luminosité ou d'opacité. Passer à SCSS. [Conversation avec ChatGPT](https://chatgpt.com/share/6837375e-6c4c-800e-a710-9d53620ae2c6).
-- [ ] Prévoir un style de présentation (ou une icone) spécifique pour chaque type de feedback :
-    - Succès.
-    - Hint spécifique.
-    - Hint non spécifique (message défaut).
-    - Avertissement non pénalisant (e.g., colonnes différentes de celles attendues).
-    - Erreurs lors de l'injection de la formule.
-    - ?
