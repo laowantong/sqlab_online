@@ -6,7 +6,8 @@
   "header": {
     "toggleTheme": "Changer de thème",
     "language": "Interface",
-    "theme": "Thème"
+    "theme": "Thème",
+    "formatSql": "Formatter automatiquement"
   },
   "context": {
     "loading": "Chargement de l'épisode...",

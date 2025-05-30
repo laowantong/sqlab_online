@@ -6,7 +6,8 @@
   "header": {
     "toggleTheme": "Toggle theme",
     "language": "Interface",
-    "theme": "Theme"
+    "theme": "Theme",
+    "formatSql": "Auto-format SQL"
   },
   "context": {
     "loading": "Loading episode...",
