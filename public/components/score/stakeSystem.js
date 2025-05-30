@@ -39,7 +39,7 @@ export function initStakeSystem(activityNumber) {
      */
     function updateCheckElements() {
         checkButton.disabled = false;
-        if (score === 0) {
+        if (Math.floor(score * MAX_STAKE_PERCENTAGE / 100) === 0) {
             checkButton.textContent = window.i18n.t('execution-tab.checkAnswer');
             stakeContainer.classList.add('hidden');
         } else {
