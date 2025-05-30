@@ -30,6 +30,7 @@ body {
 
 .toggle-icon {
   display: flex;
+  margin-top: var(--spacing-xs); /* Fix the vertical position */
   justify-content: center;
   align-items: center;
   cursor: pointer;
