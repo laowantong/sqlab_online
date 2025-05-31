@@ -27,7 +27,6 @@ export async function getAndRenderFeedback(refresh = true) {
     // If the refresh flag is not set, return.
     if (!refresh) {
         feedbackTextContainer.classList.add('hidden');
-        document.querySelector('.tab[data-tab="core-tables-tab"]').click();
         return
     }
 
