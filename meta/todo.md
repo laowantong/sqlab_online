@@ -66,17 +66,17 @@
 - [ ] Si on exécute une requête, qu'on change de tâche (p. ex. pour se placer sur le bon exercice), le bouton de vérification devrait apparaître, car il dépend de la requête ET de la tâche.
 - Requêtes correctes en échec :
   - [x] Exercice 19. La solution avec LEFT JOIN produit une TooManyTablesError. Celle avec NOT IN passe sans problème.
-  - [ ] Exercice 21 (amplitude prime) : erreur inédite.
+  - [x] Exercice 21 (amplitude prime) : erreur inédite.
   - [ ] Exercice 27 (animateurs par emploi) : Échec de l'évaluation de l'ajustement.
-  - [ ] Exercice 28 (animateurs Nice) : Échec de l'exécution de la seconde passe.
-  - [ ] Exercice 29 (trois entreprises) : Échec de l'exécution de la seconde passe.
-  - [ ] Exercice 30 (animateurs parisiens) : Échec de l'évaluation de l'ajustement.
+  - [x] Exercice 28 (animateurs Nice) : Échec de l'exécution de la seconde passe.
+  - [ ] Exercice 29 (trois entreprises) : Échec de l'exécution de la seconde passe. tweakEvaluationError: Cannot convert a BigInt value to a number.
+  - [ ] Exercice 30 (animateurs parisiens) : Échec de l'évaluation de l'ajustement. tweakEvaluationError: Cannot convert a BigInt value to a number
   - [x] Exercice 32 (sans concurrentes) : La solution avec LEFT JOIN produit une TooManyTablesError. Celle avec NOT EXISTS passe sans problème.
   - [ ] Exercice 34 (nombre clients) : Échec de l'évaluation de l'ajustement.
   - [x] Exercice 35 (sans prérequis) : La solution avec LEFT JOIN produit une TooManyTablesError.
   - [ ] Exercice 39 (sessions par thème) : Échec de l'évaluation de l'ajustement. NB. Il y a un LEFT JOIN.
   - [ ] Exercice 41 (avec CTE) : Fonctionne, mais seulement avec la colonne `hash`, que l'étudiant n'est pas censé utiliser.
-- [ ] Mettre en forme le nombre de squalions en séparant les milliers par des espaces insécables.
+- [ ] Mettre en forme le nombre de squalions en séparant les milliers par des espaces insécables. `const number = 1234567; console.log(number.toLocaleString("fr"));`.
 - [ ] Dans les logs: Feedback for token 59905828582739 does not start with a hint or correction. Ce token est inconnu.
 - [ ] Mettre un message par défaut dans le conteneur de feedback au lieu de jouer sur la classe `hidden`.
 
