@@ -80,16 +80,15 @@ export function getTablesOfFromClause(ast) {
 * @throws {Error} - Throws an error if the number of "hash" occurrences does not match the number of tables
 */
 export function calculateFirstPassFormula(ast, formula) {
-  const tablesOfFromClauses = getTablesOfFromClause(ast);
-  const hashMatches = formula.match(/(\w\.)?\bhash\b/g);
-  if (hashMatches.length < tablesOfFromClauses.length) {
-      throw new Error("tooManyTablesError");
-  } 
-  else if (hashMatches.length > tablesOfFromClauses.length) {
-      throw new Error("tooFewTablesError");
-  }
-  return hashMatches.reduce((result, match, i) => 
-      result.replace(match, tablesOfFromClauses[i] + '.hash'), formula);
+    const tablesOfFromClauses = getTablesOfFromClause(ast);
+    const hashMatches = formula.match(/(\w\.)?\bhash\b/g);
+    if (hashMatches.length > tablesOfFromClauses.length) {
+        console.error("Formula:", formula);
+        console.error("Tables of FROM clauses:", tablesOfFromClauses);
+        throw new Error("tooFewTablesError");
+    }
+    return hashMatches.reduce((result, match, i) => 
+        result.replace(match, tablesOfFromClauses[i] + '.hash'), formula);
 }
 
 /**
