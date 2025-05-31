@@ -2,6 +2,7 @@ import { fetchMetadata } from '../../api/fetchMetadata.js';
 import { createStrip } from './strips.js';
 import { getAndRenderTask } from '../task.js';
 import { getAndRenderFeedback } from '../feedback.js';
+import { localizedAmount } from '../../../utils/genericUtils.js';
 
 /**
  * Creates a task navigation strip
@@ -27,7 +28,7 @@ export async function createTaskStrip() {
         // Initialize the properties of the current task
         const result = {
             label: task.task_number,
-            title: `${task.task_title}\n${task.reward} squalions`,
+            title: `${task.task_title}\n${localizedAmount(task.reward)}`,
             classes: task.classes || [],
             data: {
                 reward: task.reward

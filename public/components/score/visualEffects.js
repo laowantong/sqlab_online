@@ -1,3 +1,5 @@
+import { localizedAmount } from "../../../utils/genericUtils.js";
+
 /**
  * Visual effects system for score changes
  * Provides fullscreen animations for wins and losses
@@ -43,7 +45,7 @@ export function initScoreVisualEffects() {
         
         const amountText = document.createElement('div');
         amountText.className = 'score-effect-amount';
-        amountText.textContent = `${amount} squalions`;
+        amountText.textContent = `${amount > 0 ? '+' : ''}${localizedAmount(amount)}`;
         content.appendChild(amountText);
         
         const type = amount > 0 ? 'win' : 'loss';
@@ -76,18 +78,18 @@ export function initScoreVisualEffects() {
         /**
          * Shows a fullscreen visual effect for score changes
          * @param {number} score - The current score
-         * @param {number} amount - The amount won (positive) or lost (negative)
+         * @param {number} delta - The amount won (positive) or lost (negative)
          */
-        updateScore: (score, amount) => {
-            const effect = createEffectOverlay(amount);
+        updateScore: (score, delta) => {
+            const effect = createEffectOverlay(delta);
             body.appendChild(effect);
-            if (amount > FALLING_COIN_THRESHOLD * score) {
+            if (delta > FALLING_COIN_THRESHOLD * score) {
                 // Show falling coins for big wins
                 const falling_coin_count = Math.max(
                     MIN_FALLING_COIN_COUNT,
                     Math.min(
                         MAX_FALLING_COIN_COUNT,
-                        Math.floor(Math.abs(amount) * FALLING_COIN_RATIO)
+                        Math.floor(Math.abs(delta) * FALLING_COIN_RATIO)
                     )
                 );
                 for (let i = 0; i < falling_coin_count; i++) {

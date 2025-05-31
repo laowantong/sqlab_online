@@ -175,7 +175,7 @@ h1 {
 }
 
 /*  ====  Score ===== */
-.score-display {
+.score-container {
     position: absolute;
     right: var(--spacing-md);
     top: 50%;

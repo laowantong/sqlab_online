@@ -1,3 +1,6 @@
+import { fetchUserData } from "../api/fetchUserData.js";
+import { localizedInteger } from "../utils/genericUtils.js";
+
 /**
  * Initializes localization and create the listener for language changes.
  * @returns {Promise<void>} - A promise that resolves when localization is initialized.
@@ -17,7 +20,7 @@ export async function initLocalization() {
         await i18n.setLocale(e.target.value);
     });
 
-    function applyTranslations() {
+    async function applyTranslations() {
         document.querySelectorAll('[data-i18n]').forEach(element => {
             const key = element.getAttribute('data-i18n');
             if (!key) return;
@@ -26,10 +29,13 @@ export async function initLocalization() {
             element[target] = i18n.t(key);
         });
         window.sqlEditor.setOption('placeholder', window.i18n.t('query.placeholder'));
+        const score = await fetchUserData('score');
+        const scoreDisplay = document.getElementById('score-display');
+        scoreDisplay.textContent = localizedInteger(score);
       }
     
     // Apply translations on initial load
-    applyTranslations();
+    await applyTranslations();
 
     // Listen for locale changes and reapply translations
     window.addEventListener('localeChanged', applyTranslations);

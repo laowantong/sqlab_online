@@ -35,7 +35,8 @@
     "title": "Run",
     "noResults": "No results",
     "runPrompt": "Run a query to see the results",
-    "checkAnswer": "Check the answer"
+    "checkAnswer": "Check the answer",
+    "checkAnswerWithStake": "Stake {stakeAmount}"
   },
   "table": {
     "pagination": {
@@ -48,6 +49,10 @@
     "fetchError": "Failed to fetch database information: {status}",
     "notConnected": "Not connected",
     "unknown": "Unknown"
+  },
+  "squalions": {
+    "one": "{amount} squalion",
+    "other": "{amount} squalions"
   },
   "error": {
     "tableData": "Failed to load table data",

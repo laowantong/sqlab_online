@@ -14,6 +14,9 @@ router.get('/table-data/:tableName', validatePagination, handleQueryCoreTable);
 import { handleQueryMetadata } from '../controllers/metadataController.js';
 router.get('/metadata/:name', handleQueryMetadata);
 
+import { handleQueryUserData } from '../controllers/userDataController.js';
+router.get('/user-data/:name', handleQueryUserData);
+
 import { handleDecryptToken } from '../controllers/decryptionController.js';
 router.get('/decrypt/:token', handleDecryptToken);
 

@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Initialize the task strip and simulate a click on the active button
     window.taskStrip = await createTaskStrip();
     window.taskStrip.getActiveButton().click();
-    window.stakeSystem = initStakeSystem(window.currentActivityNumber);
+    window.stakeSystem = await initStakeSystem();
     window.scoreVisualEffects = initScoreVisualEffects();
 
     initFeedback();

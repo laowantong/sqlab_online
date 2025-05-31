@@ -26,3 +26,13 @@ export function showError(message, containerElement) {
         containerElement.innerHTML = `<div class="error">${escapeHtml(message)}</div>`;
     }
 }
+
+export function localizedInteger(value) {
+    return value.toLocaleString(window.i18n.getCurrentLocale());
+}
+
+export function localizedAmount(amount) {
+    const key = amount === 1 ? 'squalions.one' : 'squalions.other';
+    amount = localizedInteger(amount);
+    return window.i18n.t(key, { amount });
+}

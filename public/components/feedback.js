@@ -45,10 +45,6 @@ export async function getAndRenderFeedback(refresh = true) {
 
         const data = await checkQuery(query, activityNumber, taskNumber, stakePercentage);
 
-        // Update the score with the new score calculated by the server
-        const scoreKey = `score/${activityNumber}`;
-        localStorage.setItem(scoreKey, data.score)
-
         // The result has necessarily a feedback part. Display it.
         feedbackTextContainer.innerHTML = data.feedback;
         feedbackTextContainer.classList.remove('hidden');
@@ -58,12 +54,12 @@ export async function getAndRenderFeedback(refresh = true) {
 
         // The feeback can be a hint.
         if (feedbackTextContainer.firstChild.classList.contains('hint')) {
-            stakeSystem.addToScore(data.scoreDelta);
+            stakeSystem.addToScore(data.score, data.scoreDelta);
             return;
         }
 
         // Otherwise, the answer was correct, and the feedback gives the official solution.
-        stakeSystem.addToScore(data.scoreDelta);
+        stakeSystem.addToScore(data.score, data.scoreDelta);
 
         // Store the correction locally
         localStorage.setItem(`feedback/${taskId}`, data.feedback);

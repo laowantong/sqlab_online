@@ -35,7 +35,8 @@
     "title": "Exécuter",
     "noResults": "Aucun résultat",
     "runPrompt": "Exécutez une requête pour voir les résultats",
-    "checkAnswer": "Vérifier la réponse"
+    "checkAnswer": "Vérifier la réponse",
+    "checkAnswerWithStake": "Miser {stakeAmount}"
   },
   "table": {
     "pagination": {
@@ -48,6 +49,10 @@
     "fetchError": "Impossible de récupérer les informations de la base de données : {status}",
     "notConnected": "Non connecté",
     "unknown": "Inconnu"
+  },
+  "squalions": {
+    "one": "{amount} squalion",
+    "other": "{amount} squalions"
   },
   "error": {
     "tableData": "Impossible de charger les données de la table",

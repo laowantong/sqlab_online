@@ -1,5 +1,5 @@
 /* feedback.css — styles for hints and corrections */
-
+unknown-token,
 .hint,
 .correction {
   background-color: var(--color-white);
@@ -13,8 +13,10 @@
   color: var(--color-dark);
 }
 
+.unknown-token .label,
 .hint .label,
 .correction .label,
+.unknown-token .number,
 .hint .number,
 .correction .number {
   color: var(--color-secondary);
@@ -25,11 +27,13 @@
   display: inline-block;
 }
 
+.unknown-token .preamble,
 .hint .preamble,
 .correction .preamble {
   margin-bottom: var(--spacing-sm);
 }
 
+.hint unknown-token p ,
 .hint .text p {
   margin: 0 0 var(--spacing-sm) 0;
 }
@@ -78,6 +82,8 @@
 }
 
 /* Dark mode */
+
+.dark-theme .unknown-token,
 .dark-theme .hint,
 .dark-theme .correction {
   background-color: var(--dark-element);
@@ -85,6 +91,7 @@
   border-left-color: var(--dark-secondary);
 }
 
+.dark-theme .unknown-token .label,
 .dark-theme .hint .label,
 .dark-theme .correction .label {
   color: var(--dark-secondary);
@@ -107,12 +114,14 @@
 
 /* Responsive tweaks */
 @media (max-width: 600px) {
+  unknown-token,
   .hint,
   .correction {
     font-size: var(--font-size-sm);
     padding: var(--spacing-sm);
   }
 
+  .unknown-token .number,
   .hint .number,
   .correction .number {
     font-size: var(--font-size-md);
