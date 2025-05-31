@@ -15,9 +15,6 @@ import { mayRecreateTableContainerIn, renderPaginatedTable } from '../tables.js'
 export async function loadAndRenderCoreTableData(tableName, offset = DEFAULT_PAGE_OFFSET, sortColumn = null, sortDirection = 'ASC') {
     const data = await fetchCoreTableData(tableName, offset, DEFAULT_PAGE_LIMIT, sortColumn, sortDirection);
 
-    // Update the column names in the outline when data is loaded
-    const columnsElement = document.getElementById(`columns-${tableName}`);
-
     // Recreate the table structure if needed
     const container = document.getElementById(`core-table-${tableName}`);
     mayRecreateTableContainerIn(container);

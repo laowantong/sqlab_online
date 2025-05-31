@@ -76,6 +76,8 @@
   - [ ] Exercice 35 (sans prérequis) : La solution avec LEFT JOIN produit une TooManyTablesError.
   - [ ] Exercice 39 (sessions par thème) : Échec de l'évaluation de l'ajustement. NB. Il y a un LEFT JOIN.
   - [ ] Exercice 41 (avec CTE) : Fonctionne, mais seulement avec la colonne `hash`, que l'étudiant n'est pas censé utiliser.
+- [ ] Mettre en forme le nombre de squalions en séparant les milliers par des espaces insécables.
+- [ ] Dans les logs: Feedback for token 59905828582739 does not start with a hint or correction. Ce token est inconnu.
 
 ## Non prioritaire
 

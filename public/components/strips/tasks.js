@@ -16,9 +16,12 @@ export async function createTaskStrip() {
 
     const properties = activity.tasks.map(task => {
 
+        // Ensure the columns including spaces are properly quoted
         const columns = task.columns.map(column => {
             return column.includes(' ') ? `"${column}"` : column;
         });
+
+        // Prepare the SQL query to be displayed in the SQL editor
         const prequery = `SELECT\n  ${columns.join(',\n  ')}\nFROM\n  `;
 
         // Initialize the properties of the current task

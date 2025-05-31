@@ -44,9 +44,6 @@ export async function getAndRenderFeedback(refresh = true) {
     try {
 
         const data = await checkQuery(query, activityNumber, taskNumber, stakePercentage);
-        //const data = JSON.parse(message);
-
-
 
         // Update the score with the new score calculated by the server
         const scoreKey = `score/${activityNumber}`;
@@ -66,8 +63,6 @@ export async function getAndRenderFeedback(refresh = true) {
         }
 
         // Otherwise, the answer was correct, and the feedback gives the official solution.
-        // const taskButton = window.taskStrip.getActiveButton();
-        // const reward = parseInt(taskButton.getAttribute('data-reward'));
         stakeSystem.addToScore(data.scoreDelta);
 
         // Store the correction locally
