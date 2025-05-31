@@ -48,7 +48,7 @@
 - [x] De la même manière, ajouter avant la bande des tâches un bouton « table des matières » (heroicons `numbered-list`), qui déroule une zone de texte avec le contenu de `toc` pour l'activité (à refaire côté Python).
 - [x] Il faudrait factoriser les deux dernières fonctionnalités, sans doute en passant un élément du DOM et un callback pour le clic.
 - [ ] Vérifier que toutes les colonnes attendues sont dans le SELECT de l'utilisateur. Sinon, dans le message affiché, préciser le nom des colonnes manquantes. Utiliser de simples tableaux.
-- [ ] Tester toutes les questions des exercices et signaler les problèmes rencontrés (ouvrir des issues). Si un problème se reproduit dans plusieurs tâches, éditer l'issue.
+- [x] Tester toutes les questions des exercices et signaler les problèmes rencontrés (ouvrir des issues). Si un problème se reproduit dans plusieurs tâches, éditer l'issue.
 - [ ] Prévoir un style de présentation (ou une icone) spécifique pour chaque type de feedback :
     - Succès : check
     - Hint spécifique : ampoule (idée)
@@ -63,6 +63,19 @@
 - [x] Vérifier que la liste de noms de colonnes est scrollable quand elle est trop longue.
 - [x] Corriger https://github.com/laowantong/sqlab_online/issues/18.
 - [ ] Empêcher de refaire un check d'une requête déjà vérifiée, cf. https://github.com/laowantong/sqlab_online/issues/23.
+- [ ] Si on exécute une requête, qu'on change de tâche (p. ex. pour se placer sur le bon exercice), le bouton de vérification devrait apparaître, car il dépend de la requête ET de la tâche.
+- Requêtes correctes en échec :
+  - [ ] Exercice 19. La solution avec LEFT JOIN produit une TooManyTablesError. Celle avec NOT IN passe sans problème.
+  - [ ] Exercice 21 (amplitude prime) : erreur inédite.
+  - [ ] Exercice 27 (animateurs par emploi) : Échec de l'évaluation de l'ajustement.
+  - [ ] Exercice 28 (animateurs Nice) : Échec de l'exécution de la seconde passe.
+  - [ ] Exercice 29 (trois entreprises) : Échec de l'exécution de la seconde passe.
+  - [ ] Exercice 30 (animateurs parisiens) : Échec de l'évaluation de l'ajustement.
+  - [ ] Exercice 32 (sans concurrentes) : La solution avec LEFT JOIN produit une TooManyTablesError. Celle avec NOT EXISTS passe sans problème.
+  - [ ] Exercice 34 (nombre clients) : Échec de l'évaluation de l'ajustement.
+  - [ ] Exercice 35 (sans prérequis) : La solution avec LEFT JOIN produit une TooManyTablesError.
+  - [ ] Exercice 39 (sessions par thème) : Échec de l'évaluation de l'ajustement. NB. Il y a un LEFT JOIN.
+  - [ ] Exercice 41 (avec CTE) : Fonctionne, mais seulement avec la colonne `hash`, que l'étudiant n'est pas censé utiliser.
 
 ## Non prioritaire
 
