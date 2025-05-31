@@ -5,7 +5,7 @@
 - [x] Rendre hidden le bouton feedBack lorsque la zone de codeMirrorEditor est dirty
 - [x] Refonte Drag to reorder (+ Icone de zone préhension (à droite) et pour dérouler le bandeau (à gauche) l'icone de zone de préhension doit être fixe et ne pas pouvoir être repoussé par le nom des colonnes)
 
-- [ ] Implémenter click to insert pour les données dans le bandeau.
+- [x] Implémenter click to insert pour les données dans le bandeau.
   Pour la mise en forme du nom de la table et des colonnes, je verrais quelque chose comme ça (ne pas tenir compte des couleurs) :
 
     <img width="758" alt="image" src="https://github.com/user-attachments/assets/119c2e40-e8eb-4f7f-a50f-98663965b790" />
@@ -19,8 +19,8 @@
     - Bouton mise score -> Un slider pour miser un pourcentage de son score 10 à 50% de son score. 
     - Dans local storage : `score/${activityNumber}`.
     - Adapter le modèle de slider donné dans `public/assets`.
-- [ ] Localiser les messages du système de score.
-- [ ] Au passage, gérer correctement le pluriel (le système de localisation devrait permettre de le faire, regarder).
+- [x] Localiser les messages du système de score.
+- [x] Au passage, gérer correctement le pluriel (le système de localisation devrait permettre de le faire, regarder).
 - [x] Côté modèle, traitement des requêtes de l'utilisateur. Transmettre au client un objet comportant systématiquement un champ `success` (booléen). En cas d'erreur, remplir un champ `message` destiné à être affiché dans la zone de feedback du client, ainsi que `score` et `scoreDelta`. Jusqu'ici, des exceptions sont levées dans les cas problématiques. Il faut que `queryCheckModel.js` les rattrape pour renvoyer l'objet approprié. Pour la structuration du code, je tenterais un [`try/catch`](https://stackoverflow.com/questions/33781818/multiple-catch-in-javascript) avec un seul `return` à la fin de la fonction. Veiller à minimiser les répétitions.
 - [x] Côté modèle, ajouter une garde sur la requête de l'utilisateur : si l'**ensemble** des noms de colonnes n'est pas celui attendu, ne pas décrémenter le score, mais juste rappeler la liste des colonnes attendues.
 - [x] Faire apparaître systématiquement une icone dans l'onglet :
@@ -50,13 +50,13 @@
 - [ ] Vérifier que toutes les colonnes attendues sont dans le SELECT de l'utilisateur. Sinon, dans le message affiché, préciser le nom des colonnes manquantes. Utiliser de simples tableaux.
 - [x] Tester toutes les questions des exercices et signaler les problèmes rencontrés (ouvrir des issues). Si un problème se reproduit dans plusieurs tâches, éditer l'issue.
 - [ ] Prévoir un style de présentation (ou une icone) spécifique pour chaque type de feedback :
-    - Succès : check
-    - Hint spécifique : ampoule (idée)
-    - Hint non spécifique (message défaut) : ?
+    - Succès (.correction) : check
+    - Hint spécifique (.hint) : ampoule (idée)
+    - Hint non spécifique (.unknown-token) : ?
     - Avertissement non pénalisant (e.g., colonnes différentes de celles attendues): triangle jaune
     - Erreurs lors de l'injection de la formule : x
     - ?
-- [ ] Trouver le texte d'attribution.
+- [ ] Trouver le texte d'attribution des icones du point précédent.
 - [x] Enquêter sur la lenteur du drag n drop.
 - [x] Ajouter le dark mode pour la table des matières.
 - [ ] Vérifier que tout est responsive.
@@ -76,8 +76,7 @@
   - [x] Exercice 35 (sans prérequis) : La solution avec LEFT JOIN produit une TooManyTablesError.
   - [ ] Exercice 39 (sessions par thème) : Échec de l'évaluation de l'ajustement. NB. Il y a un LEFT JOIN.
   - [ ] Exercice 41 (avec CTE) : Fonctionne, mais seulement avec la colonne `hash`, que l'étudiant n'est pas censé utiliser.
-- [ ] Mettre en forme le nombre de squalions en séparant les milliers par des espaces insécables. `const number = 1234567; console.log(number.toLocaleString("fr"));`.
-- [ ] Dans les logs: Feedback for token 59905828582739 does not start with a hint or correction. Ce token est inconnu.
+- [x] Mettre en forme le nombre de squalions en séparant les milliers par des espaces insécables. `const number = 1234567; console.log(number.toLocaleString("fr"));`.
 - [ ] Mettre un message par défaut dans le conteneur de feedback au lieu de jouer sur la classe `hidden`.
 
 ## Non prioritaire
