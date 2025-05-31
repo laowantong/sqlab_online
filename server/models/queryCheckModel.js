@@ -1,8 +1,14 @@
 import { runSqlStatement } from "../services/databaseService.js";
 import { queryMetadata } from './metadataModel.js';
-import { injectPlaceholderColumn, calculateFirstPassFormula, calculateSecondPassFormula } from "../utils/sqlAst.js";
+import {
+    injectPlaceholderColumn,
+    calculateFirstPassFormula,
+    calculateSecondPassFormula,
+    parseSqlToAst,
+    isSafeForEvaluation,
+    asciiMapper,
+} from "../utils/sqlAst.js";
 import { decryptToken } from "./decryptionModel.js";
-import { parseSqlToAst, isSafeForEvaluation, asciiMapper } from "../utils/sqlAst.js";
 import { globalState } from '../server.js';
 import { MIN_STAKE_PERCENTAGE, MAX_STAKE_PERCENTAGE } from "../../public/utils/constants.js";
 
@@ -37,7 +43,7 @@ export async function checkQuery(query, activityNumber, taskNumber, stakePercent
         const expectedSet = new Set(task.columns);
         const userSet = new Set(userCols);
         const columnsMatch = expectedSet.size === userSet.size && [...expectedSet].every(col => userSet.has(col));
-        
+
         if (!columnsMatch) {
             console.log(`User columns: ${userCols}, Expected columns: ${task.columns}`);
             resultData.message = "wrongColumnsError";
@@ -61,6 +67,9 @@ export async function checkQuery(query, activityNumber, taskNumber, stakePercent
                 const func = new Function('result', 'query', `return (${tweakExpression});`);
                 tweakValue = func(result, query);
             } catch (error) {
+                console.error(`tweakEvaluationError: ${error.message}`);
+                console.error(`query: ${query}`);
+                console.error(`tweakExpression: ${tweakExpression}\n`);
                 throw new Error("tweakEvaluationError");
             }
 
@@ -79,6 +88,7 @@ export async function checkQuery(query, activityNumber, taskNumber, stakePercent
             resultData.scoreDelta = task.reward + stakeAmount;
         } else {
             console.warn(`Feedback for token ${token} does not start with a hint or correction.`);
+            console.warn(`Query: ${query}\n`);
             resultData.scoreDelta = 0;
         };
         globalState.score += resultData.scoreDelta;
@@ -101,6 +111,8 @@ async function executeQueryWithFormula(passNumber, formula, queryTemplate) {
         if (result.length === 0) throw new Error("emptyResultError");
         return result;
     } catch (error) {
+        console.error(`Error executing ${passNumber} pass query:`, error);
+        console.error(`Query: ${query}\n`);
         throw new Error(`${passNumber}PassExecutionError`);
     }
 };
