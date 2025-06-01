@@ -8,21 +8,13 @@
   position: relative;
   margin-bottom: var(--spacing-md);
   overflow-x: auto;
-  /* Enable horizontal scrolling */
   overflow-y: hidden;
-  /* Hide vertical overflow */
   white-space: nowrap;
-  /* Prevent text wrapping within tabs */
   -webkit-overflow-scrolling: touch;
-  /* Smooth scrolling on iOS */
   scrollbar-width: none;
-  /* Firefox */
-  flex-wrap: nowrap;
-  /* Prevent tabs from wrapping to next line */
+  flex-wrap: nowrap; /* Prevent tabs from wrapping to next line */
   -ms-overflow-style: none;
-  /* IE/Edge */
   scrollbar-width: none;
-  /* Firefox */
 }
 
 /* Hide scrollbar for Chrome/Safari/Opera */
@@ -55,7 +47,7 @@
   font-weight: 600;
   z-index: 2;
   /* Above the tabs::after border */
-  background-color: transparent;
+  background-color: var(--color-light-gray);
 }
 
 .tab-content {
@@ -82,20 +74,12 @@
 .tab.active::after {
   content: "";
   position: absolute;
-  bottom: 0px;
+  bottom: -1px; /* Extend slightly below to ensure overlap */
   left: 0;
   width: 100%;
-  height: 2px;
+  height: 3px;  /* Slightly taller to ensure overlap */
   background-color: var(--color-light-gray);
   z-index: 2;
-}
-
-.tab-content {
-  display: none;
-}
-
-.tab-content.active {
-  display: block;
 }
 
 /* == tab icons ==*/
