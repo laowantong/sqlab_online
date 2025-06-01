@@ -21,6 +21,13 @@ let itemsGap = 0;
 let items = [];
 let prevRect = {};
 
+let clickTimer = null;
+let hasMovedSignificantly = false;
+let clickStartX = 0;
+let clickStartY = 0;
+const CLICK_THRESHOLD = 5; // pixels
+const LONG_PRESS_DELAY = 250; // milliseconds
+
 /***********************
  *    Helper Functions   *
  ***********************/
@@ -189,7 +196,44 @@ function dragStart(e) {
 
     pointerStartX = e.clientX || e.touches?.[0]?.clientX;
     pointerStartY = e.clientY || e.touches?.[0]?.clientY;
+    clickStartX = pointerStartX;
+    clickStartY = pointerStartY;
+    hasMovedSignificantly = false;
 
+    // Set up long press detection
+    clickTimer = setTimeout(() => {
+        if (!hasMovedSignificantly) {
+            startDragOperation();
+        }
+        clickTimer = null;
+    }, LONG_PRESS_DELAY);
+
+    // Add temporary movement listeners to detect if user moves during long press delay
+    document.addEventListener('mousemove', checkForMovement);
+    document.addEventListener('touchmove', checkForMovement, { passive: false });
+}
+
+function checkForMovement(e) {
+    if (!clickTimer) return;
+
+    const currentX = e.clientX || e.touches?.[0]?.clientX;
+    const currentY = e.clientY || e.touches?.[0]?.clientY;
+    
+    const deltaX = Math.abs(currentX - clickStartX);
+    const deltaY = Math.abs(currentY - clickStartY);
+    
+    if (deltaX > CLICK_THRESHOLD || deltaY > CLICK_THRESHOLD) {
+        hasMovedSignificantly = true;
+        clearTimeout(clickTimer);
+        clickTimer = null;
+        startDragOperation();
+        // Remove temporary listeners
+        document.removeEventListener('mousemove', checkForMovement);
+        document.removeEventListener('touchmove', checkForMovement);
+    }
+}
+
+function startDragOperation() {
     setItemsGap();
     disablePageScroll();
     initDraggableItem();
@@ -294,6 +338,31 @@ function updateIdleItemsStateAndPosition() {
  ***********************/
 
 function dragEnd(e) {
+    // Clean up temporary listeners
+    document.removeEventListener('mousemove', checkForMovement);
+    document.removeEventListener('touchmove', checkForMovement);
+
+    // If timer is still running, it was a short click
+    if (clickTimer) {
+        clearTimeout(clickTimer);
+        clickTimer = null;
+        
+        if (!hasMovedSignificantly && draggableItem) {
+            // Find the paginated table and table name for this accordion item
+            const tableName = draggableItem.dataset.table;
+            const paginatedTable = draggableItem.querySelector('.paginated-table');
+            if (tableName && paginatedTable) {
+                toggleAccordion(draggableItem, paginatedTable, tableName);
+            }
+        }
+        
+        // Clean up draggable item state
+        if (draggableItem) {
+            draggableItem = null;
+        }
+        return;
+    }
+
     if (!draggableItem) return;
 
     applyNewItemsOrder(e);

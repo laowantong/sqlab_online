@@ -33,7 +33,7 @@ body {
   margin-top: var(--spacing-xs); /* Fix the vertical position */
   justify-content: center;
   align-items: center;
-  cursor: pointer;
+  cursor: zoom-in;
   padding: var(--spacing-xs);
   border-radius: var(--border-radius-sm);
   transition: all var(--transition-fast);
@@ -48,6 +48,10 @@ body {
   content: '▶';
   font-size: 12px;
   transition: transform var(--transition-fast);
+}
+
+.expanded .toggle-icon {
+  cursor: zoom-out;
 }
 
 .expanded .toggle-icon::after {
