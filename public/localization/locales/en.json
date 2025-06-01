@@ -18,7 +18,7 @@
     "schema": "Schema",
     "execution": "Run",
     "feedback": "Feedback",
-    "notes-tab": "Notes"
+    "notes": "Notes"
   },
   "notes": {
     "placeholder": "What you write here is saved locally and will persist across sessions."
