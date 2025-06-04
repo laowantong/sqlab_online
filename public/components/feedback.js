@@ -6,15 +6,25 @@ export function initFeedback() {
     feedbackButton.addEventListener('click', getAndRenderFeedback);
 }
 
-export async function getAndRenderFeedback(refresh = true) {
+/**
+ * Fetches feedback for the current SQL query, renders it, and updates the task state.
+ * If the feedback is already stored, it restores it from local storage.
+ * If the query is empty, it shows an error message.
+ * If the query check fails, it displays the error message.
+ * If the query check succeeds, it updates the feedback text, stores it locally,
+ * and updates the task strip button state.
+ * @param {boolean} refresh - If false, it just displays the existing feedback. Otherwise, it fetches new feedback.
+ * @returns {Promise<void>} - A promise that resolves when the feedback is rendered.
+ * @throws {Error} - If the query check fails or if the query is empty.
+ */
+
+export async function getAndRenderFeedback(refresh) {
     const feedbackTextContainer = document.getElementById('feedback-text-container');
     const checkContainer = document.getElementById('check-container');
     const activityNumber = window.currentActivityNumber;
     const taskNumber = window.currentTaskNumber;
     const taskId = `${activityNumber}/${taskNumber}`;
     const stakeSystem = window.stakeSystem;
-
-    checkContainer.classList.add('hidden');
 
     // If the feedback is already stored, restore it and return.
     let feedback = localStorage.getItem(`feedback/${taskId}`);
@@ -24,11 +34,19 @@ export async function getAndRenderFeedback(refresh = true) {
         return
     }
 
-    // If the refresh flag is not set, return.
     if (!refresh) {
-        feedbackTextContainer.classList.add('hidden');
+        // The function is called from a task button click handler (with refresh === false).
+        // The feedback just need to be displayed, not refreshed.
         return
     }
+    // Otherwise, `refresh` is the event which directly triggered the call. We don't need it.
+
+    // Hide the check container and the feedback...
+    checkContainer.classList.add('hidden');
+    feedbackTextContainer.classList.add('hidden');
+
+    // and suppose that the check will fail for the current activity / task
+    checkContainer.setAttribute('data-check-failed-for', `${activityNumber}/${taskNumber}`);
 
     // Retrieve the SQL query from the editor
     const query = window.sqlEditor.getValue().trim();
@@ -52,8 +70,10 @@ export async function getAndRenderFeedback(refresh = true) {
 
         stakeSystem.resetCheckElements();
 
-        // The feeback can be a hint.
-        if (feedbackTextContainer.firstChild.classList.contains('hint')) {
+        // The feeback can be a hint or the fallback when the token is unknown.
+        const isHint = feedbackTextContainer.firstChild.classList.contains('hint');
+        const isFallback = feedbackTextContainer.firstChild.classList.contains('fallback');
+        if (isHint || isFallback) {
             stakeSystem.addToScore(data.score, data.scoreDelta);
             return;
         }
@@ -82,6 +102,9 @@ export async function getAndRenderFeedback(refresh = true) {
 
         // Make it accessible in the task strip.
         strip.removeClass(index + 1, 'disabled');
+
+        // Remove the mark indicating that the check has failed for this activity/task.
+        checkContainer.removeAttribute('data-check-failed-for');
     } catch (error) {
         showError(error.message, feedbackTextContainer);
         feedbackTextContainer.classList.remove('hidden');

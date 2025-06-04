@@ -80,7 +80,7 @@ export async function initStakeSystem() {
          * Resets the stake slider to initial state
          */
         resetCheckElements: () => {
-            stakeSlider.value = 0;
+            stakeSlider.value = stakeSlider.min;
             updateCheckElements();
         },
     };

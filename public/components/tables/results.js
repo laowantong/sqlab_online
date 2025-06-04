@@ -38,6 +38,9 @@ export function initQueryExecution() {
             executionTab.removeEventListener('click', triggerExecutionOfNewQuery);
             setTabIconTo(emptyIcon);
         }
+
+        // The query cannot be checked as long as it has not been executed
+        checkContainer.classList.remove('data-check-failed-for')
         checkContainer.classList.add(('hidden'));
     }
 
@@ -76,7 +79,12 @@ export function initQueryExecution() {
         const result = await runQueryAndRenderResults(query);
         executionTab.removeEventListener('click', triggerExecutionOfNewQuery);
         setTabIconTo(executedIcon);
+
+        // Display the check container iff the execution has returned a non-empty result set
         checkContainer.classList.toggle('hidden', !result || result.rows.length === 0);
+
+        // Remove the mark indicating that the check has failed for this activity/task.
+        checkContainer.classList.remove('data-check-failed-for');
     }
 
     /**

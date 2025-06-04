@@ -35,11 +35,25 @@ export async function createTaskStrip() {
             },
             onClick: () => {
                 if (task.task_number === window.currentTaskNumber) {
+                    // The same task button is clicked again: precompose the query template
                     window.sqlEditor.setValue(prequery);
                     window.sqlEditor.focus();
                     window.sqlEditor.setCursor(prequery.length);
                 } else {
+                    // The user actually switches task
                     window.currentTaskNumber = task.task_number;
+
+                    // Tell whether the Editor's current query has the "Executed" status.
+                    const executedIcon = document.querySelector('[data-tab="execution-tab"] .executed');
+                    const hasBeenExecuted = !executedIcon.classList.contains('hidden');
+
+                    // Tell whether the current activity/task has already failed the check.
+                    const currentActivityAndTask = `${window.currentActivityNumber}/${task.taskNumber}`
+                    const checkContainer = document.getElementById('check-container');
+                    const hasFailedCheck = checkContainer.getAttribute('data-check-failed-for') === currentActivityAndTask;
+
+                    // Hide the check container iff the query has not been executed yet, or has failed the check
+                    checkContainer.classList.toggle('hidden', !hasBeenExecuted || hasFailedCheck);
                 }
                 getAndRenderTask(task.access);
                 getAndRenderFeedback(false); // Don't refresh feedback
