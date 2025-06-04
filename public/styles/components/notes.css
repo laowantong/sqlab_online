@@ -4,11 +4,6 @@
  */
 
 /* == Notes == */
-#notes-tab {
-  padding: var(--spacing-md);
-}
-
-
 #notes-textarea {
   width: 100%;
   height: var(--notes-textarea-height);
