@@ -8,13 +8,13 @@ export function initFeedback() {
 
 export async function getAndRenderFeedback(refresh = true) {
     const feedbackTextContainer = document.getElementById('feedback-text-container');
-    const feedbackControlContainer = document.getElementById('check-container');
+    const checkContainer = document.getElementById('check-container');
     const activityNumber = window.currentActivityNumber;
     const taskNumber = window.currentTaskNumber;
     const taskId = `${activityNumber}/${taskNumber}`;
     const stakeSystem = window.stakeSystem;
 
-    feedbackControlContainer.classList.add('hidden');
+    checkContainer.classList.add('hidden');
 
     // If the feedback is already stored, restore it and return.
     let feedback = localStorage.getItem(`feedback/${taskId}`);

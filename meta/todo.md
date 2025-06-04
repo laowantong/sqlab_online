@@ -38,7 +38,7 @@
   Et côté JS:
   ```javascript
   document.querySelector('.refresh').classList.toggle('hidden', !flag);
-  document.querySelector('.check').classList.toggle('hidden', flag);
+  document.querySelector('.executed').classList.toggle('hidden', flag);
   ```
 - [x] Supprimer la dépendance à Font-awesome de la même manière pour les icones des modes sombre et clair.
 - [x] Au moment du clic sur Exécuter, reformater la requête SQL avec https://github.com/sql-formatter-org/sql-formatter. C'est la requête formatée qui sera envoyée au serveur. Par défaut, elle remplace également le contenu de l'éditeur.

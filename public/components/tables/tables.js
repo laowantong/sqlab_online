@@ -25,13 +25,13 @@ export function mayRecreateTableContainerIn(container) {
  * Renders a complete table with pagination, header and rows
  * @param {Object} data - Table data with columns, rows and pagination metadata
  * @param {HTMLElement} container - Container element for the table
- * @param {Function} onPageChange - Callback for pagination changes
- * @param {Function} onSortChange - Callback for sorting changes (optional)
+ * @param {Function} changePage - Callback for pagination changes
+ * @param {Function} changeSort - Callback for sorting changes (optional)
  */
-export function renderPaginatedTable(data, container, onPageChange, onSortChange = null) {
+export function renderPaginatedTable(data, container, changePage, changeSort = null) {
     if (data.offset === 0) {
         // Avoid resetting the strip to the leftmost position if it already exists
-        createPageStrip(container, data.offset, data.limit, data.total, onPageChange);
+        createPageStrip(container, data.offset, data.limit, data.total, changePage);
     };
     const tableElement = container.querySelector('.table-content');
     const headers = generateTableHeaderRow(data.columns);
@@ -39,8 +39,8 @@ export function renderPaginatedTable(data, container, onPageChange, onSortChange
     tableElement.innerHTML = `<thead>${headers}</thead><tbody>${rows}</tbody>`;
     window.sqlEditor.addClickToInsert(tableElement);
 
-    if (onSortChange) {
-        addSortingEvents(tableElement, onSortChange);
+    if (changeSort) {
+        addSortingEvents(tableElement, changeSort);
         if (data.sortColumn) {
             updateSortVisual(tableElement, data.sortColumn, data.sortDirection);
         }
