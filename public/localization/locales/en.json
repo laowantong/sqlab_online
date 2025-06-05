@@ -11,8 +11,19 @@
   },
   "query": {
     "placeholder": "Enter your SQL query here...\nTip: clicking the task number again pre-fills a query with the expected column names.",
-    "emptyError": "Please enter a SQL query"
-  },
+    "emptyError": "Please enter a SQL query.",
+    "alreadyValidatedError": "This task has already been validated.",
+    "stakePercentageError": "Stake percentage out of range.",
+    "unparsableError": "Your SQL query contains syntax errors and cannot be parsed.",
+    "missingFormulaError": "This task is missing its token formula.",
+    "missingColumnsError": "Your query is missing required columns: {columns}.",
+    "tooFewTablesError": "Your query references too few tables - {count} more table(s) required.",
+    "noTokenError": "No token found in query results.",
+    "emptyFeedbackError": "No feedback message available for this task.",
+    "unparsableJsonError": "Server response format error.",
+    "unknownFeedbackError": "Unknown feedback message type received.",
+    "genericError": "An unexpected error occurred while checking your query."
+},
   "tabs": {
     "coreTables": "Tables",
     "schema": "Schema",

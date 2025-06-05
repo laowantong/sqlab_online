@@ -56,13 +56,15 @@ export async function initStakeSystem() {
 
         /**
          * Adds amount to the score (negative to subtract)
-         * @param {number} delta - Amount to add
+         * @param {number} scoreDelta - Amount to add
          */
-        addToScore: (newScore, delta) => {
+        updateScore: (newScore, scoreDelta) => {
             // For the visual effect, use the local score
-            window.scoreVisualEffects.updateScore(score, delta);
+            window.scoreVisualEffects.updateScore(score, scoreDelta);
+
             // Update the local score to the new score, calculated server-side
             score = newScore;
+
             scoreDisplay.textContent = `${localizedInteger(score)}`;
             updateCheckElements();
             checkButton.disabled = canStake();

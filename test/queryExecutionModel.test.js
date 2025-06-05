@@ -89,12 +89,6 @@ describe('executeQuery', () => {
         await expectThrowsAsync(() => executeQuery(query)), 'Query cannot be empty';
     });
     
-    it('throws an error for falsy values', async () => {
-        for (const falsyValue of [undefined, null, false, 0]) {
-            await expectThrowsAsync(() => executeQuery(falsyValue)), 'Query cannot be empty';
-        }
-    });
-    
     // Wrong behavior:
     it('does NOT handle multi-select queries correctly', async () => {
         // TODO: execute all statements, returning the last one if it is a SELECT

@@ -1,5 +1,4 @@
 import { checkQuery } from '../api/checkQuery.js';
-import { showError } from '../../utils/genericUtils.js';
 
 export function initFeedback() {
     const feedbackButton = document.getElementById('check-button');
@@ -17,7 +16,6 @@ export function initFeedback() {
  * @returns {Promise<void>} - A promise that resolves when the feedback is rendered.
  * @throws {Error} - If the query check fails or if the query is empty.
  */
-
 export async function getAndRenderFeedback(refresh) {
     const feedbackTextContainer = document.getElementById('feedback-text-container');
     const checkContainer = document.getElementById('check-container');
@@ -26,18 +24,28 @@ export async function getAndRenderFeedback(refresh) {
     const taskId = `${activityNumber}/${taskNumber}`;
     const stakeSystem = window.stakeSystem;
 
+    function setFeedbackContent(content, cssClass) {
+        // Clear existing classes and add new classes
+        feedbackTextContainer.className = feedbackTextContainer.className.replace(/\b(suspicious error|internal error|minor error|specific hint|default hint|correction)\b/g, '').trim();
+        feedbackTextContainer.classList.add(...cssClass.split(' '));
+        
+        // Set content and display it
+        feedbackTextContainer.innerHTML = content;
+        feedbackTextContainer.classList.remove('hidden');
+        document.querySelector('.tab[data-tab="feedback-tab"]').click();
+    }
+
     // If the feedback is already stored, restore it and return.
     let feedback = localStorage.getItem(`feedback/${taskId}`);
     if (feedback) {
-        feedbackTextContainer.innerHTML = feedback;
-        feedbackTextContainer.classList.remove('hidden');
-        return
+        setFeedbackContent(feedback, 'correct');
+        return;
     }
 
     if (!refresh) {
         // The function is called from a task button click handler (with refresh === false).
-        // The feedback just need to be displayed, not refreshed.
-        return
+        // The feedback just needs to be displayed, not refreshed.
+        return;
     }
     // Otherwise, `refresh` is the event which directly triggered the call. We don't need it.
 
@@ -50,66 +58,98 @@ export async function getAndRenderFeedback(refresh) {
 
     // Retrieve the SQL query from the editor
     const query = window.sqlEditor.getValue().trim();
-    if (!query) {
-        document.querySelector('.tab[data-tab="feedback-tab"]').click();
-        showError(window.i18n.t('query.emptyError'), feedbackTextContainer);
+
+    // Fetch the object resulting from the query check
+    const stakePercentage = stakeSystem.getStakePercentage();
+
+    const data = await checkQuery(query, activityNumber, taskNumber, stakePercentage);
+    
+    // Handle error responses from the server
+    if (!data.success) {
+        let errorMessage;
+        
+        // Map server error slugs to user-friendly messages
+        switch (data.errorSlug) {
+            case 'alreadyValidatedTask':
+                errorMessage = window.i18n.t('query.alreadyValidatedError');
+                break;
+            case 'stakePercentageError':
+                errorMessage = window.i18n.t('query.stakePercentageError');
+                break;
+            case 'unparsableUserQuery':
+                errorMessage = window.i18n.t('query.unparsableError');
+                break;
+            case 'missingFormula':
+                errorMessage = window.i18n.t('query.missingFormulaError');
+                break;
+            case 'missingColumns':
+                errorMessage = window.i18n.t('query.missingColumnsError', { columns: data.missingColumns });
+                break;
+            case 'tooFewTables':
+                errorMessage = window.i18n.t('query.tooFewTablesError', { count: data.missingTablesCount });
+                break;
+            case 'noToken':
+                errorMessage = window.i18n.t('query.noTokenError');
+                break;
+            case 'emptyFeedback':
+                errorMessage = window.i18n.t('query.emptyFeedbackError');
+                break;
+            case 'unparsableJson':
+                errorMessage = window.i18n.t('query.unparsableJsonError');
+                break;
+            case 'unknownFeedbackMessageClass':
+                errorMessage = window.i18n.t('query.unknownFeedbackError');
+                break;
+            default:
+                errorMessage = data.errorSlug || window.i18n.t('query.genericError');
+        }
+        
+        setFeedbackContent(errorMessage, data.cssClass);
+        stakeSystem.resetCheckElements();
         return;
     }
 
-    // Fetch the object resulting of the query check
-    const stakePercentage = stakeSystem.getStakePercentage();
+    // The result has a feedback message. Display it.
+    const feedbackMessage = data.feedbackMessage;
+    const cssClass = data.cssClass;
+    setFeedbackContent(feedbackMessage, cssClass);
 
-    try {
+    stakeSystem.resetCheckElements();
 
-        const data = await checkQuery(query, activityNumber, taskNumber, stakePercentage);
+    // Update score regardless of feedback type
+    stakeSystem.updateScore(data.newScore, data.scoreDelta);
 
-        // The result has necessarily a feedback part. Display it.
-        feedbackTextContainer.innerHTML = data.feedback;
-        feedbackTextContainer.classList.remove('hidden');
-        document.querySelector('.tab[data-tab="feedback-tab"]').click();
-
-        stakeSystem.resetCheckElements();
-
-        // The feeback can be a hint or the fallback when the token is unknown.
-        const isHint = feedbackTextContainer.firstChild.classList.contains('hint');
-        const isFallback = feedbackTextContainer.firstChild.classList.contains('fallback');
-        if (isHint || isFallback) {
-            stakeSystem.addToScore(data.score, data.scoreDelta);
-            return;
-        }
-
-        // Otherwise, the answer was correct, and the feedback gives the official solution.
-        stakeSystem.addToScore(data.score, data.scoreDelta);
-
-        // Store the correction locally
-        localStorage.setItem(`feedback/${taskId}`, data.feedback);
-
-        // Freeze the current task strip button.
-        // Note that, contrarily to the task number, the strip button index is 0-based.
-        const strip = window.taskStrip;
-        const index = window.currentTaskNumber - 1;
-        strip.addClass(index, 'frozen');
-
-        // We may have solved a non-sequitur exercise.
-        if (activityNumber === 0) {
-            return
-        }
-
-        // Otherwise, we have solved an episode of an adventure.
-
-        // Store locally the next episode (which can be an epilogue).
-        localStorage.setItem(`task/${activityNumber}/${taskNumber + 1}`, data.task);
-
-        // Make it accessible in the task strip.
-        strip.removeClass(index + 1, 'disabled');
-
-        // Remove the mark indicating that the check has failed for this activity/task.
-        checkContainer.removeAttribute('data-check-failed-for');
-    } catch (error) {
-        showError(error.message, feedbackTextContainer);
-        feedbackTextContainer.classList.remove('hidden');
-        document.querySelector('.tab[data-tab="feedback-tab"]').click();
-        stakeSystem.resetCheckElements();
+    if (cssClass.includes('hint')) {
+        // Negative feedback - just update score and return
+        return;
     }
 
+    // Positive feedback - answer was correct
+    
+    // Store the correction locally
+    localStorage.setItem(`feedback/${taskId}`, feedbackMessage);
+
+    // Freeze the current task strip button.
+    // Note that, contrary to the task number, the strip button index is 0-based.
+    const strip = window.taskStrip;
+    const index = window.currentTaskNumber - 1;
+    strip.addClass(index, 'frozen');
+
+    // We may have solved a non-sequitur exercise.
+    if (activityNumber === 0) {
+        return;
+    }
+
+    // Otherwise, we have solved an episode of an adventure.
+
+    // Store locally the next episode (which can be an epilogue).
+    if (data.task) {
+        localStorage.setItem(`task/${activityNumber}/${taskNumber + 1}`, JSON.stringify(data.task));
+    }
+
+    // Make the next task accessible in the task strip.
+    strip.removeClass(index + 1, 'disabled');
+
+    // Remove the mark indicating that the check has failed for this activity/task.
+    checkContainer.removeAttribute('data-check-failed-for');
 }

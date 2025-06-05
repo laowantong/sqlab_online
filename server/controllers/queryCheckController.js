@@ -10,17 +10,20 @@ export async function handleCheckQuery(req, res) {
   const { query, activityNumber, taskNumber, stakePercentage } = req.body;
 
   try {
-    const jsonData = await checkQuery(query, activityNumber, taskNumber, stakePercentage);
-    const data = JSON.parse(jsonData);
-    
-    if (data.success) {
-      res.status(200).json(data);
-    } else {
-      res.status(400).json(data);
-    }
+    const data = await checkQuery(query, activityNumber, taskNumber, stakePercentage);
+    res.status(200).json(data);
   } catch (err) {
+    // Log the full error details
+    console.error('Query check error:', err);
+    console.error('Stack trace:', err.stack);
+    
     res.status(500).json({
-      error: "Error server"
+      error: "Internal server error",
+      // Include error details in development
+      ...(process.env.NODE_ENV === 'development' && { 
+        details: err.message,
+        stack: err.stack 
+      })
     });
   }
 }

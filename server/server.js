@@ -9,6 +9,7 @@ const port = process.env.PORT || 3000;
 // TODO: remove this global variable when implementing user sessions
 export const userData = {
   score: 0,
+  validatedTasks: [],
 };
 
 import { fileURLToPath } from 'url';

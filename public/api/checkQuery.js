@@ -9,7 +9,7 @@
  * @param {number} activityNumber - The activity number associated with the query.
  * @param {number} taskNumber - The task number associated with the query.
  * @param {number} stakePercentage - The percentage of the score to stake on the query.
- * @returns {Promise<Object>} - A promise that resolves to the response from the server.
+ * @returns {Promise<Object>} - A promise that resolves to an object containing the check result.
  */
 
 export async function checkQuery(query, activityNumber, taskNumber, stakePercentage) {
@@ -26,5 +26,5 @@ export async function checkQuery(query, activityNumber, taskNumber, stakePercent
         throw new Error(errorMessage);
     }
 
-    return response.json();
+    return response.json(); // A JavaScript object with the check result
 }

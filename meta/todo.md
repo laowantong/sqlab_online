@@ -51,11 +51,11 @@
 - [x] Tester toutes les questions des exercices et signaler les problèmes rencontrés (ouvrir des issues). Si un problème se reproduit dans plusieurs tâches, éditer l'issue.
 - [ ] Prévoir un style de présentation (ou une icone) spécifique pour chaque type de feedback :
     - Succès (.correction) : check
-    - Hint spécifique (.hint) : ampoule (idée)
-    - Hint non spécifique (.unknown-token) : ?
-    - Avertissement non pénalisant (e.g., colonnes différentes de celles attendues): triangle jaune
-    - Erreurs lors de l'injection de la formule : x
-    - ?
+    - Hint spécifique (.specific .hint) : ampoule (idée)
+    - Hint non spécifique (.default .hint) : ?
+    - Erreur suspecte ou triche (.suspicious .error) : drapeau pirate
+    - Erreur mineure (.minor .error): e.g., colonnes différentes de celles attendues: triangle jaune
+    - Erreur interne (.internal .error): e.g., lors de l'injection de la formule : x
 - [ ] Trouver le texte d'attribution des icones du point précédent.
 - [x] Enquêter sur la lenteur du drag n drop.
 - [x] Ajouter le dark mode pour la table des matières.
