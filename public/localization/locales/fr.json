@@ -12,16 +12,16 @@
   "query": {
     "placeholder": "Entrez ici votre requête SQL...\nAstuce : cliquer à nouveau sur le numéro de la tâche en cours pré-compose une requête avec le nom des colonnes attendues.",
     "emptyError": "Veuillez entrer une requête SQL.",
-    "alreadyValidatedError": "Cette tâche a déjà été validée.",
+    "alreadyValidatedTaskError": "Cette tâche a déjà été validée.",
     "stakePercentageError": "Pourcentage de mise hors limites.",
-    "unparsableError": "Votre requête SQL contient des erreurs de syntaxe et ne peut pas être analysée.",
+    "unparsableUserQueryError": "Votre requête SQL contient des erreurs de syntaxe et ne peut pas être analysée.",
     "missingFormulaError": "Cette tâche n'a pas de formule de token.",
     "missingColumnsError": "La ou les colonnes suivantes sont manquantes : {columns}.",
     "tooFewTablesError": "Votre requête fait référence à trop peu de tables - {count} table(s) supplémentaire(s) requise(s).",
     "noTokenError": "Aucun token trouvé dans les résultats de la requête.",
     "emptyFeedbackError": "Aucun message de retour disponible pour cette tâche.",
     "unparsableJsonError": "Erreur de format de réponse du serveur.",
-    "unknownFeedbackError": "Type de message de retour inconnu reçu.",
+    "unknownFeedbackCategoryError": "Catégorie de retours inconnue : « {category} ».",
     "genericError": "Une erreur inattendue s'est produite lors de la vérification de votre requête."
   },
   "tabs": {

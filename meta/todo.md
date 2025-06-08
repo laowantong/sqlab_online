@@ -47,15 +47,16 @@
 - [x] Transformer l'indication du nombre de lignes d'une table en un bouton (mais garder le même style). Cliquer devrait sauter à l'offset maximum.
 - [x] De la même manière, ajouter avant la bande des tâches un bouton « table des matières » (heroicons `numbered-list`), qui déroule une zone de texte avec le contenu de `toc` pour l'activité (à refaire côté Python).
 - [x] Il faudrait factoriser les deux dernières fonctionnalités, sans doute en passant un élément du DOM et un callback pour le clic.
-- [ ] Vérifier que toutes les colonnes attendues sont dans le SELECT de l'utilisateur. Sinon, dans le message affiché, préciser le nom des colonnes manquantes. Utiliser de simples tableaux.
+- [x] Vérifier que toutes les colonnes attendues sont dans le SELECT de l'utilisateur. Sinon, dans le message affiché, préciser le nom des colonnes manquantes. Utiliser de simples tableaux.
 - [x] Tester toutes les questions des exercices et signaler les problèmes rencontrés (ouvrir des issues). Si un problème se reproduit dans plusieurs tâches, éditer l'issue.
-- [ ] Prévoir un style de présentation (ou une icone) spécifique pour chaque type de feedback :
-    - Succès (.correction) : check
-    - Hint spécifique (.specific .hint) : ampoule (idée)
-    - Hint non spécifique (.default .hint) : ?
-    - Erreur suspecte ou triche (.suspicious .error) : drapeau pirate
-    - Erreur mineure (.minor .error): e.g., colonnes différentes de celles attendues: triangle jaune
-    - Erreur interne (.internal .error): e.g., lors de l'injection de la formule : x
+- [x] Prévoir un style de présentation (ou une icone) spécifique pour chaque type de feedback :
+- [x] https://iconduck.com/sets/emoji-two-emoji-set
+    1. Succès (.correction) : white-heavy-check-mark.svg
+    2. Hint spécifique (.specific .hint) : electric-light-bulb.svg
+    3. Hint non spécifique (.default .hint) : white-question-mark-ornament.svg
+    4. Erreur suspecte ou triche (.suspicious .error) : skull-and-crossbones.svg
+    5. Erreur mineure (.minor .error): e.g., colonnes différentes de celles attendues: warning-sign.svg
+    6. Erreur interne (.internal .error): e.g., lors de l'injection de la formule : negative-squared-cross-mark.svg
 - [ ] Trouver le texte d'attribution des icones du point précédent.
 - [x] Enquêter sur la lenteur du drag n drop.
 - [x] Ajouter le dark mode pour la table des matières.
@@ -63,7 +64,7 @@
 - [x] Vérifier que la liste de noms de colonnes est scrollable quand elle est trop longue.
 - [x] Corriger https://github.com/laowantong/sqlab_online/issues/18.
 - [ ] Empêcher de refaire un check d'une requête déjà vérifiée, cf. https://github.com/laowantong/sqlab_online/issues/23.
-- [ ] Si on exécute une requête, qu'on change de tâche (p. ex. pour se placer sur le bon exercice), le bouton de vérification devrait apparaître, car il dépend de la requête ET de la tâche.
+- [x] Si on exécute une requête, qu'on change de tâche (p. ex. pour se placer sur le bon exercice), le bouton de vérification devrait apparaître, car il dépend de la requête ET de la tâche.
 - Requêtes correctes en échec :
   - [x] Exercice 19. La solution avec LEFT JOIN produit une TooManyTablesError. Celle avec NOT IN passe sans problème.
   - [x] Exercice 21 (amplitude prime) : erreur inédite.

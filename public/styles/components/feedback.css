@@ -1,9 +1,5 @@
-/* feedback.css — styles for hints and corrections */
-.default .hint,
-.hint,
-.correction {
+#feedback-text-container {
   background-color: var(--color-white);
-  border-left: 5px solid var(--color-secondary);
   border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-sm);
   font-family: var(--font-primary);
@@ -13,12 +9,64 @@
   color: var(--color-dark);
 }
 
-.default .hint .label,
-.hint .label,
-.correction .label,
-.default .hint .number,
-.hint .number,
-.correction .number {
+#feedback-text-container.p {
+  margin: 0 0 var(--spacing-sm) 0;
+}
+
+/* Shared ::before styling for icons */
+#feedback-text-container > div.preamble::before,
+#feedback-text-container > div.text::before {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  vertical-align: bottom;
+  padding-right: var(--spacing-sm);
+}
+
+/* Error/Hint types: set icons only */
+#feedback-text-container.minor.error > div.text::before {
+  content: url("../../assets/icons/warning-sign.svg");
+}
+
+#feedback-text-container.internal.error > div.text::before {
+  content: url("../../assets/icons/negative-squared-cross-mark.svg");
+}
+
+#feedback-text-container.suspicious.error > div.text::before {
+  content: url("../../assets/icons/skull-and-crossbones.svg");
+}
+
+#feedback-text-container.specific.hint > div.text::before {
+  content: url("../../assets/icons/electric-light-bulb.svg");
+}
+
+#feedback-text-container.default.hint > div.text::before {
+  content: url("../../assets/icons/white-question-mark-ornament.svg");
+}
+
+#feedback-text-container.correction > div.preamble::before {
+  content: url("../../assets/icons/white-heavy-check-mark.svg"); 
+}
+
+/* Borders based on feedback type */
+.internal .error,
+.suspicious .error,
+.default .hint {
+  border-left: 5px solid red;
+}    
+
+.minor.error,
+.specific.hint {
+  border-left: 5px solid orange;
+}
+
+.correction {
+  border-left: 5px solid green;
+}
+
+/* Label + number styling */
+#feedback-text-container > div.label,
+#feedback-text-container > div.number {
   color: var(--color-secondary);
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;
@@ -27,17 +75,20 @@
   display: inline-block;
 }
 
-.default .hint .preamble,
-.hint .preamble,
-.correction .preamble {
+/* Textual feedback and icons — block layout, inline icon */
+#feedback-text-container > div.preamble,
+#feedback-text-container > div.text {
+  display: block;
   margin-bottom: var(--spacing-sm);
 }
 
-.hint .default .hint p ,
-.hint .text p {
-  margin: 0 0 var(--spacing-sm) 0;
+/* Fix for hint text layout */
+#feedback-text-container.specific.hint > div.text p:first-of-type {
+  display: inline;
+  margin: 0;
 }
 
+/* Correction block */
 .correction .solutions {
   margin-top: var(--spacing-sm);
 }
@@ -66,19 +117,6 @@
 .correction .solution .intro {
   font-style: italic;
   margin-bottom: var(--spacing-xs);
-}
-
-
-.error {
-  background-color: var(--color-white);
-  border-left: 5px solid #dc3545;
-  border-radius: var(--border-radius-md);
-  box-shadow: var(--shadow-sm);
-  font-family: var(--font-primary);
-  font-size: var(--font-size-md);
-  padding: var(--spacing-md);
-  margin: var(--spacing-md) 0;
-  color: var(--color-dark);
 }
 
 /* Dark mode */
@@ -113,21 +151,11 @@
 }
 
 /* Responsive tweaks */
+
 @media (max-width: 600px) {
-  .default .hint,
+  .error,
   .hint,
   .correction {
-    font-size: var(--font-size-sm);
-    padding: var(--spacing-sm);
-  }
-
-  .default .hint .number,
-  .hint .number,
-  .correction .number {
-    font-size: var(--font-size-md);
-  }
-
-  .error {
     font-size: var(--font-size-sm);
     padding: var(--spacing-sm);
   }

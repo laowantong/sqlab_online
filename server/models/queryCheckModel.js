@@ -178,7 +178,7 @@ export async function checkQuery(query, activityNumber, taskNumber, stakePercent
         scoreDelta = task.reward + stakeAmount;
         userData.validatedTasks.push(taskId);
     } else {
-        return createErrorResponse('unknownFeedbackMessageClass', "internal");
+        return createErrorResponse('unknownFeedbackCategory', "internal", { feedbackCategory });
     }
     userData.score += scoreDelta;
 

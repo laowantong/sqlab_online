@@ -38,7 +38,7 @@ export async function getAndRenderFeedback(refresh) {
     // If the feedback is already stored, restore it and return.
     let feedback = localStorage.getItem(`feedback/${taskId}`);
     if (feedback) {
-        setFeedbackContent(feedback, 'correct');
+        setFeedbackContent(feedback, 'correction');
         return;
     }
 
@@ -71,13 +71,13 @@ export async function getAndRenderFeedback(refresh) {
         // Map server error slugs to user-friendly messages
         switch (data.errorSlug) {
             case 'alreadyValidatedTask':
-                errorMessage = window.i18n.t('query.alreadyValidatedError');
+                errorMessage = window.i18n.t('query.alreadyValidatedTaskError');
                 break;
             case 'stakePercentageError':
                 errorMessage = window.i18n.t('query.stakePercentageError');
                 break;
             case 'unparsableUserQuery':
-                errorMessage = window.i18n.t('query.unparsableError');
+                errorMessage = window.i18n.t('query.unparsableUserQueryError');
                 break;
             case 'missingFormula':
                 errorMessage = window.i18n.t('query.missingFormulaError');
@@ -97,14 +97,14 @@ export async function getAndRenderFeedback(refresh) {
             case 'unparsableJson':
                 errorMessage = window.i18n.t('query.unparsableJsonError');
                 break;
-            case 'unknownFeedbackMessageClass':
-                errorMessage = window.i18n.t('query.unknownFeedbackError');
+            case 'unknownFeedbackCategory':
+                errorMessage = window.i18n.t('query.unknownFeedbackCategoryError', { category: data.feedbackCategory });
                 break;
             default:
                 errorMessage = data.errorSlug || window.i18n.t('query.genericError');
         }
         
-        setFeedbackContent(errorMessage, data.cssClass);
+        setFeedbackContent(`<div class="text">${errorMessage}</div>`, data.cssClass);
         stakeSystem.resetCheckElements();
         return;
     }
